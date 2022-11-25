@@ -1,0 +1,71 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:commonViews="clr-namespace:PlacowkaOswiatowa.Views.Common"
+                    >
+
+    <Style TargetType="{x:Type commonViews:ItemsCollectionViewBase}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type commonViews:ItemsCollectionViewBase}">
+                    <!--<Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                    </Border>-->
+                    <Grid Margin="0 10 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ToolBar Grid.Row="0" Height="30" Margin="0 2 0 2">
+                            <!--Dodanie ikon zamiast nazw!-->
+                            <ToggleButton Content="Dodaj" Margin="0 2 0 2"/>
+                            <ToggleButton Content="Modyfikuj" Margin="0 2 0 2"/>
+                            <ToggleButton Content="Kasuj" Margin="0 2 0 2"/>
+                            <ToggleButton Content="Odswież" Margin="0 2 0 2"
+                                          Command="{Binding UpdateCommand}"/>
+                        </ToolBar>
+                        <StackPanel Grid.Row="1" Background="Azure">
+                            <Label Content="Tu bedzie filtrowanie i sortowanie"/>
+                        </StackPanel>
+                        <!--Kazdy widok dziedziczacy z Generic.xaml bedzie wyswietlany wlasnie w sekcji ContentPresenter!-->
+                        <ContentPresenter Grid.Row="2" Margin="0 5 0 5"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Aby brać style z innych plików:
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Controls/MyStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    -->
+
+    
+    <!--<Style TargetType="{x:Type commonViews:SingleItemViewBase}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type commonViews:SingleItemViewBase}">
+                    --><!--<Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                    </Border>--><!--
+                    <Grid Margin="0 10 0 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="34"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ToolBar Grid.Row="0" Height="30" Margin="0 2 0 2">
+                            <ToggleButton Content="Zapisz i zamknij" Width="100" Height="30"
+                                          Command="{Binding SaveAndCloseCommand}"/>
+                            <ToggleButton Content="Anuluj" Width="100" Height="30"/>
+                        </ToolBar>
+                        <ContentPresenter Grid.Row="1" Margin="0 5 0 5"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+
+</ResourceDictionary>

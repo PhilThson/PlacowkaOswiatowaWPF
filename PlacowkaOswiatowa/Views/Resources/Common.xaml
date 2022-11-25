@@ -1,0 +1,237 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:PlacowkaOswiatowa.Views"
+                    >
+
+    <!--Background Colors and brushes-->
+
+    <Color x:Key="ShadowColor">#FF808080</Color>
+    <Color x:Key="GreyColor">#FF808080</Color>
+
+    <Color x:Key="KolorOlive">#FF556B2F</Color>
+    <Color x:Key="KolorStealBlue">#FF4682B4</Color>
+
+    <Color x:Key="KolorLightStealBlue">#FFB0C4DE</Color>
+    <Color x:Key="KolorCyan">#FF00FFFF</Color>
+    <Color x:Key="KolorWhiteSmoke">#FFF5F5F5</Color>
+
+    <Color x:Key="KolorMidnightBlue">#FF191970</Color>
+
+    <Color x:Key="KolorMediumBlue">#FF0000CD</Color>
+
+    <Color x:Key="KolorRoyalBlue">#FF4169E1</Color>
+    <Color x:Key="KolorFirebrick">#FFB22222</Color>
+    <Color x:Key="KolorIndianRed">#FFCD5C5C</Color>
+    <Color x:Key="KolorGainsboro">#FFDCDCDC</Color>
+    <Color x:Key="KolorLightSlateGray">#FF778899</Color>
+    <Color x:Key="KolorDimGrey">#FF696969</Color>
+    <Color x:Key="GainsboroColor">#FFDCDCDC</Color>
+    <Color x:Key="SlateGreyColor">#FF708090</Color>
+    <Color x:Key="SilverColor">#FFC0C0C0</Color>
+
+
+    <SolidColorBrush x:Key="BrushOlive" Color="{StaticResource KolorOlive}"/>
+    <SolidColorBrush x:Key="BrushStealBlue" Color="{StaticResource KolorStealBlue}"/>
+    <SolidColorBrush x:Key="BrushLightStealBlue" Color="{StaticResource KolorLightStealBlue}"/>
+    <SolidColorBrush x:Key="BrushCyan" Color="{StaticResource KolorCyan}"/>
+    <SolidColorBrush x:Key="BrushWhiteSmoke" Color="{StaticResource KolorWhiteSmoke}"/>
+    <SolidColorBrush x:Key="BrushMidnightBlue" Color="{StaticResource KolorMidnightBlue}"/>
+    <SolidColorBrush x:Key="BrushFirebrick" Color="{StaticResource KolorFirebrick}"/>
+    <SolidColorBrush x:Key="BrushIndianRed" Color="IndianRed"/>
+    <SolidColorBrush x:Key="BrushGainsboro" Color="{StaticResource GainsboroColor}"/>
+    <SolidColorBrush x:Key="BrushLightSlateGray" Color="LightSlateGray"/>
+    <SolidColorBrush x:Key="BrushDimGrey" Color="DimGray"/>
+    <SolidColorBrush x:Key="BrushRoyalBlue" Color="RoyalBlue"/>
+    <SolidColorBrush x:Key="BrushMediumBlue" Color="MediumBlue"/>
+    <SolidColorBrush x:Key="BrushSilver" Color="{StaticResource SilverColor}"/>
+
+    <!--Border colors and brushes-->
+    <Color x:Key="BorderLightColor">#FFCCCCCC</Color>
+    <Color x:Key="BorderMediumColor">#FF778899</Color>
+    <Color x:Key="BorderDarkColor">#FF444444</Color>
+
+    <Color x:Key="PressedBorderLightColor">#FF888888</Color>
+    <Color x:Key="PressedBorderDarkColor">#FF444444</Color>
+
+    <Color x:Key="DisabledBorderLightColor">#FFAAAAAA</Color>
+    <Color x:Key="DisabledBorderDarkColor">#FF888888</Color>
+
+    <Color x:Key="DefaultBorderBrushDarkColor">Black</Color>
+
+    <SolidColorBrush x:Key="BorderLightBrush" Color="{StaticResource BorderLightColor}"/>
+    <SolidColorBrush x:Key="BorderDarkBrush" Color="{StaticResource BorderDarkColor}"/>
+    <SolidColorBrush x:Key="BorderDeepDarkBrush" Color="{StaticResource DefaultBorderBrushDarkColor}"/>
+
+    <LinearGradientBrush x:Key="WorkspaceHeaderBackgroundGradient"
+        StartPoint="0.5,0"
+        EndPoint="0.5,1">
+        <GradientStop Color="DarkGray"
+                  Offset="0" />
+        <GradientStop Color="Gray"
+                  Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DeafultBorderBrush"
+        EndPoint="0.5,1"
+        StartPoint="0.5,0">
+        <GradientStop Color="{StaticResource BorderLightColor}"
+                            Offset="0" />
+        <GradientStop Color="{StaticResource BorderDarkColor}"
+                            Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ScreenBackgroundBrush"
+        StartPoint="0.5,0"
+        EndPoint="0.5,1">
+        <GradientStop Color="{StaticResource BorderDarkColor}"
+                  Offset="0" />
+        <GradientStop Color="{StaticResource GreyColor}"
+                  Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="TransientBrush"
+                     EndPoint="0.5,1"
+                     StartPoint="0.5,0">
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="0" />
+        <GradientStop Color="{DynamicResource ControlMediumColor}"
+                Offset="0.5" />
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="1" />
+    </LinearGradientBrush>
+
+
+
+    <!-- Tab Control colors.-->
+    <Color x:Key="WindowColor">#FFE8EDF9</Color>
+    <!--<Color x:Key="ContentAreaColorLight">#FFC5CBF9</Color>-->
+    <Color x:Key="ContentAreaColorLight">#FFDCDCDC</Color>
+    <!--<Color x:Key="ContentAreaColorDark">#FF7381F9</Color>-->
+    <Color x:Key="ContentAreaColorDark">#FF696969</Color>
+
+    <Color x:Key="DisabledControlLightColor">#FFE8EDF9</Color>
+    <Color x:Key="DisabledControlDarkColor">#FFC5CBF9</Color>
+    <Color x:Key="DisabledForegroundColor">#FF888888</Color>
+
+    <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+    <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
+
+    <Color x:Key="ControlLightColor">#FFDCDCDC</Color>
+    <!--<Color x:Key="ControlMediumColor">#FF7381F9</Color>-->
+    <Color x:Key="ControlMediumColor">#FF808080</Color>
+    <!--<Color x:Key="ControlDarkColor">#FF211AA9</Color>-->
+    <Color x:Key="ControlDarkColor">#FF696969</Color>
+
+    <Color x:Key="ControlMouseOverColor">#FF778899</Color>
+    <Color x:Key="ControlPressedColor">#FF444444</Color>
+    <Color x:Key="GlyphColor">#FF444444</Color>
+    <Color x:Key="GlyphMouseOver">sc#1, 0.004391443, 0.002428215, 0.242281124</Color>
+    
+    <!--Button colors and brushes-->
+    <Color x:Key="ButtonForegroundColor">#FFFFFFFF</Color>
+    <Color x:Key="ButtonBorderBrushColor">#FF778899</Color>
+    <Color x:Key="ButtonMouseEnterBorderBrushColor">#FFF5F5F5</Color>
+    
+    <Color x:Key="StandardButtonBackgroundColor">#FF4682B4</Color>
+    <Color x:Key="StandardButtonMouseEnterBackgroundColor">#FF0000CD</Color>
+    <Color x:Key="StandardButtonPressedBackgroundColor">#FF0F3656</Color>
+    
+    <Color x:Key="RedButtonBackgroundColor">#FFB22222</Color>
+    <Color x:Key="RedButtonBackgroundDisabledColor">#FFCD5C5C</Color>
+    <Color x:Key="RedButtonBackgroundPressedColor">#FF8B0000</Color>
+    <Color x:Key="RedButtonMouseEnterBackgroundColor">#FFCD5C5C</Color>
+
+    <Color x:Key="CloseButtonBackgroundMouseEnterColor">#FFCD5C5C</Color>
+    <Color x:Key="CloseButtonBackgroundColor">#00000000</Color>
+    <Color x:Key="CloseButtonMouseEnterBorderBrushColor">#FFF5F5F5</Color>
+
+    <Color x:Key="CommandButtonMouseEnterBackgroundColor">#FF708090</Color>
+
+    <SolidColorBrush x:Key="ButtonForeground"
+                     Color="{StaticResource ButtonForegroundColor}"/>
+    <SolidColorBrush x:Key="ButtonBorderBrush" 
+                     Color="{StaticResource ButtonBorderBrushColor}"/>
+    <SolidColorBrush x:Key="ButtonMouseEnterBorderBrush" 
+                     Color="{StaticResource ButtonMouseEnterBorderBrushColor}"/>
+
+    <SolidColorBrush x:Key="StandardButtonBackground" 
+                     Color="{StaticResource StandardButtonBackgroundColor}"/>
+    <SolidColorBrush x:Key="StandardButtonMouseEnterBackground" 
+                     Color="{StaticResource StandardButtonMouseEnterBackgroundColor}"/>
+    <SolidColorBrush x:Key="StandardButtonPressedBackground" 
+                     Color="{StaticResource StandardButtonPressedBackgroundColor}"/>
+        
+    <SolidColorBrush x:Key="RedButtonBackground"
+                     Color="{StaticResource RedButtonBackgroundColor}"/>
+    <SolidColorBrush x:Key="RedButtonMouseEnterBackground"
+                     Color="{StaticResource RedButtonMouseEnterBackgroundColor}"/>
+    <SolidColorBrush x:Key="RedButtonBackgroundPressedBrush"
+                     Color="{StaticResource RedButtonBackgroundPressedColor}"/>
+
+    <SolidColorBrush x:Key="CloseButtonBackground"
+                     Color="Transparent"/>
+    <SolidColorBrush x:Key="CloseButtonBorderBrush"
+                     Color="Transparent"/>
+
+    <SolidColorBrush x:Key="CommandButtonMouseEnterBackground"
+                     Color="{StaticResource CommandButtonMouseEnterBackgroundColor}"/>
+
+    <LinearGradientBrush x:Key="ContentAreaLinearGradientBrush"
+        EndPoint="0.5,1"
+        StartPoint="0.5,0">
+        <GradientStop Color="{StaticResource ContentAreaColorLight}"
+                              Offset="0" />
+        <GradientStop Color="{StaticResource ContentAreaColorDark}"
+                              Offset="1" />
+    </LinearGradientBrush>
+
+    <!--Control-specific resources.-->
+    <Color x:Key="HeaderTopColor">#FFC5CBF9</Color>
+    <Color x:Key="DatagridCurrentCellBorderColor">Black</Color>
+    <Color x:Key="SliderTrackDarkColor">#FFC5CBF9</Color>
+
+    <Color x:Key="NavButtonFrameColor">#FF4682B4</Color>
+
+    <LinearGradientBrush x:Key="MenuPopupBrush"
+                     EndPoint="0.5,1"
+                     StartPoint="0.5,0">
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="0" />
+        <GradientStop Color="{DynamicResource ControlMediumColor}"
+                Offset="0.5" />
+        <GradientStop Color="{DynamicResource ControlLightColor}"
+                Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill"
+                     StartPoint="0,0"
+                     EndPoint="1,0">
+        <LinearGradientBrush.GradientStops>
+            <GradientStopCollection>
+                <GradientStop Color="#000000FF"
+                    Offset="0" />
+                <GradientStop Color="{StaticResource SilverColor}"
+                    Offset="0.4" />
+                <GradientStop Color="{StaticResource SlateGreyColor}"
+                    Offset="0.6" />
+                <GradientStop Color="#000000FF"
+                    Offset="1" />
+            </GradientStopCollection>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
+    
+    <!--Expander colors-->
+    <SolidColorBrush x:Key="Expander.MouseOver.Circle.Stroke" Color="#FFC5CBF9"/>
+    <SolidColorBrush x:Key="Expander.MouseOver.Circle.Fill" Color="#FFF3F9FF"/>
+    <SolidColorBrush x:Key="Expander.MouseOver.Arrow.Stroke" Color="#FF000000"/>
+    <SolidColorBrush x:Key="Expander.Pressed.Circle.Stroke" Color="#FF707070"/>
+    <SolidColorBrush x:Key="Expander.Pressed.Circle.Fill" Color="#FFD9ECFF"/>
+    <SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="#FF000000"/>
+    <SolidColorBrush x:Key="Expander.Disabled.Circle.Stroke" Color="#FFBCBCBC"/>
+    <SolidColorBrush x:Key="Expander.Disabled.Circle.Fill" Color="#FFE6E6E6"/>
+    <SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="#FF707070"/>
+    <SolidColorBrush x:Key="Expander.Static.Circle.Fill" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="Expander.Static.Circle.Stroke" Color="#FF333333"/>
+    <SolidColorBrush x:Key="Expander.Static.Arrow.Stroke" Color="#FF333333"/>
+
+</ResourceDictionary>

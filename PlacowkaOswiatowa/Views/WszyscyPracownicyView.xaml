@@ -1,0 +1,84 @@
+﻿<UserControl 
+            x:Class="PlacowkaOswiatowa.Views.WszyscyPracownicyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlacowkaOswiatowa.Views"
+             xmlns:common="clr-namespace:PlacowkaOswiatowa.Views.Common"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource TextBlockNagłówek}" Text="Wszyscy pracownicy"/>
+        <common:ItemsCollectionViewBase Grid.Row="1">
+            <ListView Grid.Row="1" Margin="0 0 0 0" ItemsSource="{Binding List}">
+                <ListView.Resources>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemWysrodkowany}"/>
+                </ListView.Resources>
+                <!--<ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Padding" Value="5 20"/>
+                    </Style>
+                </ListView.ItemContainerStyle>-->
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Imię pracownika">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Imie}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Nazwisko pracownika">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Nazwisko}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Data urodzenia">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DataUrodzenia,
+                                        Converter={StaticResource DateToString}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Pesel">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Pesel}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Data zatrudnienia">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DataZatrudnienia,
+                                        Converter={StaticResource DateToString}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </common:ItemsCollectionViewBase>
+        <Button Grid.Row="2" Style="{StaticResource ButtonZaokraglony}" 
+                Content="Dodaj nowego pracownika"
+                Command="{Binding AddItemCommand}"/>
+    </Grid>
+</UserControl>
