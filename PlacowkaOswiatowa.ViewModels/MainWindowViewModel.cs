@@ -47,14 +47,14 @@ namespace PlacowkaOswiatowa.ViewModels
         //inicjować komendy jeżeli jest wywoływana ponownie
         public ICommand NowyTowarCommand => 
             new BaseCommand(() => 
-                    CreateView(_provider.GetRequiredService<NowyTowarViewModel>()));
+                    CreateView<NowyTowarViewModel>());
         
         public ICommand UrlopPracownikaCommand =>
             new BaseCommand(CreateViewAsync<UrlopPracownikaViewModel>);
 
         public ICommand NowaFakturaCommand => 
             new BaseCommand(() => 
-                    CreateView(_provider.GetRequiredService<NowaFakturaViewModel>()));
+                    CreateView<NowaFakturaViewModel>());
         
         public ICommand FakturyCommand => 
             new BaseCommand(ShowSingleton<WszystkieFakturyViewModel>);
@@ -85,6 +85,9 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public ICommand WszystkieUrlopyCommand =>
             new BaseCommand(ShowSingletonAsync<WszystkieUrlopyViewModel>);
+
+        public ICommand NowaUmowaCommand =>
+            new BaseCommand(CreateViewAsync<NowaUmowaViewModel>);
 
         public ICommand ChangeSideMenuVisibilityCommand => 
             new BaseCommand(() => ChangeSideMenuVisibility());
@@ -130,7 +133,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 //        createView(_provider.GetRequiredService<NowaFakturaViewModel>()))),
                 new CommandViewModel(BaseResources.NowyPracownik, 
                     new BaseCommand(() => 
-                        CreateView(_provider.GetRequiredService<NowyPracownikViewModel>()))),
+                        CreateView<NowyPracownikViewModel>())),
                 new CommandViewModel(BaseResources.WszyscyPracownicy, 
                     new BaseCommand(ShowSingletonAsync<WszyscyPracownicyViewModel>)),
                 new CommandViewModel(BaseResources.NowyUczen, 
@@ -171,7 +174,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
         }
 
-        //tutaj jest obsługa zdarzenia RequestCreateView
+        //Obsługa zdarzenia RequestCreateView
         //pozwalającego ogłosić chęć utworzenia zakładki
         //MainWindowViewModel subskrybuje do tego zdarzenia
         //i na podstawie zadanego typu tworzy nową zakładkę
@@ -229,8 +232,10 @@ namespace PlacowkaOswiatowa.ViewModels
             this.SetActiveWorkspace(workspace);
         }
 
-        private void CreateView(WorkspaceViewModel workspace)
+        private void CreateView<T>()
+            where T : WorkspaceViewModel
         {
+            var workspace = _provider.GetRequiredService<T>();
             this.Workspaces.Add(workspace);
             this.SetActiveWorkspace(workspace);
         }

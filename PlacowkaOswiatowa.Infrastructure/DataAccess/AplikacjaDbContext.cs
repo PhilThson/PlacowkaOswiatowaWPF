@@ -14,12 +14,14 @@ namespace PlacowkaOswiatowa.Infrastructure.DataAccess
         public DbSet<Ocena> Oceny { get; set; }
         public DbSet<Oddzial> Oddzialy { get; set; }
         public DbSet<Panstwo> Panstwa { get; set; }
+        public DbSet<Pracodawca> Pracodawcy { get; set; }
         public DbSet<Pracownik> Pracownicy { get; set; }
         public DbSet<Przedmiot> Przedmioty { get; set; }
         public DbSet<Rola> Role { get; set; }
         public DbSet<Stanowisko> Stanowiska { get; set; }
         public DbSet<Uczen> Uczniowie { get; set; }
         public DbSet<Ulica> Ulice { get; set; }
+        public DbSet<Umowa> Umowy { get; set; }
         public DbSet<Urlop> Urlopy { get; set; }
         public DbSet<Uzytkownik> Uzytkownicy { get; set; }
 
@@ -49,6 +51,7 @@ namespace PlacowkaOswiatowa.Infrastructure.DataAccess
             modelBuilder.Entity<Urlop>().HasData(Seeder.UrlopySeed());
             modelBuilder.Entity<Ocena>().HasData(Seeder.OcenySeed());
             modelBuilder.Entity<Uzytkownik>().HasData(Seeder.UzytkownicySeed());
+            modelBuilder.Entity<Pracodawca>().HasData(Seeder.PracodawcySeed());
         }
     }
 }

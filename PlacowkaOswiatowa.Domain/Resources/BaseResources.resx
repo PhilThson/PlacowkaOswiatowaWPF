@@ -129,6 +129,9 @@
   <data name="LoginPage" xml:space="preserve">
     <value>Logowanie</value>
   </data>
+  <data name="NowaUmowa" xml:space="preserve">
+    <value>Nowa umowa</value>
+  </data>
   <data name="NowyPracownik" xml:space="preserve">
     <value>Nowy Pracownik</value>
   </data>

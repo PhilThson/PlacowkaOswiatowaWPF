@@ -103,9 +103,9 @@
                                   ToolTip="Oblicz zarobki pracownika"
                                   Command="{Binding ZarobkiPracownikaCommand}"/>
                     </MenuItem>
-                    <MenuItem Header="Towary">
+                    <MenuItem Header="Umowy">
                         <MenuItem Header="Wszystkie" IsEnabled="False"/>
-                        <MenuItem Header="Dodawanie" Command="{Binding NowyTowarCommand}" IsEnabled="False"/>
+                        <MenuItem Header="Nowa" Command="{Binding NowaUmowaCommand}"/>
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Menu boczne" IsEnabled="{Binding IsLoggedIn}">

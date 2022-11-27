@@ -40,7 +40,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var uczniowieFromDb = await _repository.Uczniowie.GetAllAsync(null, "Wychowawca,Oddzial");
+                var uczniowieFromDb = await _repository.Uczniowie.GetAllAsync();
                 var listaUczniow =
                     _mapper.Map<IEnumerable<UczenDto>>(uczniowieFromDb);
 

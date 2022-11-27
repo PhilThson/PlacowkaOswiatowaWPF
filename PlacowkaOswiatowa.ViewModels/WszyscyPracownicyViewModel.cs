@@ -71,8 +71,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 (
                     _mapper.Map<IEnumerable<PracownikDto>>
                         (
-                            _repository.Pracownicy.GetAll(
-                                includeProperties: "Etat,Stanowisko,PracownikPracownicyAdresy")
+                            _repository.Pracownicy.GetAllAsync()
                         )
                 );
         }

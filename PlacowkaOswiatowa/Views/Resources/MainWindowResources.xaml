@@ -62,6 +62,10 @@
     <DataTemplate DataType="{x:Type viewmodels:WszystkieUrlopyViewModel}">
         <views:WszystkieUrlopyView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodels:NowaUmowaViewModel}">
+        <views:NowaUmowaView />
+    </DataTemplate>
     <!--tu jest koniec łączenia View z ViewModel zakładek-->
 
     <LinearGradientBrush x:Key="ScreenGradient"

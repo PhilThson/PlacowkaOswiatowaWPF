@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlacowkaOswiatowa.Domain.Models.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;

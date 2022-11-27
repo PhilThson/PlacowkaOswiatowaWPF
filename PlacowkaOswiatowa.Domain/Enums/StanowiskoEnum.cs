@@ -1,8 +1,11 @@
-﻿namespace PlacowkaOswiatowa.Domain.Enums
+﻿using System.ComponentModel;
+
+namespace PlacowkaOswiatowa.Domain.Enums
 {
     public enum StanowiskoEnum
     {
-        Obsługa,
+        [Description("Obsługa")]
+        Obsluga,
         Konserwator,
         Pomoc,
         Pedagog,

@@ -328,7 +328,8 @@
                                 <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                             </Border.BorderBrush>
                             <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource ContentAreaColorDark}" />
+                                <SolidColorBrush Color="Transparent"/>
+                                <!--<SolidColorBrush Color="{DynamicResource ContentAreaColorDark}" />-->
                             </Border.Background>
                             <ContentPresenter 
                                 x:Name="ExpanderContent"

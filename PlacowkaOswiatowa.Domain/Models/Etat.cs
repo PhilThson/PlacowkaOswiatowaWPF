@@ -7,9 +7,9 @@ namespace PlacowkaOswiatowa.Domain.Models
     {
         public Etat()
         {
-            EtatPracownicy = new HashSet<Pracownik>();
+            EtatUmowy = new HashSet<Umowa>();
         }
 
-        public virtual ICollection<Pracownik> EtatPracownicy { get; set; }
+        public virtual ICollection<Umowa> EtatUmowy { get; set; }
     }
 }

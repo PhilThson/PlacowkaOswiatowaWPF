@@ -326,7 +326,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     //    a.KodPocztowy == _adres.KodPocztowy);
                     var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres);
 
-                    if (adresFromDb == null)
+                    if (adresFromDb is null)
                         throw new DataNotFoundException("Nie znaleziono adresu o podanych parametrach");
 
                     uczen.AdresId = adresFromDb.Id;

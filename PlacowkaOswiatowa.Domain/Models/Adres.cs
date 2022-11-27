@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Models.Base;
 
 namespace PlacowkaOswiatowa.Domain.Models
@@ -40,23 +42,49 @@ namespace PlacowkaOswiatowa.Domain.Models
         [MaxLength(10)]
         public string KodPocztowy { get; set; }
 
+        public virtual Pracodawca AdresPracodawca { get; set; }
         public virtual ICollection<Uczen> AdresUczniowie { get; set; }
         public virtual ICollection<PracownicyAdresy> AdresPracownicyAdresy 
         { get; set; }
 
+        public static bool operator ==(Adres a1, AdresDto a2)
+        {
+            return a1.Panstwo?.Nazwa.ToLower() == a2.Panstwo.ToLower() &&
+                a1.Miejscowosc?.Nazwa.ToLower() == a2.Miejscowosc.ToLower() &&
+                a1.Ulica?.Nazwa.ToLower() == a2.Ulica.ToLower() &&
+                a1.NumerDomu.ToLower() == a2.NumerDomu.ToLower() &&
+                a1.NumerMieszkania?.ToLower() == a2.NumerMieszkania?.ToLower() &&
+                a1.KodPocztowy.ToLower() == a2.KodPocztowy.ToLower();
+        }
+
+        public static bool operator !=(Adres a1, AdresDto a2) => !(a1 == a2);
+
         public static bool operator ==(Adres a1, Adres a2)
         {
+            if (a2 is null) return false;
+
             return a1.GetHashCode() == a2.GetHashCode();
+
+            //if (a1 is null)
+            //{
+            //    return a2 is null;
+            //}
+
+            //return a1.Equals(a2);
         }
-        public static bool operator !=(Adres a1, Adres a2)
-        {
-            return !(a1 == a2);
-        }
+        public static bool operator !=(Adres a1, Adres a2) => !(a1 == a2);
+        
         public override bool Equals(object obj)
         {
             if (!(obj is Adres)) return false;
-            Adres a = (Adres)obj;
-            return (this == a);
+            return this == (Adres)obj;
+
+            //if (obj is null)
+            //    return false;
+            //if (Object.ReferenceEquals(this, obj))
+            //    return true;
+            //if (this.GetType() != obj.GetType())
+            //    return false;
         }
         public override int GetHashCode()
         {

@@ -97,6 +97,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nowa umowa.
+        /// </summary>
+        public static string NowaUmowa {
+            get {
+                return ResourceManager.GetString("NowaUmowa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nowy Pracownik.
         /// </summary>
         public static string NowyPracownik {

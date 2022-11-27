@@ -21,9 +21,23 @@ namespace PlacowkaOswiatowa.Helpers
                 .ForMember(d => d.Adres, 
                     o => o.MapFrom(
                         s => s.PracownikPracownicyAdresy.FirstOrDefault().Adres))
+                .ForMember(d => d.Stanowisko, o => o.MapFrom(s => s.PracownikUmowa.Stanowisko))
+                .ForMember(d => d.Etat, o => o.MapFrom(s => s.PracownikUmowa.Etat))
+                .ForMember(d => d.DataRozpoczeciaPracy, o => o.MapFrom(
+                    s => s.PracownikUmowa.DataRozpoczeciaPracy))
+                .ForMember(d => d.DataZakonczeniaPracy, o => o.MapFrom(
+                    s => s.PracownikUmowa.DataZakonczeniaPracy))
+                .ForMember(d => d.WynagrodzenieBrutto, o => o.MapFrom(
+                    s => s.PracownikUmowa.WynagrodzenieBrutto))
+                .ForMember(d => d.WymiarGodzinowy, o => o.MapFrom(
+                    s => s.PracownikUmowa.WymiarGodzinowy))
                 ;
 
             CreateMap<Uczen, UczenDto>();
+
+            CreateMap<Pracodawca, PracodawcaDto>();
+
+            CreateMap<UmowaDto, Umowa>();
 
             //CreateMap<PracownikDTO, PracownikDto>()
             //    .ForMember(p => p.PracownikId, src => src.MapFrom(s => s.Id))

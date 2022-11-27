@@ -1,16 +1,20 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
+using PlacowkaOswiatowa.Domain.Models.Base;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -92,30 +96,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Pola i właściwości Pracownika
-        public double? WymiarGodzinowy
-        {
-            get => Item.WymiarGodzinowy;
-            set 
-            {
-                if (value != Item.WymiarGodzinowy)
-                {
-                    Item.WymiarGodzinowy = value;
-                    OnPropertyChanged(() => WymiarGodzinowy);
-                }
-            }
-        }
-        public double? Nadgodziny
-        {
-            get => Item.Nadgodziny;
-            set 
-            {
-                if (value != Item.Nadgodziny)
-                {
-                    Item.Nadgodziny = value;
-                    OnPropertyChanged(() => Nadgodziny);
-                }
-            }
-        }
         public string NrTelefonu
         {
             get => Item.NrTelefonu;
@@ -137,70 +117,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.Email = value;
                     OnPropertyChanged(() => Email);
-                }
-            }
-        }
-        public DateTime? DataZatrudnienia
-        {
-            get => Item.DataZatrudnienia;
-            set
-            {
-                if (value != Item.DataZatrudnienia)
-                {
-                    Item.DataZatrudnienia = value;
-                    OnPropertyChanged(() => DataZatrudnienia);
-                }
-            }
-        }
-        public DateTime? DataKoncaZatrudnienia
-        {
-            get => Item.DataKoncaZatrudnienia;
-            set
-            {
-                if (value != Item.DataKoncaZatrudnienia)
-                {
-                    Item.DataKoncaZatrudnienia = value;
-                    OnPropertyChanged(() => DataKoncaZatrudnienia);
-                }
-            }
-        }
-        private ReadOnlyCollection<Stanowisko> _stanowiska;
-        public ReadOnlyCollection<Stanowisko> Stanowiska => _stanowiska;
-        public Stanowisko WybraneStanowisko
-        {
-            get => Item.Stanowisko;
-            set
-            {
-                if(value != Item.Stanowisko)
-                {
-                    Item.Stanowisko = value;
-                    OnPropertyChanged(() => WybraneStanowisko);
-                }
-            }
-        }
-        private ReadOnlyCollection<Etat> _etaty;
-        public ReadOnlyCollection<Etat> Etaty => _etaty;
-        public Etat WybranyEtat
-        {
-            get => Item.Etat;
-            set
-            {
-                if (value != Item.Etat)
-                {
-                    Item.Etat = value;
-                    OnPropertyChanged(() => WybranyEtat);
-                }
-            }
-        }
-        public decimal Pensja
-        {
-            get => Item.PensjaBrutto;
-            set 
-            { 
-                if(value != Item.PensjaBrutto)
-                {
-                    Item.PensjaBrutto = value;
-                    OnPropertyChanged(() => Pensja);
                 }
             }
         }
@@ -338,34 +254,54 @@ namespace PlacowkaOswiatowa.ViewModels
                     Nazwisko = Nazwisko,
                     DataUrodzenia = DataUrodzenia,
                     Pesel = Pesel,
-                    Pensja = Pensja,
-                    WymiarGodzinowy = WymiarGodzinowy,
-                    Nadgodziny = Nadgodziny,
+                    //Pensja = Pensja,
+                    //WymiarGodzinowy = WymiarGodzinowy,
+                    //Nadgodziny = Nadgodziny,
                     NrTelefonu = NrTelefonu,
                     Email = Email,
-                    Stanowisko = WybraneStanowisko,
-                    Etat = WybranyEtat,
-                    DataZatrudnienia = DataZatrudnienia.Value,
-                    DataKoncaZatrudnienia = DataKoncaZatrudnienia
+                    //Stanowisko = WybraneStanowisko,
+                    //Etat = WybranyEtat,
+                    //DataZatrudnienia = DataZatrudnienia.Value,
+                    //DataKoncaZatrudnienia = DataKoncaZatrudnienia
                 };
 
                 var adres = new Adres
                 {
-                    Panstwo = new Panstwo { Nazwa = Panstwo },
-                    Miejscowosc = new Miejscowosc { Nazwa = Miejscowosc },
-                    Ulica = new Ulica { Nazwa = Ulica },
+                    //Panstwo = new Panstwo { Nazwa = Panstwo },
+                    //Miejscowosc = new Miejscowosc { Nazwa = Miejscowosc },
+                    //Ulica = new Ulica { Nazwa = Ulica },
                     NumerDomu = NumerDomu,
                     NumerMieszkania = NumerMieszkania,
                     KodPocztowy = KodPocztowy
                     //CzyAktywny powinno samo się defaultowo ustawić na true
                 };
+
+                var properties = adres.GetType().GetProperties()
+                    .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
+                    .ToList();
+                foreach(var prop in properties)
+                {
+                    var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
+                    MethodInfo method = _repository.GetType().GetMethod("GetByName",
+                        BindingFlags.Public | BindingFlags.Instance);
+                    MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                    var result = genericMethod.Invoke(_repository, new object[] { toSearch });
+                    var entity = result as BaseDictionaryEntity<int>;
+                    if (entity != null)
+                        prop.SetValue(adres, entity);
+                }
+
+                adres.Panstwo ??= new Panstwo { Nazwa = Panstwo };
+                adres.Miejscowosc ??= new Miejscowosc { Nazwa = Miejscowosc };
+                adres.Ulica ??= new Ulica { Nazwa = Ulica };
+
                 //var adres = _mapper.Map<AdresDTO, Adres>(_adres);
                 var czyAdresIstnieje = await _repository.Adresy.Exists(adres);
                 if (!czyAdresIstnieje)
                 {
                     await _repository.Adresy.AddAsync(adres);
                     await _repository.SaveAsync();
-                    //bo adresDTO jest śledzony
+                    
                     pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
                     {
                         new PracownicyAdresy{ AdresId = adres.Id }
@@ -379,9 +315,10 @@ namespace PlacowkaOswiatowa.ViewModels
                     //    a.NumerMieszkania == _adres.NumerMieszkania &&
                     //    a.KodPocztowy == _adres.KodPocztowy);
                     //AdresId = adresFromDb.Id;
-                    var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres);
+                    var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres,
+                        includeProperties: "Panstwo,Miejscowosc,Ulica");
 
-                    if (adresFromDb == null)
+                    if (adresFromDb is null)
                         throw new DataNotFoundException("Nie znaleziono adresu o podanych parametrach");
 
                     pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
@@ -434,15 +371,15 @@ namespace PlacowkaOswiatowa.ViewModels
             Miejscowosc = "";
             Panstwo = "";
             KodPocztowy = "";
-            DataZatrudnienia = DateTime.Today;
-            DataKoncaZatrudnienia = DateTime.Today;
-            WybranyEtat = null;
-            WybraneStanowisko = null;
-            Pensja = 0;
+            //DataZatrudnienia = DateTime.Today;
+            //DataKoncaZatrudnienia = DateTime.Today;
+            //WybranyEtat = null;
+            //WybraneStanowisko = null;
+            //Pensja = 0;
             Email = "";
             NrTelefonu = "";
-            Nadgodziny = 0;
-            WymiarGodzinowy = 0;
+            //Nadgodziny = 0;
+            //WymiarGodzinowy = 0;
         }
         #endregion
 
@@ -478,13 +415,13 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var etatyFromDb = await _repository.Etaty.GetAllAsync();
-                _etaty = new ReadOnlyCollection<Etat>(etatyFromDb);
-                OnPropertyChanged(() => Etaty);
+                //var etatyFromDb = await _repository.Etaty.GetAllAsync();
+                //_etaty = new ReadOnlyCollection<Etat>(etatyFromDb);
+                //OnPropertyChanged(() => Etaty);
 
-                var stanowiskaFromDb = await _repository.Stanowiska.GetAllAsync();
-                _stanowiska = new ReadOnlyCollection<Stanowisko>(stanowiskaFromDb);
-                OnPropertyChanged(() => Stanowiska);
+                //var stanowiskaFromDb = await _repository.Stanowiska.GetAllAsync();
+                //_stanowiska = new ReadOnlyCollection<Stanowisko>(stanowiskaFromDb);
+                //OnPropertyChanged(() => Stanowiska);
             }
             catch (Exception e)
             {

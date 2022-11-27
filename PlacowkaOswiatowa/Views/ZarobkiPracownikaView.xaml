@@ -117,7 +117,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="1" Content="Pensja brutto:"/>
-                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding PensjaBrutto, UpdateSourceTrigger=PropertyChanged, 
+                    <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding WynagrodzenieBrutto, UpdateSourceTrigger=PropertyChanged, 
                     Mode=TwoWay, StringFormat=N2}" MinWidth="80" IsEnabled="False"/>
                     <Label Grid.Row="0" Grid.Column="3" Content="zł" Style="{StaticResource LabelWaski}"/>
                     <Label Grid.Row="0" Grid.Column="4" Content="Pensja netto:"/>

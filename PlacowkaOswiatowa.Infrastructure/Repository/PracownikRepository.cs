@@ -2,6 +2,8 @@
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
+using PlacowkaOswiatowa.Infrastructure.Extensions;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
@@ -20,5 +22,13 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             return await _pracownikDbSet.AnyAsync(p => p.Imie == uzytkownik.Email &&
                                             p.Nazwisko == uzytkownik.HashHasla);
         }
+
+        public async Task<IEnumerable<Pracownik>> GetAllAsync() =>
+            await _pracownikDbSet
+                .IncludeUmowa(p => p.PracownikUmowa)
+                .Include(p => p.PracownikPrzedmiotyPracownicy)
+                    .ThenInclude(pp => pp.Przedmiot)
+                .IncludePracownicyAdresy()
+                .ToListAsync();
     }
 }

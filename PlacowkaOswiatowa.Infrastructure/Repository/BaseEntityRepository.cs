@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models.Base;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
@@ -30,7 +31,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
                 query = _dbSet;
             else
                 query = _dbSet.AsNoTracking();
-                        
+
             return query.FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
         public virtual TEntity Get(Expression<Func<TEntity, bool>> filter, string? includeProperties = null,

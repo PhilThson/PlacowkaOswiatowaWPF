@@ -689,5 +689,8 @@
     <converters:InvertBooleanConverter x:Key="InvertedBool"/>
     <converters:DateToStringConverter x:Key="DateToString"/>
     <converters:EnumStringToStringConverter x:Key="EnumStringToString"/>
+    <converters:AdresDtoToStringConverter x:Key="AdresDtoToString"/>
+    <converters:AdresToStringConverter x:Key="AdresToString"/>
+    <converters:EnumToCollectionConverter x:Key="EnumToCollection"/>
 
 </ResourceDictionary>

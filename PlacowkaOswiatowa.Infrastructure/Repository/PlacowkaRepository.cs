@@ -1,6 +1,8 @@
 ﻿using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models.Base;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
@@ -17,6 +19,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         private IStanowiskoRepository _stanowiska;
         private IPrzedmiotRepository _przedmioty;
         private IOcenaRepository _oceny;
+        private IUmowaRepository _umowy;
+        private IPracodawcaRepository _pracodawcy;
 
         public IAdresRepository Adresy => _adresy ??= new AdresRepository(_dbContext);
         public IPracownikRepository Pracownicy => _pracownicy ??= new PracownikRepository(_dbContext);
@@ -27,6 +31,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public IStanowiskoRepository Stanowiska => _stanowiska ??= new StanowiskoRepository(_dbContext);
         public IPrzedmiotRepository Przedmioty => _przedmioty ??= new PrzedmiotRepository(_dbContext);
         public IOcenaRepository Oceny => _oceny ??= new OcenaRepository(_dbContext);
+        public IUmowaRepository Umowy => _umowy ??= new UmowaRepository(_dbContext);
+        public IPracodawcaRepository Pracodawcy => _pracodawcy ??= new PracodawcaRepository(_dbContext);
 
         public PlacowkaRepository(AplikacjaDbContext dbContext)
         {
@@ -47,5 +53,9 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         {
             _dbContext.Dispose();
         }
+
+        public T GetByName<T>(string name)
+            where T : BaseDictionaryEntity<int> =>
+            _dbContext.Set<T>().FirstOrDefault(e => e.Nazwa == name);
     }
 }

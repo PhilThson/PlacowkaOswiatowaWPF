@@ -4,12 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PlacowkaOswiatowa.Views"
-             xmlns:extensions="clr-namespace:PlacowkaOswiatowa.Extensions"
              xmlns:custom="clr-namespace:PlacowkaOswiatowa.Helpers.CustomUI" 
              xmlns:viewmodels="clr-namespace:PlacowkaOswiatowa.ViewModels;assembly=PlacowkaOswiatowa.ViewModels" 
              d:DataContext="{d:DesignInstance Type=viewmodels:NowyPracownikViewModel}"
              mc:Ignorable="d" >
-             <!--xmlns:viewmodels="clr-namespace:PlacowkaOswiatowa.ViewModels"--> 
 
     <Grid>
         <Grid.RowDefinitions>
@@ -82,84 +80,15 @@
                         <Label Grid.Row="2" Grid.Column="1" Content="Pesel:"/>
                         <custom:NumericTextBox Grid.Row="2" Grid.Column="2" MaxLength="11" 
                                  Text="{Binding Pesel, UpdateSourceTrigger=PropertyChanged}"/>
-
-
-                    </Grid>
-                </GroupBox>
-                <GroupBox Grid.Row="1" Header="Dane zatrudnienia pracownika">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="155"/>
-                            <ColumnDefinition SharedSizeGroup="ThirdColumn"/>
-                            <ColumnDefinition Width="210"/>
-                            <ColumnDefinition Width="auto" SharedSizeGroup="FifthColumn"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Row="0" Grid.Column="1" Content="Stanowisko:"/>
-                        <ComboBox Grid.Row="0" Grid.Column="2" x:Name="StanowiskoComboBox"
-                                  ItemsSource="{Binding Stanowiska}"
-                                  SelectedItem="{Binding WybraneStanowisko, UpdateSourceTrigger=PropertyChanged}"
-                                  >
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Nazwa}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <!--ItemsSource="{Binding Source={extensions:EnumBinding {x:Type enums:Stanowisko}}}"-->
-
-                        <Label Grid.Row="0" Grid.Column="3" Content="Etat:"/>
-                        <ComboBox Grid.Row="0" Grid.Column="4" x:Name="EtatComboBox"
-                                  ItemsSource="{Binding Etaty}"
-                                  SelectedItem="{Binding WybranyEtat, UpdateSourceTrigger=PropertyChanged}"
-                                  >
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Nazwa}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                                  <!--Text="{Binding Etat, UpdateSourceTrigger=PropertyChanged}"-->
-                        <!--ItemsSource="{Binding Source={extensions:EnumBinding {x:Type enums:Etat}}}"-->
-
-                        <Label Grid.Row="1" Grid.Column="1" Content="Data zatrudnienia:" />
-                        <DatePicker Grid.Row="1" Grid.Column="2" 
-                                    Text="{Binding DataZatrudnienia, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Row="1" Grid.Column="3" Content="Data końca zatrudnienia:" />
-                        <DatePicker Grid.Row="1" Grid.Column="4" 
-                                    Text="{Binding DataKoncaZatrudnienia, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Row="2" Grid.Column="1" Content="Pensja:" />
-                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
-                            <TextBox MinWidth="125" HorizontalContentAlignment="Right"
-                                 Text="{Binding Pensja, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="PLN"/>
-                        </StackPanel>
-                        <Label Grid.Row="2" Grid.Column="3" Content="Wymiar godzinowy:"/>
-                        <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal">
-                            <TextBox MinWidth="120" Text="{Binding WymiarGodzinowy, UpdateSourceTrigger=PropertyChanged}"/>
-                            <Label Content="godz." MaxWidth="60"/>
-
-                        </StackPanel>
-                        <Label Grid.Row="3" Grid.Column="1" Content="Telefon:"/>
-                        <custom:NumericTextBox Grid.Row="3" Grid.Column="2" MaxLength="9"
+                        <Label Grid.Row="2" Grid.Column="3" Content="Telefon:"/>
+                        <custom:NumericTextBox Grid.Row="2" Grid.Column="4" MaxLength="9"
                                  Text="{Binding NrTelefonu, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Row="3" Grid.Column="3" Content="E-mail:"/>
+                        <Label Grid.Row="3" Grid.Column="1" Content="E-mail:"/>
                         <!--<custom:EmailTextBox Grid.Row="3" Grid.Column="4" MaxWidth="210"
                                  Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>-->
-                        <TextBox Grid.Row="3" Grid.Column="4" MinWidth="210" MaxLength="24"
+                        <TextBox Grid.Row="3" Grid.Column="2" MinWidth="210" MaxLength="24"
                                  Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+
 
                     </Grid>
                 </GroupBox>
@@ -174,7 +103,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="155"/>
-                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="210"/>
                             <ColumnDefinition SharedSizeGroup="FifthColumn" />
                             <ColumnDefinition Width="*"/>

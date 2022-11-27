@@ -4,6 +4,7 @@ using PlacowkaOswiatowa.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PlacowkaOswiatowa.Domain.Helpers;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
 {
@@ -42,6 +43,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             new List<Urlop>();
         private static List<Uzytkownik> Uzytkownicy { get; set; } =
             new List<Uzytkownik>();
+        private static List<Pracodawca> Pracodawcy { get; set; } =
+            new List<Pracodawca>();
         #endregion
 
         #region Zasilanie encji słownikowych
@@ -52,6 +55,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .UseSeed(1122)
                 .RuleFor(e => e.Id, f => (byte)(f.IndexFaker + 1))
                 .RuleFor(e => e.Nazwa, f => ((EtatEnum)f.IndexFaker).ToString())
+                .RuleFor(e => e.Opis, f => ((EtatEnum)f.IndexFaker).GetDescription())
                 .RuleFor(e => e.CzyAktywny, f => true);
 
             Etaty = etatFaker.Generate(3);
@@ -112,6 +116,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .UseSeed(7788)
                 .RuleFor(e => e.Id, f => (byte)(f.IndexFaker + 1))
                 .RuleFor(e => e.Nazwa, f => ((StanowiskoEnum)f.IndexFaker).ToString())
+                .RuleFor(e => e.Opis, f => ((StanowiskoEnum)f.IndexFaker).GetDescription())
                 .RuleFor(e => e.CzyAktywny, f => true);
 
             Stanowiska = stanowiskoFaker.Generate(6);
@@ -161,12 +166,12 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .RuleFor(p => p.Pesel, f => f.Random.ReplaceNumbers("##########"))
                 .RuleFor(p => p.NrTelefonu, f => f.Phone.PhoneNumber("###-###-###"))
                 .RuleFor(p => p.Email, f => f.Person.Email)
-                .RuleFor(p => p.EtatId, f => f.PickRandom(Etaty).Id)
-                .RuleFor(p => p.StanowiskoId, f => f.PickRandom(Stanowiska).Id)
-                .RuleFor(p => p.WymiarGodzinowy, f => f.Random.Int(15, 40))
-                .RuleFor(p => p.Pensja, f => f.Finance.Amount(2800, 10000))
+                //.RuleFor(p => p.EtatId, f => f.PickRandom(Etaty).Id)
+                //.RuleFor(p => p.StanowiskoId, f => f.PickRandom(Stanowiska).Id)
+                //.RuleFor(p => p.WymiarGodzinowy, f => f.Random.Int(15, 40))
+                //.RuleFor(p => p.Pensja, f => f.Finance.Amount(2800, 10000))
                 .RuleFor(p => p.DniUrlopu, f => f.Random.Number(1, 100))
-                .RuleFor(p => p.DataZatrudnienia, f => f.Date.PastOffset(10, DateTime.Now.AddDays(-1)).Date)
+                //.RuleFor(p => p.DataZatrudnienia, f => f.Date.PastOffset(10, DateTime.Now.AddDays(-1)).Date)
                 .RuleFor(p => p.CzyAktywny, f => true);
 
             Pracownicy = pracownikFaker.Generate(50);
@@ -300,6 +305,23 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             };
 
             return Uzytkownicy;
+        }
+
+        public static List<Pracodawca> PracodawcySeed()
+        {
+            Pracodawcy = new List<Pracodawca>
+            {
+                new Pracodawca
+                {
+                    Id = 1,
+                    Nazwa = "Zespół Szkół nr 1 im. Janusza Korczaka",
+                    AdresId = 1,
+                    Regon = "012345678",
+                    CzyAktywny = true
+                }
+            };
+
+            return Pracodawcy;
         }
         #endregion
     }

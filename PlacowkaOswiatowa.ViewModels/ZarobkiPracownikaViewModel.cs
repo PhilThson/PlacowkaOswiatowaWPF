@@ -167,15 +167,15 @@ namespace PlacowkaOswiatowa.ViewModels
                 OnPropertyChanged(() => PensjaNetto);
             }
         }
-        public decimal PensjaBrutto
+        public decimal WynagrodzenieBrutto
         {
-            get => WybranyPracownik.PensjaBrutto;
+            get => WybranyPracownik.WynagrodzenieBrutto;
             set
             {
                 if (value != default(decimal))
                 {
-                    WybranyPracownik.PensjaBrutto = value;
-                    OnPropertyChanged(() => PensjaBrutto);
+                    WybranyPracownik.WynagrodzenieBrutto = value;
+                    OnPropertyChanged(() => WynagrodzenieBrutto);
                 }
             }
         }
@@ -267,7 +267,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody pomocnicze
         private void Oblicz()
         {
-            PensjaNetto = PensjaBrutto - SkladkaChorobowa - SkladkaEmerytalna - SkladkaRentowa - SkladkaZdrowotna;
+            PensjaNetto = WynagrodzenieBrutto - SkladkaChorobowa - SkladkaEmerytalna - SkladkaRentowa - SkladkaZdrowotna;
 
             //MessageBox.Show($"Obliczono pensję pracownika {Imie} {Nazwisko}", "Info",
             //        MessageBoxButton.OK, MessageBoxImage.Information);
@@ -293,11 +293,11 @@ namespace PlacowkaOswiatowa.ViewModels
             Pesel = WybranyPracownik.Pesel;
             WymiarGodzinowy = WybranyPracownik.WymiarGodzinowy;
             Nadgodziny = WybranyPracownik.Nadgodziny;
-            PensjaBrutto = WybranyPracownik.PensjaBrutto;
-            SkladkaZdrowotna = PensjaBrutto * 0.09m;
-            SkladkaChorobowa = PensjaBrutto * 0.0245m;
-            SkladkaRentowa = PensjaBrutto * 0.015m;
-            SkladkaEmerytalna = PensjaBrutto * 0.0976m;
+            WynagrodzenieBrutto = WybranyPracownik.WynagrodzenieBrutto;
+            SkladkaZdrowotna = WynagrodzenieBrutto * 0.09m;
+            SkladkaChorobowa = WynagrodzenieBrutto * 0.0245m;
+            SkladkaRentowa = WynagrodzenieBrutto * 0.015m;
+            SkladkaEmerytalna = WynagrodzenieBrutto * 0.0976m;
         }
 
         #endregion

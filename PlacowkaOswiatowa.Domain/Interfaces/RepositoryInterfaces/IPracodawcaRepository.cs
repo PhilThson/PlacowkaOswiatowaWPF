@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
 {
-    public interface IUczenRepository : IBaseEntityRepository<Uczen, int>
+    public interface IPracodawcaRepository : IBaseEntityRepository<Pracodawca, byte>
     {
-        Task<IEnumerable<Uczen>> GetAllAsync();
+        Task<IEnumerable<Pracodawca>> GetAllAsync();
     }
 }

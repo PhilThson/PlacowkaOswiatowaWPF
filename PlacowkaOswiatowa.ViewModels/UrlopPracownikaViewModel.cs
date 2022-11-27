@@ -124,7 +124,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     flags.Add(mP);
                     _flagsViewModel = new ObservableCollection<FlagViewModel>(flags);
                     _flagsViewModel[0].PropertyChanged += (s, e) =>
-                        IsEnabled = IsEnabled == true ? false : true;
+                        IsEnabled = IsEnabled != true;
                 }
                 return _flagsViewModel;
             }
@@ -162,8 +162,6 @@ namespace PlacowkaOswiatowa.ViewModels
 
             }
         }
-
-
         #endregion
 
         #region Dane pracownika
@@ -278,6 +276,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody pomocnicze
         private void DodajUrlop()
         {
+            //Wpis do tabeli urlopów
             MessageBox.Show($"Poprawnie dodano urlop pracownikowi {Imie} {Nazwisko}", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
         }

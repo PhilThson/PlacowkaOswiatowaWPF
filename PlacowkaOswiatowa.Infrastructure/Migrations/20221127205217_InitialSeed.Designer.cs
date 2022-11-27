@@ -12,7 +12,7 @@ using PlacowkaOswiatowa.Infrastructure.DataAccess;
 namespace PlacowkaOswiatowa.Infrastructure.Migrations
 {
     [DbContext(typeof(AplikacjaDbContext))]
-    [Migration("20221105190847_InitialSeed")]
+    [Migration("20221127205217_InitialSeed")]
     partial class InitialSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -2298,19 +2298,22 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = (byte)1,
                             CzyAktywny = true,
-                            Nazwa = "PracownikAdministracyjny"
+                            Nazwa = "PracownikAdministracyjny",
+                            Opis = "Pracownik Administracyjny"
                         },
                         new
                         {
                             Id = (byte)2,
                             CzyAktywny = true,
-                            Nazwa = "PracownikPedagogiczny"
+                            Nazwa = "PracownikPedagogiczny",
+                            Opis = "Pracownik Pedagogiczny"
                         },
                         new
                         {
                             Id = (byte)3,
                             CzyAktywny = true,
-                            Nazwa = "PracownikObslugi"
+                            Nazwa = "PracownikObslugi",
+                            Opis = "Pracownik Obsługi"
                         });
                 });
 
@@ -2553,7 +2556,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 1L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 23, 13, 45, 38, 660, DateTimeKind.Local).AddTicks(1543),
+                            DataWystawienia = new DateTime(2022, 9, 14, 15, 29, 7, 661, DateTimeKind.Local).AddTicks(7634),
                             PracownikId = 36,
                             PrzedmiotId = (byte)11,
                             UczenId = 21,
@@ -2563,7 +2566,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 2L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 18, 17, 38, 14, 129, DateTimeKind.Local).AddTicks(7735),
+                            DataWystawienia = new DateTime(2022, 10, 10, 19, 21, 43, 131, DateTimeKind.Local).AddTicks(3887),
                             PracownikId = 10,
                             PrzedmiotId = (byte)13,
                             UczenId = 51,
@@ -2573,7 +2576,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 3L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 27, 10, 34, 20, 398, DateTimeKind.Local).AddTicks(3583),
+                            DataWystawienia = new DateTime(2022, 10, 19, 12, 17, 49, 399, DateTimeKind.Local).AddTicks(9735),
                             PracownikId = 28,
                             PrzedmiotId = (byte)6,
                             UczenId = 89,
@@ -2583,7 +2586,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 4L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 3, 18, 7, 3, 698, DateTimeKind.Local).AddTicks(4340),
+                            DataWystawienia = new DateTime(2022, 8, 25, 19, 50, 32, 700, DateTimeKind.Local).AddTicks(498),
                             PracownikId = 42,
                             PrzedmiotId = (byte)10,
                             UczenId = 23,
@@ -2593,7 +2596,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 5L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 20, 14, 58, 39, 150, DateTimeKind.Local).AddTicks(3739),
+                            DataWystawienia = new DateTime(2022, 11, 11, 16, 42, 8, 151, DateTimeKind.Local).AddTicks(9903),
                             PracownikId = 23,
                             PrzedmiotId = (byte)6,
                             UczenId = 66,
@@ -2603,7 +2606,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 6L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 4, 5, 37, 12, 648, DateTimeKind.Local).AddTicks(3873),
+                            DataWystawienia = new DateTime(2022, 10, 26, 7, 20, 41, 650, DateTimeKind.Local).AddTicks(57),
                             PracownikId = 7,
                             PrzedmiotId = (byte)11,
                             UczenId = 5,
@@ -2613,7 +2616,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 7L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 2, 21, 44, 59, 421, DateTimeKind.Local).AddTicks(78),
+                            DataWystawienia = new DateTime(2022, 8, 24, 23, 28, 28, 422, DateTimeKind.Local).AddTicks(6272),
                             PracownikId = 13,
                             PrzedmiotId = (byte)12,
                             UczenId = 12,
@@ -2623,7 +2626,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 8L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 24, 9, 28, 43, 978, DateTimeKind.Local).AddTicks(10),
+                            DataWystawienia = new DateTime(2022, 10, 16, 11, 12, 12, 979, DateTimeKind.Local).AddTicks(6212),
                             PracownikId = 31,
                             PrzedmiotId = (byte)5,
                             UczenId = 4,
@@ -2633,7 +2636,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 9L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 30, 16, 59, 15, 877, DateTimeKind.Local).AddTicks(5818),
+                            DataWystawienia = new DateTime(2022, 11, 21, 18, 42, 44, 879, DateTimeKind.Local).AddTicks(2028),
                             PracownikId = 43,
                             PrzedmiotId = (byte)11,
                             UczenId = 81,
@@ -2643,7 +2646,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 10L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 19, 19, 58, 55, 888, DateTimeKind.Local).AddTicks(1990),
+                            DataWystawienia = new DateTime(2022, 11, 10, 21, 42, 24, 889, DateTimeKind.Local).AddTicks(8207),
                             PracownikId = 26,
                             PrzedmiotId = (byte)4,
                             UczenId = 74,
@@ -2653,7 +2656,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 11L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 3, 17, 59, 13, 76, DateTimeKind.Local).AddTicks(7058),
+                            DataWystawienia = new DateTime(2022, 10, 25, 19, 42, 42, 78, DateTimeKind.Local).AddTicks(3281),
                             PracownikId = 21,
                             PrzedmiotId = (byte)3,
                             UczenId = 1,
@@ -2663,7 +2666,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 12L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 5, 23, 58, 48, 876, DateTimeKind.Local).AddTicks(6488),
+                            DataWystawienia = new DateTime(2022, 9, 28, 1, 42, 17, 878, DateTimeKind.Local).AddTicks(2718),
                             PracownikId = 3,
                             PrzedmiotId = (byte)3,
                             UczenId = 91,
@@ -2673,7 +2676,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 13L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 13, 12, 30, 10, 30, DateTimeKind.Local).AddTicks(7015),
+                            DataWystawienia = new DateTime(2022, 11, 4, 14, 13, 39, 32, DateTimeKind.Local).AddTicks(3252),
                             PracownikId = 8,
                             PrzedmiotId = (byte)15,
                             UczenId = 89,
@@ -2683,7 +2686,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 14L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 19, 4, 51, 26, 743, DateTimeKind.Local).AddTicks(4473),
+                            DataWystawienia = new DateTime(2022, 9, 10, 6, 34, 55, 745, DateTimeKind.Local).AddTicks(716),
                             PracownikId = 22,
                             PrzedmiotId = (byte)11,
                             UczenId = 19,
@@ -2693,7 +2696,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 15L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 28, 7, 35, 22, 160, DateTimeKind.Local).AddTicks(2336),
+                            DataWystawienia = new DateTime(2022, 11, 19, 9, 18, 51, 161, DateTimeKind.Local).AddTicks(8584),
                             PracownikId = 40,
                             PrzedmiotId = (byte)15,
                             UczenId = 98,
@@ -2703,7 +2706,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 16L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 2, 2, 9, 35, 146, DateTimeKind.Local).AddTicks(2352),
+                            DataWystawienia = new DateTime(2022, 9, 24, 3, 53, 4, 147, DateTimeKind.Local).AddTicks(8605),
                             PracownikId = 33,
                             PrzedmiotId = (byte)4,
                             UczenId = 3,
@@ -2713,7 +2716,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 17L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 7, 0, 2, 45, 693, DateTimeKind.Local).AddTicks(3222),
+                            DataWystawienia = new DateTime(2022, 8, 29, 1, 46, 14, 694, DateTimeKind.Local).AddTicks(9480),
                             PracownikId = 20,
                             PrzedmiotId = (byte)2,
                             UczenId = 82,
@@ -2723,7 +2726,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 18L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 7, 14, 12, 46, 36, DateTimeKind.Local).AddTicks(3138),
+                            DataWystawienia = new DateTime(2022, 8, 29, 15, 56, 15, 37, DateTimeKind.Local).AddTicks(9400),
                             PracownikId = 13,
                             PrzedmiotId = (byte)12,
                             UczenId = 95,
@@ -2733,7 +2736,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 19L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 8, 22, 14, 43, 674, DateTimeKind.Local).AddTicks(1282),
+                            DataWystawienia = new DateTime(2022, 10, 30, 23, 58, 12, 675, DateTimeKind.Local).AddTicks(7549),
                             PracownikId = 36,
                             PrzedmiotId = (byte)6,
                             UczenId = 89,
@@ -2743,7 +2746,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 20L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 3, 11, 2, 40, 366, DateTimeKind.Local).AddTicks(1733),
+                            DataWystawienia = new DateTime(2022, 9, 25, 12, 46, 9, 367, DateTimeKind.Local).AddTicks(8004),
                             PracownikId = 49,
                             PrzedmiotId = (byte)10,
                             UczenId = 96,
@@ -2753,7 +2756,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 21L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 29, 9, 20, 38, 704, DateTimeKind.Local).AddTicks(6682),
+                            DataWystawienia = new DateTime(2022, 10, 21, 11, 4, 7, 706, DateTimeKind.Local).AddTicks(2958),
                             PracownikId = 17,
                             PrzedmiotId = (byte)5,
                             UczenId = 10,
@@ -2763,7 +2766,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 22L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 30, 1, 49, 58, 397, DateTimeKind.Local).AddTicks(918),
+                            DataWystawienia = new DateTime(2022, 9, 21, 3, 33, 27, 398, DateTimeKind.Local).AddTicks(7198),
                             PracownikId = 22,
                             PrzedmiotId = (byte)15,
                             UczenId = 13,
@@ -2773,7 +2776,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 23L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 15, 16, 19, 55, 548, DateTimeKind.Local).AddTicks(6396),
+                            DataWystawienia = new DateTime(2022, 11, 6, 18, 3, 24, 550, DateTimeKind.Local).AddTicks(2682),
                             PracownikId = 2,
                             PrzedmiotId = (byte)13,
                             UczenId = 73,
@@ -2783,7 +2786,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 24L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 7, 29, 23, 17, 38, 879, DateTimeKind.Local).AddTicks(4564),
+                            DataWystawienia = new DateTime(2022, 8, 21, 1, 1, 7, 881, DateTimeKind.Local).AddTicks(854),
                             PracownikId = 17,
                             PrzedmiotId = (byte)3,
                             UczenId = 79,
@@ -2793,7 +2796,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 25L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 28, 14, 26, 3, 994, DateTimeKind.Local).AddTicks(249),
+                            DataWystawienia = new DateTime(2022, 11, 19, 16, 9, 32, 995, DateTimeKind.Local).AddTicks(6545),
                             PracownikId = 25,
                             PrzedmiotId = (byte)6,
                             UczenId = 50,
@@ -2803,7 +2806,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 26L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 25, 12, 30, 12, 88, DateTimeKind.Local).AddTicks(990),
+                            DataWystawienia = new DateTime(2022, 11, 16, 14, 13, 41, 89, DateTimeKind.Local).AddTicks(7290),
                             PracownikId = 46,
                             PrzedmiotId = (byte)14,
                             UczenId = 64,
@@ -2813,7 +2816,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 27L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 5, 5, 30, 24, 694, DateTimeKind.Local).AddTicks(6333),
+                            DataWystawienia = new DateTime(2022, 10, 27, 7, 13, 53, 696, DateTimeKind.Local).AddTicks(2639),
                             PracownikId = 35,
                             PrzedmiotId = (byte)6,
                             UczenId = 46,
@@ -2823,7 +2826,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 28L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 19, 21, 30, 51, 622, DateTimeKind.Local).AddTicks(1639),
+                            DataWystawienia = new DateTime(2022, 10, 11, 23, 14, 20, 623, DateTimeKind.Local).AddTicks(7950),
                             PracownikId = 16,
                             PrzedmiotId = (byte)7,
                             UczenId = 57,
@@ -2833,7 +2836,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 29L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 9, 21, 32, 21, 757, DateTimeKind.Local).AddTicks(5459),
+                            DataWystawienia = new DateTime(2022, 8, 31, 23, 15, 50, 759, DateTimeKind.Local).AddTicks(1774),
                             PracownikId = 6,
                             PrzedmiotId = (byte)13,
                             UczenId = 7,
@@ -2843,7 +2846,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 30L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 3, 7, 41, 34, 660, DateTimeKind.Local).AddTicks(4482),
+                            DataWystawienia = new DateTime(2022, 8, 25, 9, 25, 3, 662, DateTimeKind.Local).AddTicks(795),
                             PracownikId = 50,
                             PrzedmiotId = (byte)2,
                             UczenId = 15,
@@ -2853,7 +2856,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 31L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 21, 19, 34, 7, 314, DateTimeKind.Local).AddTicks(7986),
+                            DataWystawienia = new DateTime(2022, 11, 12, 21, 17, 36, 316, DateTimeKind.Local).AddTicks(4301),
                             PracownikId = 10,
                             PrzedmiotId = (byte)7,
                             UczenId = 80,
@@ -2863,7 +2866,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 32L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 20, 1, 47, 5, 994, DateTimeKind.Local).AddTicks(6357),
+                            DataWystawienia = new DateTime(2022, 10, 12, 3, 30, 34, 996, DateTimeKind.Local).AddTicks(2678),
                             PracownikId = 42,
                             PrzedmiotId = (byte)3,
                             UczenId = 78,
@@ -2873,7 +2876,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 33L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 7, 31, 0, 52, 39, 196, DateTimeKind.Local).AddTicks(7054),
+                            DataWystawienia = new DateTime(2022, 8, 22, 2, 36, 8, 198, DateTimeKind.Local).AddTicks(3389),
                             PracownikId = 41,
                             PrzedmiotId = (byte)15,
                             UczenId = 33,
@@ -2883,7 +2886,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 34L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 7, 1, 32, 12, 632, DateTimeKind.Local).AddTicks(6790),
+                            DataWystawienia = new DateTime(2022, 8, 29, 3, 15, 41, 634, DateTimeKind.Local).AddTicks(3132),
                             PracownikId = 29,
                             PrzedmiotId = (byte)17,
                             UczenId = 42,
@@ -2893,7 +2896,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 35L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 10, 13, 51, 40, 497, DateTimeKind.Local).AddTicks(4200),
+                            DataWystawienia = new DateTime(2022, 9, 1, 15, 35, 9, 499, DateTimeKind.Local).AddTicks(546),
                             PracownikId = 39,
                             PrzedmiotId = (byte)15,
                             UczenId = 42,
@@ -2903,7 +2906,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 36L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 26, 22, 47, 55, 377, DateTimeKind.Local).AddTicks(4759),
+                            DataWystawienia = new DateTime(2022, 11, 18, 0, 31, 24, 379, DateTimeKind.Local).AddTicks(1111),
                             PracownikId = 21,
                             PrzedmiotId = (byte)12,
                             UczenId = 74,
@@ -2913,7 +2916,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 37L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 5, 16, 47, 5, 539, DateTimeKind.Local).AddTicks(3160),
+                            DataWystawienia = new DateTime(2022, 8, 27, 18, 30, 34, 540, DateTimeKind.Local).AddTicks(9516),
                             PracownikId = 39,
                             PrzedmiotId = (byte)17,
                             UczenId = 55,
@@ -2923,7 +2926,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 38L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 18, 21, 54, 28, 944, DateTimeKind.Local).AddTicks(9018),
+                            DataWystawienia = new DateTime(2022, 10, 10, 23, 37, 57, 946, DateTimeKind.Local).AddTicks(5378),
                             PracownikId = 46,
                             PrzedmiotId = (byte)7,
                             UczenId = 5,
@@ -2933,7 +2936,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 39L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 31, 4, 40, 38, 110, DateTimeKind.Local).AddTicks(3827),
+                            DataWystawienia = new DateTime(2022, 9, 22, 6, 24, 7, 112, DateTimeKind.Local).AddTicks(192),
                             PracownikId = 27,
                             PrzedmiotId = (byte)13,
                             UczenId = 41,
@@ -2943,7 +2946,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 40L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 5, 13, 13, 20, 701, DateTimeKind.Local).AddTicks(7395),
+                            DataWystawienia = new DateTime(2022, 10, 27, 14, 56, 49, 703, DateTimeKind.Local).AddTicks(3765),
                             PracownikId = 40,
                             PrzedmiotId = (byte)17,
                             UczenId = 22,
@@ -2953,7 +2956,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 41L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 18, 21, 43, 26, 336, DateTimeKind.Local).AddTicks(9569),
+                            DataWystawienia = new DateTime(2022, 11, 9, 23, 26, 55, 338, DateTimeKind.Local).AddTicks(5944),
                             PracownikId = 29,
                             PrzedmiotId = (byte)3,
                             UczenId = 17,
@@ -2963,7 +2966,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 42L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 24, 5, 50, 36, 133, DateTimeKind.Local).AddTicks(4484),
+                            DataWystawienia = new DateTime(2022, 9, 15, 7, 34, 5, 135, DateTimeKind.Local).AddTicks(863),
                             PracownikId = 39,
                             PrzedmiotId = (byte)13,
                             UczenId = 96,
@@ -2973,7 +2976,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 43L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 27, 9, 59, 36, 215, DateTimeKind.Local).AddTicks(7294),
+                            DataWystawienia = new DateTime(2022, 9, 18, 11, 43, 5, 217, DateTimeKind.Local).AddTicks(3677),
                             PracownikId = 6,
                             PrzedmiotId = (byte)17,
                             UczenId = 12,
@@ -2983,7 +2986,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 44L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 29, 12, 24, 6, 23, DateTimeKind.Local).AddTicks(4280),
+                            DataWystawienia = new DateTime(2022, 11, 20, 14, 7, 35, 25, DateTimeKind.Local).AddTicks(668),
                             PracownikId = 13,
                             PrzedmiotId = (byte)14,
                             UczenId = 37,
@@ -2993,7 +2996,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 45L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 28, 14, 22, 38, 620, DateTimeKind.Local).AddTicks(4212),
+                            DataWystawienia = new DateTime(2022, 10, 20, 16, 6, 7, 622, DateTimeKind.Local).AddTicks(604),
                             PracownikId = 26,
                             PrzedmiotId = (byte)7,
                             UczenId = 1,
@@ -3003,7 +3006,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 46L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 29, 2, 2, 19, 736, DateTimeKind.Local).AddTicks(1275),
+                            DataWystawienia = new DateTime(2022, 11, 20, 3, 45, 48, 737, DateTimeKind.Local).AddTicks(7671),
                             PracownikId = 18,
                             PrzedmiotId = (byte)17,
                             UczenId = 70,
@@ -3013,7 +3016,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 47L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 13, 10, 47, 49, 678, DateTimeKind.Local).AddTicks(2609),
+                            DataWystawienia = new DateTime(2022, 10, 5, 12, 31, 18, 679, DateTimeKind.Local).AddTicks(9011),
                             PracownikId = 10,
                             PrzedmiotId = (byte)17,
                             UczenId = 79,
@@ -3023,7 +3026,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 48L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 22, 14, 0, 10, 129, DateTimeKind.Local).AddTicks(3323),
+                            DataWystawienia = new DateTime(2022, 11, 13, 15, 43, 39, 130, DateTimeKind.Local).AddTicks(9729),
                             PracownikId = 31,
                             PrzedmiotId = (byte)1,
                             UczenId = 40,
@@ -3033,7 +3036,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 49L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 29, 4, 16, 33, 742, DateTimeKind.Local).AddTicks(3434),
+                            DataWystawienia = new DateTime(2022, 10, 21, 6, 0, 2, 743, DateTimeKind.Local).AddTicks(9846),
                             PracownikId = 48,
                             PrzedmiotId = (byte)7,
                             UczenId = 34,
@@ -3043,7 +3046,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 50L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 25, 16, 35, 17, 464, DateTimeKind.Local).AddTicks(4551),
+                            DataWystawienia = new DateTime(2022, 10, 17, 18, 18, 46, 466, DateTimeKind.Local).AddTicks(968),
                             PracownikId = 21,
                             PrzedmiotId = (byte)3,
                             UczenId = 46,
@@ -3053,7 +3056,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 51L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 18, 5, 45, 37, 15, DateTimeKind.Local).AddTicks(4815),
+                            DataWystawienia = new DateTime(2022, 9, 9, 7, 29, 6, 17, DateTimeKind.Local).AddTicks(1236),
                             PracownikId = 22,
                             PrzedmiotId = (byte)1,
                             UczenId = 44,
@@ -3063,7 +3066,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 52L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 15, 12, 21, 53, 758, DateTimeKind.Local).AddTicks(235),
+                            DataWystawienia = new DateTime(2022, 9, 6, 14, 5, 22, 759, DateTimeKind.Local).AddTicks(6662),
                             PracownikId = 28,
                             PrzedmiotId = (byte)12,
                             UczenId = 80,
@@ -3073,7 +3076,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 53L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 13, 4, 18, 0, 511, DateTimeKind.Local).AddTicks(2259),
+                            DataWystawienia = new DateTime(2022, 10, 5, 6, 1, 29, 512, DateTimeKind.Local).AddTicks(8690),
                             PracownikId = 4,
                             PrzedmiotId = (byte)12,
                             UczenId = 96,
@@ -3083,7 +3086,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 54L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 26, 16, 2, 22, 506, DateTimeKind.Local).AddTicks(765),
+                            DataWystawienia = new DateTime(2022, 11, 17, 17, 45, 51, 507, DateTimeKind.Local).AddTicks(7201),
                             PracownikId = 16,
                             PrzedmiotId = (byte)2,
                             UczenId = 13,
@@ -3093,7 +3096,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 55L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 24, 22, 15, 14, 736, DateTimeKind.Local).AddTicks(1395),
+                            DataWystawienia = new DateTime(2022, 11, 15, 23, 58, 43, 737, DateTimeKind.Local).AddTicks(7836),
                             PracownikId = 43,
                             PrzedmiotId = (byte)16,
                             UczenId = 37,
@@ -3103,7 +3106,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 56L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 7, 31, 12, 0, 45, 295, DateTimeKind.Local).AddTicks(9942),
+                            DataWystawienia = new DateTime(2022, 8, 22, 13, 44, 14, 297, DateTimeKind.Local).AddTicks(6387),
                             PracownikId = 10,
                             PrzedmiotId = (byte)9,
                             UczenId = 62,
@@ -3113,7 +3116,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 57L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 1, 15, 27, 38, 83, DateTimeKind.Local).AddTicks(714),
+                            DataWystawienia = new DateTime(2022, 9, 23, 17, 11, 7, 84, DateTimeKind.Local).AddTicks(7157),
                             PracownikId = 45,
                             PrzedmiotId = (byte)15,
                             UczenId = 55,
@@ -3123,7 +3126,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 58L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 7, 31, 1, 28, 49, 512, DateTimeKind.Local).AddTicks(9054),
+                            DataWystawienia = new DateTime(2022, 8, 22, 3, 12, 18, 514, DateTimeKind.Local).AddTicks(5499),
                             PracownikId = 39,
                             PrzedmiotId = (byte)7,
                             UczenId = 74,
@@ -3133,7 +3136,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 59L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 30, 13, 4, 52, 192, DateTimeKind.Local).AddTicks(1781),
+                            DataWystawienia = new DateTime(2022, 11, 21, 14, 48, 21, 193, DateTimeKind.Local).AddTicks(8239),
                             PracownikId = 41,
                             PrzedmiotId = (byte)8,
                             UczenId = 71,
@@ -3143,7 +3146,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 60L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 30, 13, 11, 24, 694, DateTimeKind.Local).AddTicks(5781),
+                            DataWystawienia = new DateTime(2022, 11, 21, 14, 54, 53, 696, DateTimeKind.Local).AddTicks(2248),
                             PracownikId = 1,
                             PrzedmiotId = (byte)8,
                             UczenId = 65,
@@ -3153,7 +3156,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 61L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 11, 7, 20, 29, 81, DateTimeKind.Local).AddTicks(6806),
+                            DataWystawienia = new DateTime(2022, 10, 3, 9, 3, 58, 83, DateTimeKind.Local).AddTicks(3278),
                             PracownikId = 15,
                             PrzedmiotId = (byte)3,
                             UczenId = 40,
@@ -3163,7 +3166,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 62L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 5, 13, 17, 20, 407, DateTimeKind.Local).AddTicks(1987),
+                            DataWystawienia = new DateTime(2022, 9, 27, 15, 0, 49, 408, DateTimeKind.Local).AddTicks(8464),
                             PracownikId = 3,
                             PrzedmiotId = (byte)6,
                             UczenId = 56,
@@ -3173,7 +3176,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 63L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 5, 10, 22, 23, 29, DateTimeKind.Local).AddTicks(2927),
+                            DataWystawienia = new DateTime(2022, 8, 27, 12, 5, 52, 30, DateTimeKind.Local).AddTicks(9409),
                             PracownikId = 47,
                             PrzedmiotId = (byte)11,
                             UczenId = 30,
@@ -3183,7 +3186,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 64L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 20, 12, 58, 20, 910, DateTimeKind.Local).AddTicks(3466),
+                            DataWystawienia = new DateTime(2022, 9, 11, 14, 41, 49, 911, DateTimeKind.Local).AddTicks(9952),
                             PracownikId = 27,
                             PrzedmiotId = (byte)2,
                             UczenId = 10,
@@ -3193,7 +3196,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 65L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 7, 19, 57, 12, 523, DateTimeKind.Local).AddTicks(9553),
+                            DataWystawienia = new DateTime(2022, 10, 29, 21, 40, 41, 525, DateTimeKind.Local).AddTicks(6043),
                             PracownikId = 29,
                             PrzedmiotId = (byte)17,
                             UczenId = 75,
@@ -3203,7 +3206,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 66L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 24, 23, 12, 47, 664, DateTimeKind.Local).AddTicks(5360),
+                            DataWystawienia = new DateTime(2022, 11, 16, 0, 56, 16, 666, DateTimeKind.Local).AddTicks(1855),
                             PracownikId = 8,
                             PrzedmiotId = (byte)14,
                             UczenId = 93,
@@ -3213,7 +3216,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 67L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 28, 13, 14, 45, 693, DateTimeKind.Local).AddTicks(7483),
+                            DataWystawienia = new DateTime(2022, 9, 19, 14, 58, 14, 695, DateTimeKind.Local).AddTicks(3983),
                             PracownikId = 28,
                             PrzedmiotId = (byte)3,
                             UczenId = 18,
@@ -3223,7 +3226,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 68L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 7, 14, 10, 8, 183, DateTimeKind.Local).AddTicks(4760),
+                            DataWystawienia = new DateTime(2022, 9, 29, 15, 53, 37, 185, DateTimeKind.Local).AddTicks(1264),
                             PracownikId = 26,
                             PrzedmiotId = (byte)14,
                             UczenId = 41,
@@ -3233,7 +3236,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 69L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 11, 1, 18, 23, 17, 987, DateTimeKind.Local).AddTicks(340),
+                            DataWystawienia = new DateTime(2022, 11, 23, 20, 6, 46, 988, DateTimeKind.Local).AddTicks(6849),
                             PracownikId = 11,
                             PrzedmiotId = (byte)16,
                             UczenId = 44,
@@ -3243,7 +3246,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 70L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 14, 11, 38, 48, 557, DateTimeKind.Local).AddTicks(4491),
+                            DataWystawienia = new DateTime(2022, 10, 6, 13, 22, 17, 559, DateTimeKind.Local).AddTicks(1003),
                             PracownikId = 26,
                             PrzedmiotId = (byte)15,
                             UczenId = 11,
@@ -3253,7 +3256,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 71L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 18, 4, 15, 28, 786, DateTimeKind.Local).AddTicks(6907),
+                            DataWystawienia = new DateTime(2022, 10, 10, 5, 58, 57, 788, DateTimeKind.Local).AddTicks(3424),
                             PracownikId = 46,
                             PrzedmiotId = (byte)3,
                             UczenId = 57,
@@ -3263,7 +3266,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 72L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 26, 0, 18, 37, 659, DateTimeKind.Local).AddTicks(7452),
+                            DataWystawienia = new DateTime(2022, 10, 18, 2, 2, 6, 661, DateTimeKind.Local).AddTicks(3974),
                             PracownikId = 27,
                             PrzedmiotId = (byte)2,
                             UczenId = 44,
@@ -3273,7 +3276,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 73L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 29, 15, 3, 5, 191, DateTimeKind.Local).AddTicks(2437),
+                            DataWystawienia = new DateTime(2022, 11, 20, 16, 46, 34, 192, DateTimeKind.Local).AddTicks(8963),
                             PracownikId = 7,
                             PrzedmiotId = (byte)11,
                             UczenId = 75,
@@ -3283,7 +3286,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 74L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 24, 16, 9, 37, 760, DateTimeKind.Local).AddTicks(4190),
+                            DataWystawienia = new DateTime(2022, 10, 16, 17, 53, 6, 762, DateTimeKind.Local).AddTicks(722),
                             PracownikId = 39,
                             PrzedmiotId = (byte)10,
                             UczenId = 15,
@@ -3293,7 +3296,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 75L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 10, 15, 55, 5, 383, DateTimeKind.Local).AddTicks(6605),
+                            DataWystawienia = new DateTime(2022, 10, 2, 17, 38, 34, 385, DateTimeKind.Local).AddTicks(3141),
                             PracownikId = 7,
                             PrzedmiotId = (byte)1,
                             UczenId = 29,
@@ -3303,7 +3306,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 76L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 20, 6, 1, 39, 468, DateTimeKind.Local).AddTicks(8287),
+                            DataWystawienia = new DateTime(2022, 9, 11, 7, 45, 8, 470, DateTimeKind.Local).AddTicks(4828),
                             PracownikId = 7,
                             PrzedmiotId = (byte)9,
                             UczenId = 84,
@@ -3313,7 +3316,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 77L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 15, 1, 8, 24, 547, DateTimeKind.Local).AddTicks(8840),
+                            DataWystawienia = new DateTime(2022, 11, 6, 2, 51, 53, 549, DateTimeKind.Local).AddTicks(5385),
                             PracownikId = 3,
                             PrzedmiotId = (byte)12,
                             UczenId = 9,
@@ -3323,7 +3326,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 78L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 21, 10, 16, 15, 229, DateTimeKind.Local).AddTicks(3161),
+                            DataWystawienia = new DateTime(2022, 11, 12, 11, 59, 44, 230, DateTimeKind.Local).AddTicks(9712),
                             PracownikId = 49,
                             PrzedmiotId = (byte)10,
                             UczenId = 2,
@@ -3333,7 +3336,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 79L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 20, 16, 23, 2, 374, DateTimeKind.Local).AddTicks(3748),
+                            DataWystawienia = new DateTime(2022, 10, 12, 18, 6, 31, 376, DateTimeKind.Local).AddTicks(303),
                             PracownikId = 4,
                             PrzedmiotId = (byte)2,
                             UczenId = 31,
@@ -3343,7 +3346,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 80L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 9, 7, 39, 26, 113, DateTimeKind.Local).AddTicks(7465),
+                            DataWystawienia = new DateTime(2022, 10, 31, 9, 22, 55, 115, DateTimeKind.Local).AddTicks(4024),
                             PracownikId = 24,
                             PrzedmiotId = (byte)10,
                             UczenId = 83,
@@ -3353,7 +3356,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 81L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 28, 5, 22, 44, 26, DateTimeKind.Local).AddTicks(5502),
+                            DataWystawienia = new DateTime(2022, 10, 20, 7, 6, 13, 28, DateTimeKind.Local).AddTicks(2065),
                             PracownikId = 19,
                             PrzedmiotId = (byte)17,
                             UczenId = 52,
@@ -3363,7 +3366,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 82L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 2, 2, 15, 31, 406, DateTimeKind.Local).AddTicks(4037),
+                            DataWystawienia = new DateTime(2022, 10, 24, 3, 59, 0, 408, DateTimeKind.Local).AddTicks(604),
                             PracownikId = 31,
                             PrzedmiotId = (byte)8,
                             UczenId = 55,
@@ -3373,7 +3376,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 83L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 30, 12, 1, 6, 608, DateTimeKind.Local).AddTicks(8872),
+                            DataWystawienia = new DateTime(2022, 10, 22, 13, 44, 35, 610, DateTimeKind.Local).AddTicks(5443),
                             PracownikId = 36,
                             PrzedmiotId = (byte)2,
                             UczenId = 96,
@@ -3383,7 +3386,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 84L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 27, 6, 57, 19, 977, DateTimeKind.Local).AddTicks(9516),
+                            DataWystawienia = new DateTime(2022, 11, 18, 8, 40, 48, 979, DateTimeKind.Local).AddTicks(6084),
                             PracownikId = 3,
                             PrzedmiotId = (byte)8,
                             UczenId = 8,
@@ -3393,7 +3396,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 85L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 1, 14, 10, 49, 204, DateTimeKind.Local).AddTicks(1010),
+                            DataWystawienia = new DateTime(2022, 10, 23, 15, 54, 18, 205, DateTimeKind.Local).AddTicks(7580),
                             PracownikId = 38,
                             PrzedmiotId = (byte)1,
                             UczenId = 56,
@@ -3403,7 +3406,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 86L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 27, 15, 0, 2, 971, DateTimeKind.Local).AddTicks(1454),
+                            DataWystawienia = new DateTime(2022, 11, 18, 16, 43, 31, 972, DateTimeKind.Local).AddTicks(8036),
                             PracownikId = 42,
                             PrzedmiotId = (byte)7,
                             UczenId = 23,
@@ -3413,7 +3416,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 87L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 26, 6, 39, 48, 724, DateTimeKind.Local).AddTicks(6391),
+                            DataWystawienia = new DateTime(2022, 10, 18, 8, 23, 17, 726, DateTimeKind.Local).AddTicks(2980),
                             PracownikId = 16,
                             PrzedmiotId = (byte)2,
                             UczenId = 30,
@@ -3423,7 +3426,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 88L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 6, 11, 5, 7, 183, DateTimeKind.Local).AddTicks(4687),
+                            DataWystawienia = new DateTime(2022, 9, 28, 12, 48, 36, 185, DateTimeKind.Local).AddTicks(1279),
                             PracownikId = 27,
                             PrzedmiotId = (byte)16,
                             UczenId = 14,
@@ -3433,7 +3436,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 89L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 21, 14, 33, 44, 117, DateTimeKind.Local).AddTicks(9987),
+                            DataWystawienia = new DateTime(2022, 10, 13, 16, 17, 13, 119, DateTimeKind.Local).AddTicks(6583),
                             PracownikId = 22,
                             PrzedmiotId = (byte)10,
                             UczenId = 56,
@@ -3443,7 +3446,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 90L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 25, 10, 38, 14, 543, DateTimeKind.Local).AddTicks(1356),
+                            DataWystawienia = new DateTime(2022, 10, 17, 12, 21, 43, 544, DateTimeKind.Local).AddTicks(7957),
                             PracownikId = 6,
                             PrzedmiotId = (byte)2,
                             UczenId = 22,
@@ -3453,7 +3456,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 91L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 14, 10, 42, 21, 885, DateTimeKind.Local).AddTicks(678),
+                            DataWystawienia = new DateTime(2022, 10, 6, 12, 25, 50, 886, DateTimeKind.Local).AddTicks(7283),
                             PracownikId = 20,
                             PrzedmiotId = (byte)7,
                             UczenId = 38,
@@ -3463,7 +3466,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 92L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 11, 6, 40, 29, 14, DateTimeKind.Local).AddTicks(3154),
+                            DataWystawienia = new DateTime(2022, 10, 3, 8, 23, 58, 15, DateTimeKind.Local).AddTicks(9765),
                             PracownikId = 41,
                             PrzedmiotId = (byte)4,
                             UczenId = 47,
@@ -3473,7 +3476,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 93L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 11, 2, 12, 12, 31, 306, DateTimeKind.Local).AddTicks(4285),
+                            DataWystawienia = new DateTime(2022, 11, 24, 13, 56, 0, 308, DateTimeKind.Local).AddTicks(901),
                             PracownikId = 20,
                             PrzedmiotId = (byte)4,
                             UczenId = 18,
@@ -3483,7 +3486,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 94L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 14, 11, 5, 40, 511, DateTimeKind.Local).AddTicks(8494),
+                            DataWystawienia = new DateTime(2022, 9, 5, 12, 49, 9, 513, DateTimeKind.Local).AddTicks(5114),
                             PracownikId = 21,
                             PrzedmiotId = (byte)7,
                             UczenId = 89,
@@ -3493,7 +3496,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 95L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 31, 14, 22, 45, 746, DateTimeKind.Local).AddTicks(4898),
+                            DataWystawienia = new DateTime(2022, 9, 22, 16, 6, 14, 748, DateTimeKind.Local).AddTicks(1521),
                             PracownikId = 46,
                             PrzedmiotId = (byte)12,
                             UczenId = 15,
@@ -3503,7 +3506,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 96L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 13, 3, 47, 3, 3, DateTimeKind.Local).AddTicks(4132),
+                            DataWystawienia = new DateTime(2022, 11, 4, 5, 30, 32, 5, DateTimeKind.Local).AddTicks(760),
                             PracownikId = 10,
                             PrzedmiotId = (byte)15,
                             UczenId = 98,
@@ -3513,7 +3516,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 97L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 8, 27, 15, 39, 47, 825, DateTimeKind.Local).AddTicks(1484),
+                            DataWystawienia = new DateTime(2022, 9, 18, 17, 23, 16, 826, DateTimeKind.Local).AddTicks(8116),
                             PracownikId = 31,
                             PrzedmiotId = (byte)2,
                             UczenId = 14,
@@ -3523,7 +3526,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 98L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 9, 7, 13, 32, 44, 103, DateTimeKind.Local).AddTicks(9965),
+                            DataWystawienia = new DateTime(2022, 9, 29, 15, 16, 13, 105, DateTimeKind.Local).AddTicks(6601),
                             PracownikId = 47,
                             PrzedmiotId = (byte)13,
                             UczenId = 90,
@@ -3533,7 +3536,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 99L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 10, 15, 9, 28, 54, 57, DateTimeKind.Local).AddTicks(1748),
+                            DataWystawienia = new DateTime(2022, 11, 6, 11, 12, 23, 58, DateTimeKind.Local).AddTicks(8387),
                             PracownikId = 4,
                             PrzedmiotId = (byte)10,
                             UczenId = 94,
@@ -3543,7 +3546,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 100L,
                             CzyAktywny = true,
-                            DataWystawienia = new DateTime(2022, 11, 1, 5, 48, 36, 864, DateTimeKind.Local).AddTicks(7702),
+                            DataWystawienia = new DateTime(2022, 11, 23, 7, 32, 5, 866, DateTimeKind.Local).AddTicks(4346),
                             PracownikId = 14,
                             PrzedmiotId = (byte)12,
                             UczenId = 34,
@@ -3904,6 +3907,45 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Pracodawca", b =>
+                {
+                    b.Property<byte>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<byte>("Id"), 1L, 1);
+
+                    b.Property<int>("AdresId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("CzyAktywny")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nazwa")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("Regon")
+                        .HasColumnType("char(9)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdresId")
+                        .IsUnique();
+
+                    b.ToTable("Pracodawcy");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)1,
+                            AdresId = 1,
+                            CzyAktywny = true,
+                            Nazwa = "Zespół Szkół nr 1 im. Janusza Korczaka",
+                            Regon = "012345678"
+                        });
+                });
+
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.PracownicyAdresy", b =>
                 {
                     b.Property<int>("PracownikId")
@@ -4182,14 +4224,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Property<bool>("CzyAktywny")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("DataKoncaZatrudnienia")
-                        .HasColumnType("date");
-
                     b.Property<DateTime?>("DataUrodzenia")
                         .HasMaxLength(10)
-                        .HasColumnType("date");
-
-                    b.Property<DateTime>("DataZatrudnienia")
                         .HasColumnType("date");
 
                     b.Property<int?>("DniUrlopu")
@@ -4203,16 +4239,10 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<byte>("EtatId")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("Imie")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
-
-                    b.Property<double?>("Nadgodziny")
-                        .HasColumnType("float");
 
                     b.Property<string>("Nazwisko")
                         .IsRequired()
@@ -4222,26 +4252,12 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Property<string>("NrTelefonu")
                         .HasColumnType("varchar(11)");
 
-                    b.Property<decimal>("Pensja")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("money");
-
                     b.Property<string>("Pesel")
                         .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("varchar(11)");
 
-                    b.Property<byte>("StanowiskoId")
-                        .HasColumnType("tinyint");
-
-                    b.Property<double?>("WymiarGodzinowy")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("EtatId");
-
-                    b.HasIndex("StanowiskoId");
 
                     b.ToTable("Pracownicy");
 
@@ -4250,851 +4266,601 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = 1,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1970, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 53,
+                            DataUrodzenia = new DateTime(1970, 9, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 19,
                             Email = "Monica_Reichert@hotmail.com",
-                            EtatId = (byte)1,
                             Imie = "Monica",
                             Nazwisko = "Reichert",
                             NrTelefonu = "060-078-495",
-                            Pensja = 9061.42m,
-                            Pesel = "6835611161",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 36.0
+                            Pesel = "6835611161"
                         },
                         new
                         {
                             Id = 2,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1958, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2016, 7, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 53,
-                            Email = "Ismael_Medhurst88@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Ismael",
-                            Nazwisko = "Medhurst",
-                            NrTelefonu = "346-687-257",
-                            Pensja = 5439.30m,
-                            Pesel = "3899355605",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 32.0
+                            DataUrodzenia = new DateTime(1975, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 88,
+                            Email = "Marty_Strosin33@gmail.com",
+                            Imie = "Marty",
+                            Nazwisko = "Strosin",
+                            NrTelefonu = "556-053-466",
+                            Pesel = "8843638993"
                         },
                         new
                         {
                             Id = 3,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1999, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2018, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 35,
-                            Email = "Kristopher.Balistreri0@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Kristopher",
-                            Nazwisko = "Balistreri",
-                            NrTelefonu = "675-171-769",
-                            Pensja = 6651.89m,
-                            Pesel = "0457960031",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 28.0
+                            DataUrodzenia = new DateTime(1963, 2, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 62,
+                            Email = "Leslie_Labadie@hotmail.com",
+                            Imie = "Leslie",
+                            Nazwisko = "Labadie",
+                            NrTelefonu = "033-004-579",
+                            Pesel = "9089725672"
                         },
                         new
                         {
                             Id = 4,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1955, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2014, 3, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 16,
-                            Email = "Darnell_Pfannerstill@hotmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Darnell",
-                            Nazwisko = "Pfannerstill",
-                            NrTelefonu = "260-673-498",
-                            Pensja = 3495.17m,
-                            Pesel = "8664682891",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 30.0
+                            DataUrodzenia = new DateTime(1952, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 75,
+                            Email = "Joseph.Jacobi@hotmail.com",
+                            Imie = "Joseph",
+                            Nazwisko = "Jacobi",
+                            NrTelefonu = "485-722-030",
+                            Pesel = "2295548870"
                         },
                         new
                         {
                             Id = 5,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1998, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 7,
-                            Email = "Jean88@yahoo.com",
-                            EtatId = (byte)2,
-                            Imie = "Jean",
-                            Nazwisko = "McGlynn",
-                            NrTelefonu = "629-180-480",
-                            Pensja = 6835.11m,
-                            Pesel = "2899604104",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 17.0
+                            DataUrodzenia = new DateTime(1957, 7, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 89,
+                            Email = "Eunice82@hotmail.com",
+                            Imie = "Eunice",
+                            Nazwisko = "Moore",
+                            NrTelefonu = "901-536-430",
+                            Pesel = "6045731617"
                         },
                         new
                         {
                             Id = 6,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1961, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 7, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 77,
-                            Email = "Anthony_Stanton@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Anthony",
-                            Nazwisko = "Stanton",
-                            NrTelefonu = "353-962-581",
-                            Pensja = 3959.81m,
-                            Pesel = "1319237163",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 21.0
+                            DataUrodzenia = new DateTime(1969, 8, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 66,
+                            Email = "Jaime_Will67@gmail.com",
+                            Imie = "Jaime",
+                            Nazwisko = "Will",
+                            NrTelefonu = "939-757-798",
+                            Pesel = "9603903767"
                         },
                         new
                         {
                             Id = 7,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1965, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2022, 8, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 58,
-                            Email = "Corey_Jenkins39@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Corey",
-                            Nazwisko = "Jenkins",
-                            NrTelefonu = "180-511-284",
-                            Pensja = 4867.24m,
-                            Pesel = "1344952667",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 31.0
+                            DataUrodzenia = new DateTime(1978, 3, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 52,
+                            Email = "Glenn94@yahoo.com",
+                            Imie = "Glenn",
+                            Nazwisko = "Beatty",
+                            NrTelefonu = "290-666-357",
+                            Pesel = "1835996032"
                         },
                         new
                         {
                             Id = 8,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1956, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2016, 7, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 17,
-                            Email = "Danielle87@gmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Danielle",
-                            Nazwisko = "Kulas",
-                            NrTelefonu = "455-721-018",
-                            Pensja = 6886.34m,
-                            Pesel = "4248992256",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 40.0
+                            DataUrodzenia = new DateTime(1967, 9, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 78,
+                            Email = "Brad35@yahoo.com",
+                            Imie = "Brad",
+                            Nazwisko = "Quigley",
+                            NrTelefonu = "519-778-535",
+                            Pesel = "6508402749"
                         },
                         new
                         {
                             Id = 9,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1945, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 6, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 91,
-                            Email = "Brad_Farrell@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Brad",
-                            Nazwisko = "Farrell",
-                            NrTelefonu = "185-990-380",
-                            Pensja = 5363.10m,
-                            Pesel = "7551391069",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 19.0
+                            DataUrodzenia = new DateTime(1991, 12, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 54,
+                            Email = "Marsha.Pfeffer@yahoo.com",
+                            Imie = "Marsha",
+                            Nazwisko = "Pfeffer",
+                            NrTelefonu = "536-047-226",
+                            Pesel = "8876567003"
                         },
                         new
                         {
                             Id = 10,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1984, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2016, 4, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 7,
-                            Email = "Sheldon.Stark@gmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Sheldon",
-                            Nazwisko = "Stark",
-                            NrTelefonu = "299-750-705",
-                            Pensja = 7797.94m,
-                            Pesel = "7632172966",
-                            StanowiskoId = (byte)4,
-                            WymiarGodzinowy = 16.0
+                            DataUrodzenia = new DateTime(1996, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 40,
+                            Email = "Leroy_Wuckert0@gmail.com",
+                            Imie = "Leroy",
+                            Nazwisko = "Wuckert",
+                            NrTelefonu = "164-497-616",
+                            Pesel = "6942166487"
                         },
                         new
                         {
                             Id = 11,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1965, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2020, 11, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 33,
-                            Email = "Nellie.Heller@gmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Nellie",
-                            Nazwisko = "Heller",
-                            NrTelefonu = "275-725-449",
-                            Pensja = 9564.00m,
-                            Pesel = "8146640264",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 32.0
+                            DataUrodzenia = new DateTime(1944, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 87,
+                            Email = "Steven.Harvey46@gmail.com",
+                            Imie = "Steven",
+                            Nazwisko = "Harvey",
+                            NrTelefonu = "186-792-612",
+                            Pesel = "7649245620"
                         },
                         new
                         {
                             Id = 12,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1943, 5, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 99,
-                            Email = "Preston.Weber42@hotmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Preston",
-                            Nazwisko = "Weber",
-                            NrTelefonu = "220-445-934",
-                            Pensja = 8790.57m,
-                            Pesel = "6141675991",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 29.0
+                            DataUrodzenia = new DateTime(1995, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 12,
+                            Email = "Hubert_Huel5@hotmail.com",
+                            Imie = "Hubert",
+                            Nazwisko = "Huel",
+                            NrTelefonu = "558-130-611",
+                            Pesel = "7227925329"
                         },
                         new
                         {
                             Id = 13,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1985, 5, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2012, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 10,
-                            Email = "Seth_Weber56@gmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Seth",
-                            Nazwisko = "Weber",
-                            NrTelefonu = "795-043-535",
-                            Pensja = 6109.21m,
-                            Pesel = "9628527591",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 15.0
+                            DataUrodzenia = new DateTime(1991, 9, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 81,
+                            Email = "Enrique_Ritchie@gmail.com",
+                            Imie = "Enrique",
+                            Nazwisko = "Ritchie",
+                            NrTelefonu = "179-542-512",
+                            Pesel = "3755753959"
                         },
                         new
                         {
                             Id = 14,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1962, 4, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2022, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 28,
-                            Email = "Joy44@hotmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Joy",
-                            Nazwisko = "Rohan",
-                            NrTelefonu = "677-320-042",
-                            Pensja = 3612.97m,
-                            Pesel = "7772936882",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 32.0
+                            DataUrodzenia = new DateTime(1976, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 38,
+                            Email = "Rafael49@gmail.com",
+                            Imie = "Rafael",
+                            Nazwisko = "Kunde",
+                            NrTelefonu = "775-445-970",
+                            Pesel = "0924506445"
                         },
                         new
                         {
                             Id = 15,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1952, 6, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2018, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 61,
-                            Email = "Jimmie50@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Jimmie",
-                            Nazwisko = "Crona",
-                            NrTelefonu = "502-726-042",
-                            Pensja = 5471.83m,
-                            Pesel = "7121798573",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 17.0
+                            DataUrodzenia = new DateTime(1993, 2, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 8,
+                            Email = "Katie13@hotmail.com",
+                            Imie = "Katie",
+                            Nazwisko = "Halvorson",
+                            NrTelefonu = "523-404-696",
+                            Pesel = "2005178941"
                         },
                         new
                         {
                             Id = 16,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1986, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2013, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 22,
-                            Email = "Pauline28@hotmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Pauline",
-                            Nazwisko = "Bernier",
-                            NrTelefonu = "504-456-876",
-                            Pensja = 3677.71m,
-                            Pesel = "0337788633",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 15.0
+                            DataUrodzenia = new DateTime(1983, 4, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 24,
+                            Email = "Betty13@hotmail.com",
+                            Imie = "Betty",
+                            Nazwisko = "Streich",
+                            NrTelefonu = "572-244-400",
+                            Pesel = "1103649206"
                         },
                         new
                         {
                             Id = 17,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1985, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 60,
-                            Email = "Doreen85@hotmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Doreen",
-                            Nazwisko = "Howell",
-                            NrTelefonu = "225-811-351",
-                            Pensja = 8939.81m,
-                            Pesel = "9617780191",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 20.0
+                            DataUrodzenia = new DateTime(1949, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 29,
+                            Email = "Robin.Hodkiewicz@yahoo.com",
+                            Imie = "Robin",
+                            Nazwisko = "Hodkiewicz",
+                            NrTelefonu = "361-718-599",
+                            Pesel = "7619012958"
                         },
                         new
                         {
                             Id = 18,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1980, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 45,
-                            Email = "Ken_Sanford60@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Ken",
-                            Nazwisko = "Sanford",
-                            NrTelefonu = "942-898-322",
-                            Pensja = 3123.75m,
-                            Pesel = "6226218643",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 26.0
+                            DataUrodzenia = new DateTime(1982, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 21,
+                            Email = "Donna_Stiedemann49@gmail.com",
+                            Imie = "Donna",
+                            Nazwisko = "Stiedemann",
+                            NrTelefonu = "853-257-871",
+                            Pesel = "5811351941"
                         },
                         new
                         {
                             Id = 19,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1951, 6, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2020, 7, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 12,
-                            Email = "Delia.Mueller@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Delia",
-                            Nazwisko = "Mueller",
-                            NrTelefonu = "623-189-970",
-                            Pensja = 4349.47m,
-                            Pesel = "8289488043",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 38.0
+                            DataUrodzenia = new DateTime(1982, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 44,
+                            Email = "Verna_Mitchell56@hotmail.com",
+                            Imie = "Verna",
+                            Nazwisko = "Mitchell",
+                            NrTelefonu = "289-832-237",
+                            Pesel = "2621864394"
                         },
                         new
                         {
                             Id = 20,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1997, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 8, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 18,
-                            Email = "Roxanne70@gmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Roxanne",
-                            Nazwisko = "Monahan",
-                            NrTelefonu = "769-754-910",
-                            Pensja = 5128.09m,
-                            Pesel = "0910355883",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 26.0
+                            DataUrodzenia = new DateTime(1948, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 89,
+                            Email = "Harvey.Little@hotmail.com",
+                            Imie = "Harvey",
+                            Nazwisko = "Little",
+                            NrTelefonu = "880-436-231",
+                            Pesel = "7819882894"
                         },
                         new
                         {
                             Id = 21,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1989, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 63,
-                            Email = "Noel.Sipes44@gmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Noel",
-                            Nazwisko = "Sipes",
-                            NrTelefonu = "141-182-257",
-                            Pensja = 6014.64m,
-                            Pesel = "3889124248",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 28.0
+                            DataUrodzenia = new DateTime(1945, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 99,
+                            Email = "Nettie.Rutherford11@hotmail.com",
+                            Imie = "Nettie",
+                            Nazwisko = "Rutherford",
+                            NrTelefonu = "035-588-376",
+                            Pesel = "8284220091"
                         },
                         new
                         {
                             Id = 22,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1988, 10, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 52,
-                            Email = "Angel54@hotmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Angel",
-                            Nazwisko = "D'Amore",
-                            NrTelefonu = "540-893-421",
-                            Pensja = 4336.66m,
-                            Pesel = "9531038012",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 29.0
+                            DataUrodzenia = new DateTime(1988, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 42,
+                            Email = "Kay.Kling32@yahoo.com",
+                            Imie = "Kay",
+                            Nazwisko = "Kling",
+                            NrTelefonu = "138-891-242",
+                            Pesel = "9164651589"
                         },
                         new
                         {
                             Id = 23,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1969, 12, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2014, 6, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 14,
-                            Email = "Victor62@hotmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Victor",
-                            Nazwisko = "Schaden",
-                            NrTelefonu = "122-535-206",
-                            Pensja = 3216.06m,
-                            Pesel = "6733251548",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 33.0
+                            DataUrodzenia = new DateTime(1950, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 16,
+                            Email = "Kelly26@hotmail.com",
+                            Imie = "Kelly",
+                            Nazwisko = "Kilback",
+                            NrTelefonu = "195-310-380",
+                            Pesel = "3070453999"
                         },
                         new
                         {
                             Id = 24,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1951, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2018, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 62,
-                            Email = "Irving.Lang42@hotmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Irving",
-                            Nazwisko = "Lang",
-                            NrTelefonu = "388-925-803",
-                            Pensja = 7273.30m,
-                            Pesel = "4447839339",
-                            StanowiskoId = (byte)4,
-                            WymiarGodzinowy = 19.0
+                            DataUrodzenia = new DateTime(1956, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 39,
+                            Email = "Marshall.Koss@hotmail.com",
+                            Imie = "Marshall",
+                            Nazwisko = "Koss",
+                            NrTelefonu = "958-524-673",
+                            Pesel = "8466777926"
                         },
                         new
                         {
                             Id = 25,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1958, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 34,
-                            Email = "Lonnie.Rippin77@gmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Lonnie",
-                            Nazwisko = "Rippin",
-                            NrTelefonu = "604-868-283",
-                            Pensja = 2860.05m,
-                            Pesel = "3032390872",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 33.0
+                            DataUrodzenia = new DateTime(1950, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 83,
+                            Email = "Marion26@hotmail.com",
+                            Imie = "Marion",
+                            Nazwisko = "Casper",
+                            NrTelefonu = "534-129-319",
+                            Pesel = "2453535651"
                         },
                         new
                         {
                             Id = 26,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1999, 1, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 29,
-                            Email = "Jessie.Flatley@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Jessie",
+                            DataUrodzenia = new DateTime(1950, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 23,
+                            Email = "Melanie_Flatley31@yahoo.com",
+                            Imie = "Melanie",
                             Nazwisko = "Flatley",
-                            NrTelefonu = "988-530-130",
-                            Pensja = 3223.22m,
-                            Pesel = "5616611953",
-                            StanowiskoId = (byte)2,
-                            WymiarGodzinowy = 31.0
+                            NrTelefonu = "131-342-180",
+                            Pesel = "2117460917"
                         },
                         new
                         {
                             Id = 27,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1977, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2014, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 97,
-                            Email = "Sherman.Hackett@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Sherman",
-                            Nazwisko = "Hackett",
-                            NrTelefonu = "769-095-016",
-                            Pensja = 2852.21m,
-                            Pesel = "7966972082",
-                            StanowiskoId = (byte)2,
-                            WymiarGodzinowy = 19.0
+                            DataUrodzenia = new DateTime(1993, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 20,
+                            Email = "Woodrow_Strosin@hotmail.com",
+                            Imie = "Woodrow",
+                            Nazwisko = "Strosin",
+                            NrTelefonu = "047-461-000",
+                            Pesel = "1966009558"
                         },
                         new
                         {
                             Id = 28,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1980, 1, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 3, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 100,
-                            Email = "Bill51@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Bill",
-                            Nazwisko = "Abbott",
-                            NrTelefonu = "088-397-434",
-                            Pensja = 6616.85m,
-                            Pesel = "6938729445",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 32.0
+                            DataUrodzenia = new DateTime(1948, 3, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 1,
+                            Email = "Al.Gutkowski27@yahoo.com",
+                            Imie = "Al",
+                            Nazwisko = "Gutkowski",
+                            NrTelefonu = "773-544-728",
+                            Pesel = "3685916388"
                         },
                         new
                         {
                             Id = 29,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1947, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 10,
-                            Email = "Tonya.Dare@hotmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Tonya",
-                            Nazwisko = "Dare",
-                            NrTelefonu = "620-859-897",
-                            Pensja = 8148.26m,
-                            Pesel = "0081469622",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 35.0
+                            DataUrodzenia = new DateTime(1948, 11, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 74,
+                            Email = "Travis19@hotmail.com",
+                            Imie = "Travis",
+                            Nazwisko = "Homenick",
+                            NrTelefonu = "043-599-483",
+                            Pesel = "8422801549"
                         },
                         new
                         {
                             Id = 30,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1973, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 31,
-                            Email = "Grady70@yahoo.com",
-                            EtatId = (byte)2,
-                            Imie = "Grady",
-                            Nazwisko = "Connelly",
-                            NrTelefonu = "697-610-167",
-                            Pensja = 9586.12m,
-                            Pesel = "8510619081",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 28.0
+                            DataUrodzenia = new DateTime(1954, 9, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 59,
+                            Email = "Lionel19@gmail.com",
+                            Imie = "Lionel",
+                            Nazwisko = "Bailey",
+                            NrTelefonu = "858-804-798",
+                            Pesel = "0706943478"
                         },
                         new
                         {
                             Id = 31,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1944, 6, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 3, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 73,
-                            Email = "Abraham55@yahoo.com",
-                            EtatId = (byte)3,
-                            Imie = "Abraham",
-                            Nazwisko = "Smith",
-                            NrTelefonu = "969-704-059",
-                            Pensja = 8458.34m,
-                            Pesel = "9490271692",
-                            StanowiskoId = (byte)2,
-                            WymiarGodzinowy = 25.0
+                            DataUrodzenia = new DateTime(1995, 10, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 39,
+                            Email = "Dora.Rolfson69@gmail.com",
+                            Imie = "Dora",
+                            Nazwisko = "Rolfson",
+                            NrTelefonu = "306-782-019",
+                            Pesel = "1255688237"
                         },
                         new
                         {
                             Id = 32,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1975, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 5, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 38,
-                            Email = "Hugo61@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Hugo",
-                            Nazwisko = "Steuber",
-                            NrTelefonu = "651-713-868",
-                            Pensja = 9711.71m,
-                            Pesel = "9155616066",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 33.0
+                            DataUrodzenia = new DateTime(1969, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 21,
+                            Email = "Ann.Buckridge@hotmail.com",
+                            Imie = "Ann",
+                            Nazwisko = "Buckridge",
+                            NrTelefonu = "243-683-241",
+                            Pesel = "1312678389"
                         },
                         new
                         {
                             Id = 33,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1971, 3, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2021, 9, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 52,
-                            Email = "Erma0@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Erma",
-                            Nazwisko = "Bahringer",
-                            NrTelefonu = "163-334-558",
-                            Pensja = 3008.21m,
-                            Pesel = "9560123832",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 32.0
+                            DataUrodzenia = new DateTime(1947, 8, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 73,
+                            Email = "Vanessa11@hotmail.com",
+                            Imie = "Vanessa",
+                            Nazwisko = "Gutkowski",
+                            NrTelefonu = "104-126-562",
+                            Pesel = "0944954098"
                         },
                         new
                         {
                             Id = 34,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1971, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2018, 7, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 13,
-                            Email = "Erin_Treutel10@hotmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Erin",
-                            Nazwisko = "Treutel",
-                            NrTelefonu = "952-767-108",
-                            Pensja = 5206.29m,
-                            Pesel = "6547600122",
-                            StanowiskoId = (byte)4,
-                            WymiarGodzinowy = 35.0
+                            DataUrodzenia = new DateTime(1999, 9, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 38,
+                            Email = "Janis.Hauck@hotmail.com",
+                            Imie = "Janis",
+                            Nazwisko = "Hauck",
+                            NrTelefonu = "229-927-612",
+                            Pesel = "5782327485"
                         },
                         new
                         {
                             Id = 35,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1998, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2016, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 9,
-                            Email = "Bernard81@gmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Bernard",
-                            Nazwisko = "Kris",
-                            NrTelefonu = "437-630-212",
-                            Pensja = 3673.70m,
-                            Pesel = "4640247966",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 28.0
+                            DataUrodzenia = new DateTime(1977, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 13,
+                            Email = "Katrina37@gmail.com",
+                            Imie = "Katrina",
+                            Nazwisko = "Dietrich",
+                            NrTelefonu = "177-585-493",
+                            Pesel = "7989173704"
                         },
                         new
                         {
                             Id = 36,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1970, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 2, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 20,
-                            Email = "Nicolas52@yahoo.com",
-                            EtatId = (byte)2,
-                            Imie = "Nicolas",
-                            Nazwisko = "Hilll",
-                            NrTelefonu = "690-605-725",
-                            Pensja = 7971.04m,
-                            Pesel = "3966068457",
-                            StanowiskoId = (byte)2,
-                            WymiarGodzinowy = 25.0
+                            DataUrodzenia = new DateTime(1974, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 12,
+                            Email = "Joann56@yahoo.com",
+                            Imie = "Joann",
+                            Nazwisko = "Rogahn",
+                            NrTelefonu = "712-140-539",
+                            Pesel = "1249691080"
                         },
                         new
                         {
                             Id = 37,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1961, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2020, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 48,
-                            Email = "Don.Lueilwitz82@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Don",
-                            Nazwisko = "Lueilwitz",
-                            NrTelefonu = "304-489-999",
-                            Pensja = 9308.08m,
-                            Pesel = "6511101605",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 17.0
+                            DataUrodzenia = new DateTime(1989, 7, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 43,
+                            Email = "Jeannette_Turcotte@yahoo.com",
+                            Imie = "Jeannette",
+                            Nazwisko = "Turcotte",
+                            NrTelefonu = "404-355-910",
+                            Pesel = "2675106383"
                         },
                         new
                         {
                             Id = 38,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1992, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2022, 4, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 8,
-                            Email = "Antoinette_Turcotte10@gmail.com",
-                            EtatId = (byte)2,
-                            Imie = "Antoinette",
-                            Nazwisko = "Turcotte",
-                            NrTelefonu = "704-191-763",
-                            Pensja = 3096.94m,
-                            Pesel = "4859549171",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 27.0
+                            DataUrodzenia = new DateTime(1944, 7, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 2,
+                            Email = "Claudia_Shanahan77@gmail.com",
+                            Imie = "Claudia",
+                            Nazwisko = "Shanahan",
+                            NrTelefonu = "713-425-775",
+                            Pesel = "0605725323"
                         },
                         new
                         {
                             Id = 39,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1970, 8, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 15,
-                            Email = "Elsa.Tillman86@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Elsa",
-                            Nazwisko = "Tillman",
-                            NrTelefonu = "778-327-635",
-                            Pensja = 6229.73m,
-                            Pesel = "7944457287",
-                            StanowiskoId = (byte)6,
-                            WymiarGodzinowy = 32.0
+                            DataUrodzenia = new DateTime(1961, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 11,
+                            Email = "Eleanor_Schuster40@hotmail.com",
+                            Imie = "Eleanor",
+                            Nazwisko = "Schuster",
+                            NrTelefonu = "304-489-999",
+                            Pesel = "6511101605"
                         },
                         new
                         {
                             Id = 40,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1977, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 5, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 61,
-                            Email = "Katie.Metz@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Katie",
-                            Nazwisko = "Metz",
-                            NrTelefonu = "569-548-451",
-                            Pensja = 8730.42m,
-                            Pesel = "2361567593",
-                            StanowiskoId = (byte)4,
-                            WymiarGodzinowy = 17.0
+                            DataUrodzenia = new DateTime(1992, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 34,
+                            Email = "Teresa_Turner94@hotmail.com",
+                            Imie = "Teresa",
+                            Nazwisko = "Turner",
+                            NrTelefonu = "704-191-763",
+                            Pesel = "4859549171"
                         },
                         new
                         {
                             Id = 41,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1974, 3, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2022, 6, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 46,
-                            Email = "Loren.Nienow60@yahoo.com",
-                            EtatId = (byte)2,
-                            Imie = "Loren",
-                            Nazwisko = "Nienow",
-                            NrTelefonu = "978-798-509",
-                            Pensja = 8400.37m,
-                            Pesel = "2978913294",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 33.0
+                            DataUrodzenia = new DateTime(1970, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 25,
+                            Email = "Courtney_Bauch18@hotmail.com",
+                            Imie = "Courtney",
+                            Nazwisko = "Bauch",
+                            NrTelefonu = "778-327-635",
+                            Pesel = "7944457287"
                         },
                         new
                         {
                             Id = 42,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1960, 9, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2022, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 51,
-                            Email = "Mercedes63@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Mercedes",
-                            Nazwisko = "Bailey",
-                            NrTelefonu = "614-125-908",
-                            Pensja = 8184.92m,
-                            Pesel = "5378772727",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 24.0
+                            DataUrodzenia = new DateTime(1950, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 55,
+                            Email = "Opal_Kreiger@hotmail.com",
+                            Imie = "Opal",
+                            Nazwisko = "Kreiger",
+                            NrTelefonu = "567-593-569",
+                            Pesel = "6535332361"
                         },
                         new
                         {
                             Id = 43,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1943, 3, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2013, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 75,
-                            Email = "Esther25@hotmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Esther",
-                            Nazwisko = "Trantow",
-                            NrTelefonu = "883-638-674",
-                            Pensja = 3682.79m,
-                            Pesel = "1668704525",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 26.0
+                            DataUrodzenia = new DateTime(1975, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 35,
+                            Email = "Marty.Kertzmann@gmail.com",
+                            Imie = "Marty",
+                            Nazwisko = "Kertzmann",
+                            NrTelefonu = "724-297-891",
+                            Pesel = "8294028242"
                         },
                         new
                         {
                             Id = 44,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1997, 12, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2017, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 9,
-                            Email = "Jasmine_Kuhlman81@yahoo.com",
-                            EtatId = (byte)2,
-                            Imie = "Jasmine",
-                            Nazwisko = "Kuhlman",
-                            NrTelefonu = "468-934-827",
-                            Pensja = 5604.03m,
-                            Pesel = "6280329801",
-                            StanowiskoId = (byte)3,
-                            WymiarGodzinowy = 19.0
+                            DataUrodzenia = new DateTime(1965, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 70,
+                            Email = "Cary_Jenkins58@hotmail.com",
+                            Imie = "Cary",
+                            Nazwisko = "Jenkins",
+                            NrTelefonu = "378-772-727",
+                            Pesel = "8833730765"
                         },
                         new
                         {
                             Id = 45,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1963, 5, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 15,
-                            Email = "Penny_Mitchell75@gmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Penny",
-                            Nazwisko = "Mitchell",
-                            NrTelefonu = "740-688-646",
-                            Pensja = 5662.12m,
-                            Pesel = "1821040648",
-                            StanowiskoId = (byte)4,
-                            WymiarGodzinowy = 17.0
+                            DataUrodzenia = new DateTime(1945, 9, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 4,
+                            Email = "Edgar88@hotmail.com",
+                            Imie = "Edgar",
+                            Nazwisko = "Christiansen",
+                            NrTelefonu = "591-916-687",
+                            Pesel = "4862475450"
                         },
                         new
                         {
                             Id = 46,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1967, 11, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 12, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 71,
-                            Email = "Douglas.Nienow25@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Douglas",
-                            Nazwisko = "Nienow",
-                            NrTelefonu = "582-053-117",
-                            Pensja = 8595.50m,
-                            Pesel = "8973939561",
-                            StanowiskoId = (byte)5,
-                            WymiarGodzinowy = 30.0
+                            DataUrodzenia = new DateTime(1992, 12, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 61,
+                            Email = "Jimmie_Effertz@hotmail.com",
+                            Imie = "Jimmie",
+                            Nazwisko = "Effertz",
+                            NrTelefonu = "892-319-350",
+                            Pesel = "1554095082"
                         },
                         new
                         {
                             Id = 47,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1943, 12, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 7, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 69,
-                            Email = "Nellie.Spencer@yahoo.com",
-                            EtatId = (byte)2,
-                            Imie = "Nellie",
-                            Nazwisko = "Spencer",
-                            NrTelefonu = "538-375-980",
-                            Pensja = 6311.70m,
-                            Pesel = "5922440056",
-                            StanowiskoId = (byte)4,
-                            WymiarGodzinowy = 20.0
+                            DataUrodzenia = new DateTime(1948, 1, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 67,
+                            Email = "Ervin.Barrows14@hotmail.com",
+                            Imie = "Ervin",
+                            Nazwisko = "Barrows",
+                            NrTelefonu = "464-689-576",
+                            Pesel = "7804423054"
                         },
                         new
                         {
                             Id = 48,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1971, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2013, 1, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 66,
-                            Email = "Robin.Wehner44@gmail.com",
-                            EtatId = (byte)1,
-                            Imie = "Robin",
-                            Nazwisko = "Wehner",
-                            NrTelefonu = "914-895-775",
-                            Pensja = 7614.95m,
-                            Pesel = "3384781844",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 35.0
+                            DataUrodzenia = new DateTime(1988, 11, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 35,
+                            Email = "Alice.Stiedemann@gmail.com",
+                            Imie = "Alice",
+                            Nazwisko = "Stiedemann",
+                            NrTelefonu = "297-459-155",
+                            Pesel = "0080893985"
                         },
                         new
                         {
                             Id = 49,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1959, 4, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2019, 6, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 4,
-                            Email = "Sergio79@gmail.com",
-                            EtatId = (byte)3,
-                            Imie = "Sergio",
-                            Nazwisko = "Botsford",
-                            NrTelefonu = "219-672-898",
-                            Pensja = 5620.86m,
-                            Pesel = "1405587991",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 24.0
+                            DataUrodzenia = new DateTime(1953, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 93,
+                            Email = "Matt_Pfeffer72@yahoo.com",
+                            Imie = "Matt",
+                            Nazwisko = "Pfeffer",
+                            NrTelefonu = "039-810-658",
+                            Pesel = "2100180628"
                         },
                         new
                         {
                             Id = 50,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(1977, 11, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DataZatrudnienia = new DateTime(2015, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DniUrlopu = 18,
-                            Email = "Kristopher97@yahoo.com",
-                            EtatId = (byte)1,
-                            Imie = "Kristopher",
-                            Nazwisko = "Jacobs",
-                            NrTelefonu = "481-933-062",
-                            Pensja = 5456.63m,
-                            Pesel = "2411715347",
-                            StanowiskoId = (byte)1,
-                            WymiarGodzinowy = 33.0
+                            DataUrodzenia = new DateTime(1987, 2, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DniUrlopu = 94,
+                            Email = "Shelia.Kiehn90@yahoo.com",
+                            Imie = "Shelia",
+                            Nazwisko = "Kiehn",
+                            NrTelefonu = "460-082-443",
+                            Pesel = "5907523455"
                         });
                 });
 
@@ -5573,37 +5339,43 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                         {
                             Id = (byte)1,
                             CzyAktywny = true,
-                            Nazwa = "Obsługa"
+                            Nazwa = "Obsluga",
+                            Opis = "Obsługa"
                         },
                         new
                         {
                             Id = (byte)2,
                             CzyAktywny = true,
-                            Nazwa = "Konserwator"
+                            Nazwa = "Konserwator",
+                            Opis = "Konserwator"
                         },
                         new
                         {
                             Id = (byte)3,
                             CzyAktywny = true,
-                            Nazwa = "Pomoc"
+                            Nazwa = "Pomoc",
+                            Opis = "Pomoc"
                         },
                         new
                         {
                             Id = (byte)4,
                             CzyAktywny = true,
-                            Nazwa = "Pedagog"
+                            Nazwa = "Pedagog",
+                            Opis = "Pedagog"
                         },
                         new
                         {
                             Id = (byte)5,
                             CzyAktywny = true,
-                            Nazwa = "Kierownik"
+                            Nazwa = "Kierownik",
+                            Opis = "Kierownik"
                         },
                         new
                         {
                             Id = (byte)6,
                             CzyAktywny = true,
-                            Nazwa = "Dyrektor"
+                            Nazwa = "Dyrektor",
+                            Opis = "Dyrektor"
                         });
                 });
 
@@ -5666,7 +5438,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 1,
                             AdresId = 145,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2014, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2014, 12, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Alfred",
                             Nazwisko = "Gulgowski",
                             OddzialId = (byte)22,
@@ -5678,7 +5450,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 2,
                             AdresId = 108,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2008, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2008, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Homer",
                             Nazwisko = "Halvorson",
                             OddzialId = (byte)3,
@@ -5690,7 +5462,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 3,
                             AdresId = 118,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 10, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Robert",
                             Nazwisko = "Murphy",
                             OddzialId = (byte)30,
@@ -5702,7 +5474,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 4,
                             AdresId = 147,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 3, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Conrad",
                             Nazwisko = "Jakubowski",
                             OddzialId = (byte)3,
@@ -5714,7 +5486,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 5,
                             AdresId = 123,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2015, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2015, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Kenny",
                             Nazwisko = "VonRueden",
                             OddzialId = (byte)20,
@@ -5726,7 +5498,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 6,
                             AdresId = 24,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2016, 8, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2016, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Terrell",
                             Nazwisko = "Schimmel",
                             OddzialId = (byte)5,
@@ -5738,7 +5510,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 7,
                             AdresId = 161,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Dale",
                             Nazwisko = "Moore",
                             OddzialId = (byte)1,
@@ -5750,7 +5522,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 8,
                             AdresId = 93,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2015, 1, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2015, 2, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Darnell",
                             Nazwisko = "Johnston",
                             OddzialId = (byte)27,
@@ -5762,7 +5534,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 9,
                             AdresId = 167,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2008, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2008, 10, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Guillermo",
                             Nazwisko = "Lynch",
                             OddzialId = (byte)3,
@@ -5774,7 +5546,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 10,
                             AdresId = 84,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2007, 1, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2007, 2, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Sara",
                             Nazwisko = "Wintheiser",
                             OddzialId = (byte)11,
@@ -5786,7 +5558,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 11,
                             AdresId = 147,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Lora",
                             Nazwisko = "Schmidt",
                             OddzialId = (byte)35,
@@ -5798,7 +5570,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 12,
                             AdresId = 85,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2012, 7, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2012, 7, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Shelley",
                             Nazwisko = "Turcotte",
                             OddzialId = (byte)35,
@@ -5810,7 +5582,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 13,
                             AdresId = 59,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 11, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 12, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Douglas",
                             Nazwisko = "Steuber",
                             OddzialId = (byte)19,
@@ -5822,7 +5594,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 14,
                             AdresId = 151,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 2, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Darlene",
                             Nazwisko = "Dickens",
                             OddzialId = (byte)24,
@@ -5834,7 +5606,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 15,
                             AdresId = 124,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Traci",
                             Nazwisko = "Ratke",
                             OddzialId = (byte)14,
@@ -5846,7 +5618,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 16,
                             AdresId = 169,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 4, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Doug",
                             Nazwisko = "Harvey",
                             OddzialId = (byte)21,
@@ -5858,7 +5630,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 17,
                             AdresId = 38,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 12, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2014, 1, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Lora",
                             Nazwisko = "Jacobs",
                             OddzialId = (byte)30,
@@ -5870,7 +5642,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 18,
                             AdresId = 4,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2016, 12, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 1, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Milton",
                             Nazwisko = "Homenick",
                             OddzialId = (byte)22,
@@ -5882,7 +5654,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 19,
                             AdresId = 141,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2010, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2010, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mathew",
                             Nazwisko = "Haag",
                             OddzialId = (byte)21,
@@ -5894,7 +5666,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 20,
                             AdresId = 163,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 2, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Oliver",
                             Nazwisko = "Nitzsche",
                             OddzialId = (byte)19,
@@ -5906,7 +5678,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 21,
                             AdresId = 162,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2012, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2012, 8, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Latoya",
                             Nazwisko = "Fritsch",
                             OddzialId = (byte)26,
@@ -5918,7 +5690,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 22,
                             AdresId = 180,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Melinda",
                             Nazwisko = "Bechtelar",
                             OddzialId = (byte)20,
@@ -5930,7 +5702,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 23,
                             AdresId = 95,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2006, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2006, 4, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Louis",
                             Nazwisko = "Blanda",
                             OddzialId = (byte)20,
@@ -5942,7 +5714,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 24,
                             AdresId = 102,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 4, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Ricky",
                             Nazwisko = "Schulist",
                             OddzialId = (byte)29,
@@ -5954,7 +5726,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 25,
                             AdresId = 62,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 5, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 5, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mary",
                             Nazwisko = "Kessler",
                             OddzialId = (byte)21,
@@ -5966,7 +5738,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 26,
                             AdresId = 97,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2010, 12, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mable",
                             Nazwisko = "Goyette",
                             OddzialId = (byte)11,
@@ -5978,7 +5750,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 27,
                             AdresId = 154,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2012, 12, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Santos",
                             Nazwisko = "Thompson",
                             OddzialId = (byte)9,
@@ -5990,7 +5762,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 28,
                             AdresId = 71,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2014, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2014, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Laurence",
                             Nazwisko = "Leannon",
                             OddzialId = (byte)17,
@@ -6002,7 +5774,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 29,
                             AdresId = 115,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2014, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2014, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Gilberto",
                             Nazwisko = "Pagac",
                             OddzialId = (byte)34,
@@ -6014,7 +5786,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 30,
                             AdresId = 25,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2019, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2019, 8, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Roman",
                             Nazwisko = "Tillman",
                             OddzialId = (byte)30,
@@ -6026,7 +5798,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 31,
                             AdresId = 76,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2008, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2008, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Delbert",
                             Nazwisko = "Leannon",
                             OddzialId = (byte)35,
@@ -6038,7 +5810,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 32,
                             AdresId = 15,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2012, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2012, 1, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Tom",
                             Nazwisko = "Predovic",
                             OddzialId = (byte)23,
@@ -6050,7 +5822,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 33,
                             AdresId = 165,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 11, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 12, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Candace",
                             Nazwisko = "McLaughlin",
                             OddzialId = (byte)5,
@@ -6062,7 +5834,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 34,
                             AdresId = 188,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 7, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 8, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mercedes",
                             Nazwisko = "Gerhold",
                             OddzialId = (byte)19,
@@ -6074,7 +5846,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 35,
                             AdresId = 155,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 3, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 4, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Eula",
                             Nazwisko = "Macejkovic",
                             OddzialId = (byte)12,
@@ -6086,7 +5858,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 36,
                             AdresId = 88,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2015, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2015, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mike",
                             Nazwisko = "Braun",
                             OddzialId = (byte)21,
@@ -6098,7 +5870,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 37,
                             AdresId = 67,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2006, 6, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2006, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Scott",
                             Nazwisko = "Rau",
                             OddzialId = (byte)16,
@@ -6110,7 +5882,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 38,
                             AdresId = 92,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2006, 1, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2006, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Sarah",
                             Nazwisko = "Pfannerstill",
                             OddzialId = (byte)22,
@@ -6122,7 +5894,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 39,
                             AdresId = 152,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 1, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 1, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Doyle",
                             Nazwisko = "Altenwerth",
                             OddzialId = (byte)22,
@@ -6134,7 +5906,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 40,
                             AdresId = 33,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 9, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Loren",
                             Nazwisko = "Haag",
                             OddzialId = (byte)8,
@@ -6146,7 +5918,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 41,
                             AdresId = 84,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 6, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Shannon",
                             Nazwisko = "Graham",
                             OddzialId = (byte)21,
@@ -6158,7 +5930,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 42,
                             AdresId = 77,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Lonnie",
                             Nazwisko = "Pouros",
                             OddzialId = (byte)21,
@@ -6170,7 +5942,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 43,
                             AdresId = 80,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 11, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Dewey",
                             Nazwisko = "Hansen",
                             OddzialId = (byte)18,
@@ -6182,7 +5954,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 44,
                             AdresId = 171,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2006, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2007, 1, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Samantha",
                             Nazwisko = "Ernser",
                             OddzialId = (byte)1,
@@ -6194,7 +5966,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 45,
                             AdresId = 40,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 3, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 4, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Shelly",
                             Nazwisko = "Purdy",
                             OddzialId = (byte)6,
@@ -6206,7 +5978,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 46,
                             AdresId = 65,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 8, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Frank",
                             Nazwisko = "Herman",
                             OddzialId = (byte)12,
@@ -6218,7 +5990,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 47,
                             AdresId = 160,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mathew",
                             Nazwisko = "O'Keefe",
                             OddzialId = (byte)34,
@@ -6230,7 +6002,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 48,
                             AdresId = 121,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2009, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2009, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Duane",
                             Nazwisko = "Klocko",
                             OddzialId = (byte)13,
@@ -6242,7 +6014,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 49,
                             AdresId = 155,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2007, 8, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2007, 9, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Kimberly",
                             Nazwisko = "Prosacco",
                             OddzialId = (byte)3,
@@ -6254,7 +6026,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 50,
                             AdresId = 117,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2014, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2014, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Darla",
                             Nazwisko = "Grant",
                             OddzialId = (byte)1,
@@ -6266,7 +6038,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 51,
                             AdresId = 44,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2016, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2016, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Jacqueline",
                             Nazwisko = "Crooks",
                             OddzialId = (byte)14,
@@ -6278,7 +6050,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 52,
                             AdresId = 16,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2007, 12, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2007, 12, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Rudy",
                             Nazwisko = "Rosenbaum",
                             OddzialId = (byte)10,
@@ -6290,7 +6062,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 53,
                             AdresId = 85,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2019, 10, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2019, 11, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Robyn",
                             Nazwisko = "Ledner",
                             OddzialId = (byte)3,
@@ -6302,7 +6074,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 54,
                             AdresId = 34,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2014, 1, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2014, 2, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Nichole",
                             Nazwisko = "Beatty",
                             OddzialId = (byte)34,
@@ -6314,7 +6086,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 55,
                             AdresId = 152,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2015, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2015, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Clara",
                             Nazwisko = "Denesik",
                             OddzialId = (byte)10,
@@ -6326,7 +6098,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 56,
                             AdresId = 135,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2008, 9, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2008, 9, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Jimmie",
                             Nazwisko = "Heidenreich",
                             OddzialId = (byte)30,
@@ -6338,7 +6110,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 57,
                             AdresId = 134,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 4, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Emily",
                             Nazwisko = "Barrows",
                             OddzialId = (byte)31,
@@ -6350,7 +6122,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 58,
                             AdresId = 65,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Richard",
                             Nazwisko = "Grant",
                             OddzialId = (byte)9,
@@ -6362,7 +6134,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 59,
                             AdresId = 44,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Barbara",
                             Nazwisko = "Crist",
                             OddzialId = (byte)18,
@@ -6374,7 +6146,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 60,
                             AdresId = 22,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2007, 9, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2007, 10, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Samuel",
                             Nazwisko = "Walter",
                             OddzialId = (byte)25,
@@ -6386,7 +6158,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 61,
                             AdresId = 129,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 8, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 8, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Eula",
                             Nazwisko = "Moore",
                             OddzialId = (byte)32,
@@ -6398,7 +6170,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 62,
                             AdresId = 79,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2007, 2, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2007, 3, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Erik",
                             Nazwisko = "Prosacco",
                             OddzialId = (byte)30,
@@ -6410,7 +6182,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 63,
                             AdresId = 105,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Emily",
                             Nazwisko = "McLaughlin",
                             OddzialId = (byte)5,
@@ -6422,7 +6194,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 64,
                             AdresId = 78,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2019, 9, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2019, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Norma",
                             Nazwisko = "Reinger",
                             OddzialId = (byte)35,
@@ -6434,7 +6206,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 65,
                             AdresId = 127,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2016, 2, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2016, 2, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Virgil",
                             Nazwisko = "Gleason",
                             OddzialId = (byte)34,
@@ -6446,7 +6218,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 66,
                             AdresId = 19,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mack",
                             Nazwisko = "Schoen",
                             OddzialId = (byte)18,
@@ -6458,7 +6230,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 67,
                             AdresId = 99,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2015, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2015, 6, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Arlene",
                             Nazwisko = "Kozey",
                             OddzialId = (byte)31,
@@ -6470,7 +6242,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 68,
                             AdresId = 55,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 10, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 11, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Jeff",
                             Nazwisko = "Wilderman",
                             OddzialId = (byte)17,
@@ -6482,7 +6254,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 69,
                             AdresId = 49,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 9, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 10, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Lucia",
                             Nazwisko = "McCullough",
                             OddzialId = (byte)12,
@@ -6494,7 +6266,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 70,
                             AdresId = 72,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2010, 5, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2010, 6, 4, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Devin",
                             Nazwisko = "Rodriguez",
                             OddzialId = (byte)15,
@@ -6506,7 +6278,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 71,
                             AdresId = 178,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 9, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Perry",
                             Nazwisko = "Krajcik",
                             OddzialId = (byte)4,
@@ -6518,7 +6290,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 72,
                             AdresId = 109,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Marta",
                             Nazwisko = "Cormier",
                             OddzialId = (byte)21,
@@ -6530,7 +6302,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 73,
                             AdresId = 57,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2010, 1, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2010, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Sheldon",
                             Nazwisko = "Lakin",
                             OddzialId = (byte)17,
@@ -6542,7 +6314,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 74,
                             AdresId = 172,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 7, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Bill",
                             Nazwisko = "Rodriguez",
                             OddzialId = (byte)21,
@@ -6554,7 +6326,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 75,
                             AdresId = 187,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 7, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Vera",
                             Nazwisko = "Johns",
                             OddzialId = (byte)5,
@@ -6566,7 +6338,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 76,
                             AdresId = 175,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 5, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mona",
                             Nazwisko = "Watsica",
                             OddzialId = (byte)26,
@@ -6578,7 +6350,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 77,
                             AdresId = 91,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2011, 7, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2011, 8, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Rhonda",
                             Nazwisko = "Fisher",
                             OddzialId = (byte)6,
@@ -6590,7 +6362,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 78,
                             AdresId = 38,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2012, 7, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2012, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Elsie",
                             Nazwisko = "Russel",
                             OddzialId = (byte)30,
@@ -6602,7 +6374,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 79,
                             AdresId = 195,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Suzanne",
                             Nazwisko = "Bartell",
                             OddzialId = (byte)27,
@@ -6614,7 +6386,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 80,
                             AdresId = 60,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 9, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Mable",
                             Nazwisko = "West",
                             OddzialId = (byte)27,
@@ -6626,7 +6398,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 81,
                             AdresId = 197,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2016, 3, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2016, 4, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Tricia",
                             Nazwisko = "Hamill",
                             OddzialId = (byte)30,
@@ -6638,7 +6410,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 82,
                             AdresId = 33,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 9, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Kerry",
                             Nazwisko = "Blick",
                             OddzialId = (byte)7,
@@ -6650,7 +6422,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 83,
                             AdresId = 116,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2018, 6, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2018, 7, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "George",
                             Nazwisko = "Wunsch",
                             OddzialId = (byte)23,
@@ -6662,7 +6434,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 84,
                             AdresId = 5,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2009, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2009, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Alyssa",
                             Nazwisko = "Satterfield",
                             OddzialId = (byte)19,
@@ -6674,7 +6446,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 85,
                             AdresId = 151,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2017, 1, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2017, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Todd",
                             Nazwisko = "Roberts",
                             OddzialId = (byte)5,
@@ -6686,7 +6458,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 86,
                             AdresId = 22,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 1, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Sue",
                             Nazwisko = "Barton",
                             OddzialId = (byte)1,
@@ -6698,7 +6470,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 87,
                             AdresId = 192,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2010, 5, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2010, 6, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Tabitha",
                             Nazwisko = "Steuber",
                             OddzialId = (byte)23,
@@ -6710,7 +6482,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 88,
                             AdresId = 57,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2012, 11, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2012, 12, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Ruben",
                             Nazwisko = "Mertz",
                             OddzialId = (byte)14,
@@ -6722,7 +6494,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 89,
                             AdresId = 78,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 4, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Johnnie",
                             Nazwisko = "Hermann",
                             OddzialId = (byte)24,
@@ -6734,7 +6506,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 90,
                             AdresId = 7,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2013, 4, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2013, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Peter",
                             Nazwisko = "Koelpin",
                             OddzialId = (byte)17,
@@ -6746,7 +6518,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 91,
                             AdresId = 20,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2019, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2019, 11, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Priscilla",
                             Nazwisko = "Tillman",
                             OddzialId = (byte)14,
@@ -6758,7 +6530,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 92,
                             AdresId = 78,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2005, 4, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2005, 5, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Virginia",
                             Nazwisko = "Lemke",
                             OddzialId = (byte)11,
@@ -6770,7 +6542,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 93,
                             AdresId = 137,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2016, 7, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2016, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Sandy",
                             Nazwisko = "Roberts",
                             OddzialId = (byte)17,
@@ -6782,7 +6554,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 94,
                             AdresId = 138,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2010, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2010, 2, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Nicholas",
                             Nazwisko = "Gulgowski",
                             OddzialId = (byte)23,
@@ -6794,7 +6566,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 95,
                             AdresId = 83,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2019, 8, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2019, 8, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Lindsay",
                             Nazwisko = "Roob",
                             OddzialId = (byte)29,
@@ -6806,7 +6578,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 96,
                             AdresId = 185,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2009, 6, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2009, 7, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Marshall",
                             Nazwisko = "Schiller",
                             OddzialId = (byte)32,
@@ -6818,7 +6590,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 97,
                             AdresId = 121,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2019, 7, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2019, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Homer",
                             Nazwisko = "Powlowski",
                             OddzialId = (byte)12,
@@ -6830,7 +6602,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 98,
                             AdresId = 88,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2008, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2008, 9, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Don",
                             Nazwisko = "Ryan",
                             OddzialId = (byte)19,
@@ -6842,7 +6614,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 99,
                             AdresId = 28,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2009, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2009, 2, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Sally",
                             Nazwisko = "Hilll",
                             OddzialId = (byte)25,
@@ -6854,7 +6626,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             Id = 100,
                             AdresId = 56,
                             CzyAktywny = true,
-                            DataUrodzenia = new DateTime(2015, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DataUrodzenia = new DateTime(2015, 6, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Imie = "Bradford",
                             Nazwisko = "Hahn",
                             OddzialId = (byte)24,
@@ -6948,6 +6720,91 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                             CzyAktywny = true,
                             Nazwa = "Kwiatowa"
                         });
+                });
+
+            modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Umowa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("CzyAktywny")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CzyZwolnionyOdPodatku")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataRozpoczeciaPracy")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("DataUtworzenia")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasComputedColumnSql("getdate()");
+
+                    b.Property<DateTime?>("DataZakonczeniaPracy")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime>("DataZawarciaUmowy")
+                        .HasColumnType("date");
+
+                    b.Property<byte>("EtatId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("InneWarunkiZatrudnienia")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("MiejsceWykonywaniaPracy")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("OkresPracy")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("OpisWynagrodzenia")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<byte>("PracodawcaId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("PracownikId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PrzyczynyZawarciaUmowy")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<byte>("StanowiskoId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("WymiarCzasuPracy")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<double?>("WymiarGodzinowy")
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("WynagrodzenieBrutto")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("money");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EtatId");
+
+                    b.HasIndex("PracodawcaId");
+
+                    b.HasIndex("PracownikId")
+                        .IsUnique();
+
+                    b.HasIndex("StanowiskoId");
+
+                    b.ToTable("Umowy");
                 });
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Urlop", b =>
@@ -7394,6 +7251,17 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Navigation("Pracownik");
                 });
 
+            modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Pracodawca", b =>
+                {
+                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Adres", "Adres")
+                        .WithOne("AdresPracodawca")
+                        .HasForeignKey("PlacowkaOswiatowa.Domain.Models.Pracodawca", "AdresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adres");
+                });
+
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.PracownicyAdresy", b =>
                 {
                     b.HasOne("PlacowkaOswiatowa.Domain.Models.Adres", "Adres")
@@ -7411,25 +7279,6 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Navigation("Adres");
 
                     b.Navigation("Pracownik");
-                });
-
-            modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Pracownik", b =>
-                {
-                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Etat", "Etat")
-                        .WithMany("EtatPracownicy")
-                        .HasForeignKey("EtatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Stanowisko", "Stanowisko")
-                        .WithMany("StanowiskoPracownicy")
-                        .HasForeignKey("StanowiskoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Etat");
-
-                    b.Navigation("Stanowisko");
                 });
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.PrzedmiotyPracownicy", b =>
@@ -7476,6 +7325,41 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Navigation("Wychowawca");
                 });
 
+            modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Umowa", b =>
+                {
+                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Etat", "Etat")
+                        .WithMany("EtatUmowy")
+                        .HasForeignKey("EtatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Pracodawca", "Pracodawca")
+                        .WithMany("PracodawcaUmowy")
+                        .HasForeignKey("PracodawcaId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Pracownik", "Pracownik")
+                        .WithOne("PracownikUmowa")
+                        .HasForeignKey("PlacowkaOswiatowa.Domain.Models.Umowa", "PracownikId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PlacowkaOswiatowa.Domain.Models.Stanowisko", "Stanowisko")
+                        .WithMany("StanowiskoUmowy")
+                        .HasForeignKey("StanowiskoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Etat");
+
+                    b.Navigation("Pracodawca");
+
+                    b.Navigation("Pracownik");
+
+                    b.Navigation("Stanowisko");
+                });
+
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Urlop", b =>
                 {
                     b.HasOne("PlacowkaOswiatowa.Domain.Models.Pracownik", "Pracownik")
@@ -7500,6 +7384,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Adres", b =>
                 {
+                    b.Navigation("AdresPracodawca");
+
                     b.Navigation("AdresPracownicyAdresy");
 
                     b.Navigation("AdresUczniowie");
@@ -7507,7 +7393,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Etat", b =>
                 {
-                    b.Navigation("EtatPracownicy");
+                    b.Navigation("EtatUmowy");
                 });
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Miejscowosc", b =>
@@ -7525,6 +7411,11 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Navigation("PanstwoAdresy");
                 });
 
+            modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Pracodawca", b =>
+                {
+                    b.Navigation("PracodawcaUmowy");
+                });
+
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Pracownik", b =>
                 {
                     b.Navigation("PracownikOceny");
@@ -7536,6 +7427,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
                     b.Navigation("PracownikPrzedmiotyPracownicy");
 
                     b.Navigation("PracownikUczniowie");
+
+                    b.Navigation("PracownikUmowa");
 
                     b.Navigation("PracownikUrlopy");
                 });
@@ -7552,7 +7445,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Migrations
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Stanowisko", b =>
                 {
-                    b.Navigation("StanowiskoPracownicy");
+                    b.Navigation("StanowiskoUmowy");
                 });
 
             modelBuilder.Entity("PlacowkaOswiatowa.Domain.Models.Uczen", b =>
