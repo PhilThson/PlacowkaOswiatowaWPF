@@ -19,12 +19,6 @@ namespace PlacowkaOswiatowa.ViewModels
         //nie można bindować do modeli które nie implementują interfejsu
         //  INotifyPropertyChanged - może to powodować wycieki pamięci
         //chyba żeby zastosować wrappery, które będą implementowały ten interfejs
-        //private ObservableCollection<PracownikDto> _pracownicy;
-        //public IEnumerable<PracownikDto> Pracownicy => _pracownicy;
-        //public ICommand DodajPracownikaCommand 
-        //{
-        //    get => new BaseCommand(DodajNowegoPracownika);
-        //}
 
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
         #endregion
@@ -42,8 +36,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync(
-                    includeProperties: "Etat,Stanowisko,PracownikPracownicyAdresy");
+                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
                 var listaPracownikow = _mapper.Map<IEnumerable<PracownikDto>>(pracownicyFormDb);
 
                 List = new ObservableCollection<PracownikDto>(listaPracownikow);
@@ -58,13 +51,12 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Helpers
+        #region Metody
         public override void Update()
         {
             Load();
         }
 
-        //Ta metoda zostanie raczej podpięta pod przycisk 'Odswież'
         public override void Load()
         {
             List = new ObservableCollection<PracownikDto>

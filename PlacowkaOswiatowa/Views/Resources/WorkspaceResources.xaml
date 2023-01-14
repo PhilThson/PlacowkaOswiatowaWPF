@@ -20,7 +20,7 @@
     </Style>
 
     <!--Labele-->
-    
+
     <Style x:Key="LabelError" TargetType="{x:Type Label}">
         <Setter Property="Height" Value="25"/>
         <Setter Property="Background" Value="Red"/>
@@ -454,6 +454,8 @@
         <Setter Property="MaxLength" Value="20"/>
     </Style>
 
+    <!--Dzięki implementacji walidacji w środku TextBox'a, wiadomości
+    nie będą nachodziły na inne elemnty interfejsu-->
     <Style x:Key="TextBoxZaokraglony" TargetType="{x:Type TextBox}">
         <Setter Property="MinWidth" Value="170"/>
         <Setter Property="TextAlignment" Value="Left"/>
@@ -467,39 +469,48 @@
         <Setter Property="BorderBrush" Value="{StaticResource DeafultBorderBrush}"/>
         <Setter Property="Background" Value="{StaticResource BrushGainsboro}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <!--Aby nie roziciągać ramki na textbox i error message-->
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <AdornedElementPlaceholder/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="TextBoxBorder" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" 
+                    <StackPanel>
+                        <Border x:Name="TextBoxBorder" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Background="{TemplateBinding Background}">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="TextBoxBorder"
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="TextBoxBorder"
                                                 Storyboard.TargetProperty="(Panel.Background).
                                             (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0"
+                                                <EasingColorKeyFrame KeyTime="0"
                                          Value="{StaticResource DisabledBorderLightColor}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="ReadOnly">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="TextBoxBorder"
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="ReadOnly">
+                                        <Storyboard>
+                                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="TextBoxBorder"
                                                 Storyboard.TargetProperty="(Panel.Background).
                                              (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0"
+                                                <EasingColorKeyFrame KeyTime="0"
                                          Value="{StaticResource DisabledBorderDarkColor}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <ScrollViewer x:Name="PART_ContentHost"
+                                            </ColorAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ScrollViewer x:Name="PART_ContentHost"
                             Focusable="false"
                             HorizontalScrollBarVisibility="Hidden"
                             VerticalScrollBarVisibility="Hidden"
@@ -509,7 +520,15 @@
                             Padding="{TemplateBinding Padding}" Margin="{TemplateBinding Margin}"
                             MinWidth="{TemplateBinding MinWidth}" FontSize="{TemplateBinding FontSize}"          
                         />
-                    </Border>
+                        </Border>
+                        <ItemsControl Margin="0 5 0 0" FontSize="12" ItemsSource="{TemplateBinding Validation.Errors}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Foreground="{StaticResource BrushRed}" Text="{Binding ErrorContent}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="BorderBrush" TargetName="TextBoxBorder" 
@@ -590,7 +609,7 @@
     </Style>
 
     <Style x:Name="TextBoxAlfabet" TargetType="{x:Type custom:AlphabetTextBox}" BasedOn="{StaticResource TextBoxZaokraglony}">
-        
+
     </Style>
 
     <Style x:Name="TextBoxNumeryczny" TargetType="{x:Type custom:NumericTextBox}" BasedOn="{StaticResource TextBoxZaokraglony}">
@@ -692,5 +711,6 @@
     <converters:AdresDtoToStringConverter x:Key="AdresDtoToString"/>
     <converters:AdresToStringConverter x:Key="AdresToString"/>
     <converters:EnumToCollectionConverter x:Key="EnumToCollection"/>
+    <converters:JobToStringConverter x:Key="JobToString"/>
 
 </ResourceDictionary>

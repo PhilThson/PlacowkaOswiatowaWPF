@@ -1,19 +1,17 @@
-﻿using PlacowkaOswiatowa.Domain.DTOs;
+﻿using PlacowkaOswiatowa.Domain.Models;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 
 namespace PlacowkaOswiatowa.Helpers.Converters
 {
-    [ValueConversion(typeof(AdresDto), typeof(string))]
-    public class AdresDtoToStringConverter : IValueConverter
+    [ValueConversion(typeof(Stanowisko), typeof(string))]
+    public class JobToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var adres = value as AdresDto;
-            
-            return adres != null ? adres.ToString()
-                : "Brak adresu do wyświetlenia";
+            var job = value as Stanowisko;
+            return job != null ? job.Opis : "Brak";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -13,10 +13,14 @@ using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
+using System.ComponentModel;
+using PlacowkaOswiatowa.ViewModels.Helpers;
+using System.Windows.Threading;
+using System.Collections;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable
+    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable, INotifyDataErrorInfo
     {
         #region Prywatne pola
         //private Uczen _uczen;
@@ -34,8 +38,12 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Imie)
                 {
                     Item.Imie = value;
+
+                    _errorsViewModel.ClearErrors(nameof(Imie));
+                    if (Item.Imie.Length > 2)
+                        _errorsViewModel.AddError(nameof(Imie), $"{nameof(Imie)} może posiadać maksymalnie 20 znaków");
+
                     OnPropertyChanged(() => Imie);
-                    OnRequestValidate();
                 }
             }
         }
@@ -60,7 +68,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.Nazwisko = value;
                     OnPropertyChanged(() => Nazwisko);
-                    OnRequestValidate();
                 }
             }
         }
@@ -81,33 +88,21 @@ namespace PlacowkaOswiatowa.ViewModels
             get => Item.DataUrodzenia;
             set
             {
-                if (value != null && value != Item.DataUrodzenia)
+                if (value != Item.DataUrodzenia)
                 {
-                    Item.DataUrodzenia = value.Value;
+                    Item.DataUrodzenia = value;
+                    _errorsViewModel.ClearErrors(nameof(DataUrodzenia));
+                    if (Item.DataUrodzenia > DateTime.Today)
+                        _errorsViewModel.AddError(nameof(DataUrodzenia),
+                            "Nieprawidłowa data urodzenia");
+
                     OnPropertyChanged(() => DataUrodzenia);
-                    OnRequestValidate();
                 }
             }
         }
         #endregion
 
         #region Pola i właściwości Ucznia
-
-        private ReadOnlyCollection<PracownikDto> _wychowawcy;
-        public ReadOnlyCollection<PracownikDto> Wychowawcy => _wychowawcy;
-
-        public PracownikDto WybranyWychowawca
-        {
-            get => Item.Wychowawca;
-            set
-            {
-                if (value != null)
-                {
-                    Item.Wychowawca = value;
-                    OnPropertyChanged(() => WybranyWychowawca);
-                }
-            }
-        }
 
         private ReadOnlyCollection<OddzialDto> _oddzialy;
         public ReadOnlyCollection<OddzialDto> Oddzialy => _oddzialy;
@@ -203,30 +198,23 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Komendy
-        //Pozbywam się tej komendy na rzecz komendy bazowej SaveAndCloseCommand
-        //
-        //private BaseCommand _dodajUczniaCommand;
-        //public ICommand DodajUczniaCommand 
-        //{ 
-        //    get
-        //    {
-        //        if(_dodajUczniaCommand == null)
-        //            _dodajUczniaCommand =
-        //                new BaseCommand(DodajUcznia, () => CzyPrawidlowy);
-        //        return _dodajUczniaCommand;
-        //    }
-        //}
 
         public ICommand WyczyscFormularzCommand 
         { 
             get => new BaseCommand(WyczyscFormularz);
         }
+        #endregion
 
-        protected override bool SaveAndCloseCanExecute() => 
-            !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
-            !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3 &&
-            DataUrodzenia.HasValue && 
-            DataUrodzenia.Value < DateTime.Now.AddYears(-3);
+        #region Obsługa błędów
+
+        private readonly ErrorsViewModel _errorsViewModel;
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        public bool HasErrors => _errorsViewModel.HasErrors;
+        public bool CanSave => !_errorsViewModel.HasErrors;
+
+        public IEnumerable GetErrors(string propertyName) =>
+            _errorsViewModel.GetErrors(propertyName);
 
         #endregion
 
@@ -235,34 +223,28 @@ namespace PlacowkaOswiatowa.ViewModels
             : base(BaseResources.NowyUczen, repository)
         {
             Item = new UczenDto { Adres = new AdresDto() };
-            //tutaj przycisk będzie wyłączony dopóki formularz nie przejdzie walidacji
-            this.RequestValidate += (s, e) =>
+            //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
+            this.PropertyChanged += (s, e) =>
                 _SaveAndCloseCommand.OnCanExecuteChanged();
             _mapper = mapper;
+            _errorsViewModel = new ErrorsViewModel();
+            _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
+        }
+
+        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            ErrorsChanged?.Invoke(sender, e);
+            OnPropertyChanged(nameof(CanSave));
         }
         #endregion
 
         #region Pobieranie danych z bazy
-        //ta metoda nigdy nie zostanie wywołana
-        //[Obsolete("Metoda statyczna do asynchronicznego ładowania ViewModelu")]
-        //public static NowyUczenViewModel Load(IPlacowkaRepository repository, IMapper mapper)
-        //{
-        //    NowyUczenViewModel viewModel = new NowyUczenViewModel(repository, mapper);
-        //    Task.Run(async () => await viewModel.DownloadAsync());
-        //    return viewModel;
-        //}
 
         public async Task LoadAsync()
         {
             try
             {
-                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
-                var listaWychowawcow = _mapper.Map<List<PracownikDto>>(pracownicyFormDb);
-
-                _wychowawcy = new ReadOnlyCollection<PracownikDto>(listaWychowawcow);
-                OnPropertyChanged(() => Wychowawcy);
-
-                var grupyFromDb = await _repository.Oddzialy.GetAllAsync();
+                var grupyFromDb = await _repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
                 var listaOddzialow = _mapper.Map<List<OddzialDto>>(grupyFromDb);
 
                 _oddzialy = new ReadOnlyCollection<OddzialDto>(listaOddzialow);
@@ -270,11 +252,13 @@ namespace PlacowkaOswiatowa.ViewModels
             }
             catch (Exception e)
             {
-                MessageBox.Show("Nie udało się załadować danych.", "Error",
+                MessageBox.Show("Nie udało się załadować oddziałów.", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion
+
+        #region Metody
 
         protected override async Task SaveAsync()
         {
@@ -285,28 +269,10 @@ namespace PlacowkaOswiatowa.ViewModels
                 //OnPropertyChanged(() => _pracownik.Imie);
                 //this.OnRequestCreateView(this, new EventArgs());
 
-                var uczen = new Uczen
-                {
-                    Imie = Imie,
-                    DrugieImie = DrugieImie,
-                    Nazwisko = Nazwisko,
-                    DataUrodzenia = DataUrodzenia,
-                    Pesel = Pesel,
-                    //Adres = adres,
-                    WychowawcaId = WybranyWychowawca.Id,
-                    OddzialId = WybranyOddzial.Id
-                };
+                var uczen = _mapper.Map<Uczen>(Item);
+                uczen.OddzialId = WybranyOddzial.Id;
 
-                var adres = new Adres
-                {
-                    Panstwo = new Panstwo { Nazwa = Panstwo },
-                    Miejscowosc = new Miejscowosc { Nazwa = Miejscowosc },
-                    Ulica = new Ulica { Nazwa = Ulica },
-                    NumerDomu = NumerDomu,
-                    NumerMieszkania = NumerMieszkania,
-                    KodPocztowy = KodPocztowy
-                    //CzyAktywny powinno samo się defaultowo ustawić na true
-                };
+                var adres = _mapper.Map<Adres>(Item.Adres);
 
                 var czyAdresIstnieje = await _repository.Adresy.Exists(adres);
                 if (!czyAdresIstnieje)
@@ -319,11 +285,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
                 else
                 {
-                    //var adresFromDb = await _repository.Adresy.GetAsync(a => a.Ulica == _adres.Ulica &&
-                    //    a.Miejscowosc == _adres.Miejscowosc &&
-                    //    a.NumerDomu == _adres.NumerDomu &&
-                    //    a.NumerMieszkania == _adres.NumerMieszkania &&
-                    //    a.KodPocztowy == _adres.KodPocztowy);
                     var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres);
 
                     if (adresFromDb is null)
@@ -360,20 +321,30 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public void WyczyscFormularz()
         {
-            Imie = "";
-            DrugieImie = "";
-            Nazwisko = "";
-            DataUrodzenia = DateTime.Today;
-            Pesel = "";
-            Ulica = "";
-            NumerDomu = "";
-            NumerMieszkania = "";
-            Miejscowosc = "";
-            Panstwo = "";
-            KodPocztowy = "";
-            WybranyWychowawca = null;
-            WybranyOddzial = null;
+            //Imie = "";
+            //DrugieImie = "";
+            //Nazwisko = "";
+            //DataUrodzenia = DateTime.Today;
+            //Pesel = "";
+            //Ulica = "";
+            //NumerDomu = "";
+            //NumerMieszkania = "";
+            //Miejscowosc = "";
+            //Panstwo = "";
+            //KodPocztowy = "";
+            //WybranyOddzial = null;
+            Item = new UczenDto { Adres = new AdresDto() };
+            foreach(var prop in this.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
+
+        protected override bool SaveAndCloseCanExecute() =>
+            !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
+            !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3 &&
+            DataUrodzenia.HasValue &&
+            DataUrodzenia.Value < DateTime.Now.AddYears(-3);
+
+        #endregion
 
         #region Obsługa zdarzeń
         private void CheckForCanExecute(object? sender, EventArgs e) =>

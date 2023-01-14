@@ -45,6 +45,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             new List<Uzytkownik>();
         private static List<Pracodawca> Pracodawcy { get; set; } =
             new List<Pracodawca>();
+        private static List<Umowa> Umowy { get; set; } =
+            new List<Umowa>();
         #endregion
 
         #region Zasilanie encji słownikowych
@@ -166,12 +168,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .RuleFor(p => p.Pesel, f => f.Random.ReplaceNumbers("##########"))
                 .RuleFor(p => p.NrTelefonu, f => f.Phone.PhoneNumber("###-###-###"))
                 .RuleFor(p => p.Email, f => f.Person.Email)
-                //.RuleFor(p => p.EtatId, f => f.PickRandom(Etaty).Id)
-                //.RuleFor(p => p.StanowiskoId, f => f.PickRandom(Stanowiska).Id)
-                //.RuleFor(p => p.WymiarGodzinowy, f => f.Random.Int(15, 40))
-                //.RuleFor(p => p.Pensja, f => f.Finance.Amount(2800, 10000))
                 .RuleFor(p => p.DniUrlopu, f => f.Random.Number(1, 100))
-                //.RuleFor(p => p.DataZatrudnienia, f => f.Date.PastOffset(10, DateTime.Now.AddDays(-1)).Date)
                 .RuleFor(p => p.CzyAktywny, f => true);
 
             Pracownicy = pracownikFaker.Generate(50);
@@ -200,13 +197,39 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .RuleFor(u => u.Imie, f => f.Person.FirstName)
                 .RuleFor(u => u.Nazwisko, f => f.Person.LastName)
                 .RuleFor(u => u.DataUrodzenia, f => f.Date.PastOffset(15, DateTime.Now.AddYears(-3)).Date)
-                .RuleFor(u => u.Pesel, f => f.Random.ReplaceNumbers("##########"))
+                .RuleFor(u => u.Pesel, f => f.Random.ReplaceNumbers("###########"))
                 .RuleFor(u => u.AdresId, f => f.PickRandom(Adresy).Id)
-                .RuleFor(u => u.WychowawcaId, f => f.PickRandom(Pracownicy).Id)
-                .RuleFor(u => u.OddzialId, f => f.PickRandom(Oddzialy).Id);
+                .RuleFor(u => u.OddzialId, f => f.PickRandom(Oddzialy).Id)
+                .RuleFor(u => u.CzyAktywny, f => true)
+                ;
 
             Uczniowie = uczenFaker.Generate(100);
             return Uczniowie;
+        }
+
+        public static List<Umowa> UmowySeed()
+        {
+            var umowaFaker = new Faker<Umowa>()
+                .UseSeed(7876)
+                .RuleFor(u => u.Id, f => f.IndexFaker + 1)
+                .RuleFor(u => u.PracownikId, f => ++f.IndexVariable)
+                .RuleFor(u => u.PracodawcaId, Pracodawcy.First().Id)
+                .RuleFor(u => u.WynagrodzenieBrutto, f => f.Finance.Amount(2800, 10000))
+                //Z racji na to że w adresie są klucze obce, to nie wpisuje się Panstwo, Miejscowosc, Ulica
+                .RuleFor(u => u.MiejsceWykonywaniaPracy, Adresy.First().ToString())
+                .RuleFor(u => u.WymiarCzasuPracy, f => f.PickRandom<WymiarCzasuPracyEnum>().GetDescription())
+                .RuleFor(u => u.WymiarGodzinowy, f => f.Random.Int(15, 40))
+                .RuleFor(u => u.OkresPracy, f => f.PickRandom<OkresPracyEnum>().GetDescription())
+                .RuleFor(u => u.DataZawarciaUmowy, f => f.Date.PastOffset(10, DateTime.Now.AddDays(-1)).Date)
+                .RuleFor(u => u.EtatId, f => f.PickRandom(Etaty).Id)
+                .RuleFor(u => u.StanowiskoId, f => f.PickRandom(Stanowiska).Id)
+                .RuleFor(u => u.DataRozpoczeciaPracy, (f, current) => current.DataZawarciaUmowy.AddDays(f.Random.Number(1, 10)))
+                .RuleFor(u => u.DataUtworzenia, f => f.Date.Recent(10))
+                .RuleFor(u => u.CzyAktywny, f => true);
+            ;
+
+            Umowy = umowaFaker.Generate(Pracownicy.Count);
+            return Umowy;
         }
 
         #region Zasilanie tabel asocjacyjnych (wiele do wielu)

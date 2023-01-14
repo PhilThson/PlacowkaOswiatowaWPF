@@ -8,7 +8,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
     public abstract class SingleItemViewModel<T> : WorkspaceViewModel
     {
-        #region Właściwości
+        #region Pola i właściwości
         public T Item { get; set; }
         #endregion
 

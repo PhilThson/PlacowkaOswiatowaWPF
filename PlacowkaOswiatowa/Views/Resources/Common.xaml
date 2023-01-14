@@ -28,6 +28,7 @@
     <Color x:Key="GainsboroColor">#FFDCDCDC</Color>
     <Color x:Key="SlateGreyColor">#FF708090</Color>
     <Color x:Key="SilverColor">#FFC0C0C0</Color>
+    <Color x:Key="RedColor">#FF0000</Color>
 
 
     <SolidColorBrush x:Key="BrushOlive" Color="{StaticResource KolorOlive}"/>
@@ -44,6 +45,7 @@
     <SolidColorBrush x:Key="BrushRoyalBlue" Color="RoyalBlue"/>
     <SolidColorBrush x:Key="BrushMediumBlue" Color="MediumBlue"/>
     <SolidColorBrush x:Key="BrushSilver" Color="{StaticResource SilverColor}"/>
+    <SolidColorBrush x:Key="BrushRed" Color="{StaticResource RedColor}"/>
 
     <!--Border colors and brushes-->
     <Color x:Key="BorderLightColor">#FFCCCCCC</Color>

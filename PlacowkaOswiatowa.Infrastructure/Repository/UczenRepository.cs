@@ -19,6 +19,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public async Task<IEnumerable<Uczen>> GetAllAsync() =>
             await _uczenDbSet
             .IncludeAdres(u => u.Adres)
+            .Include(u => u.Oddzial)
+                .ThenInclude(o => o.Pracownik)
             .ToListAsync();
     }
 }

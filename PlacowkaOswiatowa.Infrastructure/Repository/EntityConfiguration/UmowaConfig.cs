@@ -10,12 +10,13 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
         {
             builder
                 .Property(u => u.DataUtworzenia)
+                .HasColumnType("datetime")
                 .HasComputedColumnSql("getdate()");
 
             builder
                 .Property(u => u.WynagrodzenieBrutto)
                 .HasColumnType("money")
-                .HasPrecision(5, 2)
+                .HasPrecision(7, 2)
                 .IsRequired(true);
 
             builder
@@ -26,6 +27,16 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             builder
                 .HasOne(u => u.Pracownik)
                 .WithOne(p => p.PracownikUmowa)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasOne(u => u.Etat)
+                .WithMany(e => e.EtatUmowy)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasOne(u => u.Stanowisko)
+                .WithMany(s => s.StanowiskoUmowy)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

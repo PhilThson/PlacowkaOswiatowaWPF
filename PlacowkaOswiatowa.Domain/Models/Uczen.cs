@@ -11,13 +11,6 @@ namespace PlacowkaOswiatowa.Domain.Models
             UczenOceny = new HashSet<Ocena>();
         }
 
-        public int WychowawcaId { get; set; }
-
-        [Required]
-        [ForeignKey(nameof(WychowawcaId))]
-        [InverseProperty("PracownikUczniowie")]
-        public virtual Pracownik Wychowawca { get; set; }
-
         public byte OddzialId { get; set; }
 
         [Required]

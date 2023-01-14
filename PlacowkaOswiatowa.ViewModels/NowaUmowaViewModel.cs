@@ -290,7 +290,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 var listaPracodawcow = _mapper.Map<List<PracodawcaDto>>(pracodawcyFromDb);
                 Pracodawcy = new ReadOnlyCollection<PracodawcaDto>(listaPracodawcow);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("Nie udało się załadować danych.", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
@@ -316,12 +316,12 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("Umowa pomiędzy wybranymi podmiotami już istnieje umowa.", 
+                    MessageBox.Show("Umowa pomiędzy wybranymi podmiotami już istnieje.", 
                         "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("Nie udało się dodać umowy", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);

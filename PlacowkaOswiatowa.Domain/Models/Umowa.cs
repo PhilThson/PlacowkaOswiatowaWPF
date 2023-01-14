@@ -19,6 +19,7 @@ namespace PlacowkaOswiatowa.Domain.Models
         [InverseProperty("PracodawcaUmowy")]
         public virtual Pracodawca Pracodawca { get; set; }
 
+        [Range(0.0, 99999.0)]
         public decimal WynagrodzenieBrutto { get; set; }
 
         public bool CzyZwolnionyOdPodatku { get; set; }

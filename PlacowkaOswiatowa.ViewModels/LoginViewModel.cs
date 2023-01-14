@@ -17,17 +17,16 @@ namespace PlacowkaOswiatowa.ViewModels
         public LoginViewModel(IPlacowkaRepository repository, ISignalHub signal)
             : base(repository)
         {
-            //_repository = repository;
             _signal = signal;
             DisplayName = BaseResources.LoginPage;
             DisplayStatusMessage("Logowanie do aplikacji");
-            this.RequestValidate += CheckForCanExecute;
+            this.PropertyChanged += (s, e) => _zalogujCommand.OnCanExecuteChanged();
             _login = "Gość";
         }
         #endregion
 
         #region Pola i Właściwości
-        //private readonly IPlacowkaRepository _repository;
+
         private readonly ISignalHub _signal;
 
         private Uzytkownik _uzytkownik;
@@ -36,30 +35,14 @@ namespace PlacowkaOswiatowa.ViewModels
         public string Login
         {
             get => _login;
-            set 
-            {
-                if (value != null)
-                {
-                    _login = value;
-                    OnPropertyChanged(() => Login);
-                    OnRequestValidate();
-                }
-            }
+            set => SetProperty(ref _login, value);
         }
 
         private string _password;
         public string Password
         {
             get => _password;
-            set 
-            {
-                if (value != null)
-                {
-                    _password = value;
-                    OnPropertyChanged(() => Password);
-                    OnRequestValidate();
-                }
-            }
+            set => SetProperty(ref _password, value);
         }
 
         public bool CzyPoprawne =>
@@ -132,6 +115,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody pomocnicze
+
         public override void Close(bool wasCancelled = true)
         {
             if (wasCancelled)
@@ -148,8 +132,6 @@ namespace PlacowkaOswiatowa.ViewModels
             _signal.RaiseHideLoginViewRequest();
         }
 
-        private void CheckForCanExecute(object? sender, EventArgs e) =>
-            _zalogujCommand.OnCanExecuteChanged();
         #endregion
     }
 }

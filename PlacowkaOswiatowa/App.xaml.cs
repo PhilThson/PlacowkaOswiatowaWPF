@@ -61,6 +61,7 @@ namespace PlacowkaOswiatowa
                     services.AddSingleton<MainWindowViewModel>();
                     services.AddSingleton(mapper);
                     services.AddSingleton<IPlacowkaRepository, PlacowkaRepository>();
+                    //TODO: usunąć SignalHub
                     services.AddSingleton<ISignalHub, SignalHub>();
                     services.AddSingleton<LoginViewModel>();
                     services.AddSingleton<WszyscyPracownicyViewModel>();
@@ -68,7 +69,6 @@ namespace PlacowkaOswiatowa
                     services.AddTransient<NowyPracownikViewModel>();
                     services.AddTransient<NowyUczenViewModel>();
                     services.AddTransient<NowaFakturaViewModel>();
-                    services.AddTransient<NowyTowarViewModel>();
                     services.AddTransient<WszystkieFakturyViewModel>();
                     services.AddTransient<ZarobkiPracownikaViewModel>();
                     services.AddTransient<UrlopPracownikaViewModel>();

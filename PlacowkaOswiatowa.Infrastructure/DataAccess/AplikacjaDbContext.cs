@@ -42,16 +42,17 @@ namespace PlacowkaOswiatowa.Infrastructure.DataAccess
             modelBuilder.Entity<Ulica>().HasData(Seeder.UliceSeed());
             modelBuilder.Entity<Adres>().HasData(Seeder.AdresySeed());
             modelBuilder.Entity<Pracownik>().HasData(Seeder.PracownicySeed());
+            modelBuilder.Entity<Pracodawca>().HasData(Seeder.PracodawcySeed());
             //Oddział wymaga pracownika
             modelBuilder.Entity<Oddzial>().HasData(Seeder.OddzialySeed());
             //Uczen wymaga oddziału
             modelBuilder.Entity<Uczen>().HasData(Seeder.UczniowieSeed());
+            modelBuilder.Entity<Umowa>().HasData(Seeder.UmowySeed());
             modelBuilder.Entity<PracownicyAdresy>().HasData(Seeder.PracownicyAdresySeed());
             modelBuilder.Entity<PrzedmiotyPracownicy>().HasData(Seeder.PrzedmiotyPracownicySeed());
             modelBuilder.Entity<Urlop>().HasData(Seeder.UrlopySeed());
             modelBuilder.Entity<Ocena>().HasData(Seeder.OcenySeed());
             modelBuilder.Entity<Uzytkownik>().HasData(Seeder.UzytkownicySeed());
-            modelBuilder.Entity<Pracodawca>().HasData(Seeder.PracodawcySeed());
         }
     }
 }

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PlacowkaOswiatowa.Views"
              xmlns:enums="clr-namespace:PlacowkaOswiatowa.Domain.Enums;assembly=PlacowkaOswiatowa.Domain" 
              xmlns:custom="clr-namespace:PlacowkaOswiatowa.Helpers.CustomUI"
              mc:Ignorable="d" 
@@ -70,19 +69,23 @@
                         <Label Grid.Row="0" Grid.Column="1" Content="Imię:"/>
                         <custom:AlphabetTextBox Grid.Row="0" Grid.Column="2"
                                  Text="{Binding Imie, UpdateSourceTrigger=PropertyChanged}"/>
+                        
                         <Label Grid.Row="0" Grid.Column="3" Content="Drugie imię:"/>
                         <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding DrugieImie, 
                             UpdateSourceTrigger=PropertyChanged}"/>
+                        
                         <Label Grid.Row="1" Grid.Column="1" Content="Nazwisko:" />
                         <TextBox Grid.Row="1" Grid.Column="2" 
                                  Text="{Binding Nazwisko, UpdateSourceTrigger=PropertyChanged}"/>
+                        
                         <Label Grid.Row="1" Grid.Column="3" Content="Data urodzenia:" />
                         <DatePicker Grid.Row="1" Grid.Column="4" 
-                                    Text="{Binding DataUrodzenia, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Text="{Binding DataUrodzenia, UpdateSourceTrigger=PropertyChanged,
+                                    Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+
                         <Label Grid.Row="2" Grid.Column="1" Content="Pesel:"/>
                         <custom:NumericTextBox Grid.Row="2" Grid.Column="2" MaxLength="11" 
                                  Text="{Binding Pesel, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Grid.Row="2" Grid.Column="3" Content="Pesel"/>
 
                     </Grid>
                 </GroupBox>
@@ -103,23 +106,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0" Grid.Column="1" Content="Wychowawca:"/>
-                        <ComboBox Grid.Row="0" Grid.Column="2" x:Name="WychowawcaComboBox"
-                                  ItemsSource="{Binding Wychowawcy}"
-                                  SelectedItem="{Binding WybranyWychowawca, UpdateSourceTrigger=PropertyChanged}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Imie}"/>
-                                        <TextBlock Text=" "/>
-                                        <TextBlock Text="{Binding Nazwisko}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-
-                        <Label Grid.Row="0" Grid.Column="3" Content="Oddział:"/>
-                        <ComboBox Grid.Row="0" Grid.Column="4" x:Name="OddzialComboBox"
+                        <Label Grid.Row="0" Grid.Column="1" Content="Oddział:"/>
+                        <ComboBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" x:Name="OddzialComboBox"
                                   ItemsSource="{Binding Oddzialy}"
                                   SelectedItem="{Binding WybranyOddzial, UpdateSourceTrigger=PropertyChanged}"
                                   >
@@ -127,6 +115,10 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Nazwa}"/>
+                                        <TextBlock Text=", Wychowawca: "/>
+                                        <TextBlock Text="{Binding Pracownik.Imie}"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Pracownik.Nazwisko}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -162,10 +154,10 @@
                         <Label Grid.Row="1" Grid.Column="3" Content="Nr domu:"/>
                         <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal"
                                     HorizontalAlignment="Left">
-                            <custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NrDomu,
+                            <custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NumerDomu,
                                 UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Content="Nr Mieszkania:" Padding="1 5"/>
-                            <custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NrMieszkania,
+                            <custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NumerMieszkania,
                                 UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
 

@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using AutoMapper.Internal;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
-using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Models.Base;
@@ -11,7 +9,6 @@ using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -21,12 +18,9 @@ using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyPracownikViewModel : SingleItemViewModel<PracownikDto>, ILoadable
+    public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>
     {
         #region Pola prywatne
-        //private Pracownik _pracownik;
-        //private Adres _adres;
-        //private readonly IPlacowkaRepository _repository;
         private readonly IMapper _mapper;
         #endregion
 
@@ -39,8 +33,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Imie)
                 {
                     Item.Imie = value;
-                    OnPropertyChanged(() => Imie);
-                    OnRequestValidate();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -52,7 +45,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DrugieImie)
                 {
                     Item.DrugieImie = value;
-                    OnPropertyChanged(() => DrugieImie);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -64,8 +57,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Nazwisko)
                 {
                     Item.Nazwisko = value;
-                    OnPropertyChanged(() => Nazwisko);
-                    OnRequestValidate();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -77,7 +69,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Pesel)
                 {
                     Item.Pesel = value;
-                    OnPropertyChanged(() => Pesel);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -89,7 +81,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DataUrodzenia)
                 {
                     Item.DataUrodzenia = value;
-                    OnPropertyChanged(() => DataUrodzenia);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -104,7 +96,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.NrTelefonu)
                 {
                     Item.NrTelefonu = value;
-                    OnPropertyChanged(() => NrTelefonu);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -116,7 +108,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Email)
                 {
                     Item.Email = value;
-                    OnPropertyChanged(() => Email);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -133,7 +125,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.Panstwo)
                 {
                     Item.Adres.Panstwo = value;
-                    OnPropertyChanged(() => Panstwo);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -145,7 +137,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.Miejscowosc)
                 {
                     Item.Adres.Miejscowosc = value;
-                    OnPropertyChanged(() => Miejscowosc);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -157,7 +149,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.Ulica)
                 {
                     Item.Adres.Ulica = value;
-                    OnPropertyChanged(() => Ulica);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -169,7 +161,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.NumerDomu)
                 {
                     Item.Adres.NumerDomu = value;
-                    OnPropertyChanged(() => NumerDomu);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -181,7 +173,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.NumerMieszkania)
                 {
                     Item.Adres.NumerMieszkania = value;
-                    OnPropertyChanged(() => NumerMieszkania);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -193,31 +185,17 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.KodPocztowy)
                 {
                     Item.Adres.KodPocztowy = value;
-                    OnPropertyChanged(() => KodPocztowy);
+                    OnPropertyChanged();
                 }
             }
         }
         #endregion
 
         #region Komendy
-        //private BaseCommand _dodajPracownikaCommand;
-        //public ICommand DodajPracownikaCommand 
-        //{ 
-        //    get
-        //    {
-        //        if(_dodajPracownikaCommand == null)
-        //            _dodajPracownikaCommand =
-        //                new BaseCommand(async () => await DodajPracownika(), 
-        //                    () => CzyPrawidlowyPracownik); 
-        //        return _dodajPracownikaCommand;
-        //        //OnPropertyChanged(() => DodajPracownikaCommand);
-        //    }
-        //}
 
         public ICommand WyczyscFormularzCommand => 
             new BaseCommand(WyczyscFormularz);
 
-        //bool CzyPrawidlowy
         protected override bool SaveAndCloseCanExecute() => 
             !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
             !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3;
@@ -228,10 +206,10 @@ namespace PlacowkaOswiatowa.ViewModels
         public NowyPracownikViewModel(IPlacowkaRepository repository, IMapper mapper)
             : base(BaseResources.NowyPracownik, repository)
         {
-            this.RequestValidate += (s, e) =>
+            this.PropertyChanged += (_, __) =>
                 _SaveAndCloseCommand.OnCanExecuteChanged();
             _mapper = mapper;
-            Item = new PracownikDto { Adres = new AdresDto(), Etat = new Etat(), Stanowisko = new Stanowisko() };
+            Item = new CreatePracownikDto { Adres = new AdresDto() };
             //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
             // - wykonywane np. w przypadku zamkniecia zkladki
         }
@@ -247,35 +225,12 @@ namespace PlacowkaOswiatowa.ViewModels
             //this.OnRequestCreateView(this, new EventArgs());
             try
             {
-                var pracownik = new Pracownik
-                {
-                    Imie = Imie,
-                    DrugieImie = DrugieImie,
-                    Nazwisko = Nazwisko,
-                    DataUrodzenia = DataUrodzenia,
-                    Pesel = Pesel,
-                    //Pensja = Pensja,
-                    //WymiarGodzinowy = WymiarGodzinowy,
-                    //Nadgodziny = Nadgodziny,
-                    NrTelefonu = NrTelefonu,
-                    Email = Email,
-                    //Stanowisko = WybraneStanowisko,
-                    //Etat = WybranyEtat,
-                    //DataZatrudnienia = DataZatrudnienia.Value,
-                    //DataKoncaZatrudnienia = DataKoncaZatrudnienia
-                };
+                var pracownik = _mapper.Map<Pracownik>(Item);
+                var adres = _mapper.Map<Adres>(Item.Adres);
 
-                var adres = new Adres
-                {
-                    //Panstwo = new Panstwo { Nazwa = Panstwo },
-                    //Miejscowosc = new Miejscowosc { Nazwa = Miejscowosc },
-                    //Ulica = new Ulica { Nazwa = Ulica },
-                    NumerDomu = NumerDomu,
-                    NumerMieszkania = NumerMieszkania,
-                    KodPocztowy = KodPocztowy
-                    //CzyAktywny powinno samo się defaultowo ustawić na true
-                };
-
+                //Mapowanie właściwości posiadających klucz obcy do adresu
+                //jeżeli dana właściwość juz istnieje w bazie danych,
+                //to zostanie przypisany klucz obcy
                 var properties = adres.GetType().GetProperties()
                     .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
                     .ToList();
@@ -291,11 +246,13 @@ namespace PlacowkaOswiatowa.ViewModels
                         prop.SetValue(adres, entity);
                 }
 
+                //jeżeli nie to zostanie utworzony nowy rekord
+                //to zrobi automaper
                 adres.Panstwo ??= new Panstwo { Nazwa = Panstwo };
                 adres.Miejscowosc ??= new Miejscowosc { Nazwa = Miejscowosc };
                 adres.Ulica ??= new Ulica { Nazwa = Ulica };
 
-                //var adres = _mapper.Map<AdresDTO, Adres>(_adres);
+                //jeżeli adres nie istnieje to dodanie do bazy
                 var czyAdresIstnieje = await _repository.Adresy.Exists(adres);
                 if (!czyAdresIstnieje)
                 {
@@ -307,14 +264,9 @@ namespace PlacowkaOswiatowa.ViewModels
                         new PracownicyAdresy{ AdresId = adres.Id }
                     };
                 }
+                //jeżeli istnieje to przypisanie istniejącego identyfikatora
                 else
                 {
-                    //var adresFromDb = await _repository.Adresy.GetAsync(a => a.Ulica == _adres.Ulica &&
-                    //    a.Miejscowosc == _adres.Miejscowosc &&
-                    //    a.NumerDomu == _adres.NumerDomu &&
-                    //    a.NumerMieszkania == _adres.NumerMieszkania &&
-                    //    a.KodPocztowy == _adres.KodPocztowy);
-                    //AdresId = adresFromDb.Id;
                     var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres,
                         includeProperties: "Panstwo,Miejscowosc,Ulica");
 
@@ -327,12 +279,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     };
                 }
 
-               
-                    //(Imie, DrugieImie, Nazwisko, DataUrodzenia, Pesel, 
-                    //AdresId, _adres, Pensja, null, WymiarGodzinowy, Nadgodziny, NrTelefonu,
-                    //Email, Etat, Stanowisko, DataZatrudnienia, DataKoncaZatrudnienia, null);
-
-                //var pracownik = _mapper.Map<PracownikDTO, Pracownik>(_pracownik);
+                //jeżeli pracownik nie istnieje to dodanie
                 var czyIstnieje = await _repository.Pracownicy.Exists(pracownik);
                 if (!czyIstnieje)
                 {
@@ -342,6 +289,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     MessageBox.Show("Dodano pracownika!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                //w przeciwnym wypadku dodanie do bazy
                 else
                 {
                     MessageBox.Show("Pracownik już istnieje.", "Uwaga",
@@ -360,26 +308,20 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public void WyczyscFormularz()
         {
-            Imie = "";
-            DrugieImie = "";
-            Nazwisko = "";
-            DataUrodzenia = DateTime.Today;
-            Pesel = "";
-            Ulica = "";
-            NumerDomu = "";
-            NumerMieszkania = "";
-            Miejscowosc = "";
-            Panstwo = "";
-            KodPocztowy = "";
-            //DataZatrudnienia = DateTime.Today;
-            //DataKoncaZatrudnienia = DateTime.Today;
-            //WybranyEtat = null;
-            //WybraneStanowisko = null;
-            //Pensja = 0;
-            Email = "";
-            NrTelefonu = "";
-            //Nadgodziny = 0;
-            //WymiarGodzinowy = 0;
+            //Imie = "";
+            //DrugieImie = "";
+            //Nazwisko = "";
+            //DataUrodzenia = DateTime.Today;
+            //Pesel = "";
+            //Ulica = "";
+            //NumerDomu = "";
+            //NumerMieszkania = "";
+            //Miejscowosc = "";
+            //Panstwo = "";
+            //KodPocztowy = "";
+            //Email = "";
+            //NrTelefonu = "";
+            Item = new CreatePracownikDto() { Adres = new AdresDto() };
         }
         #endregion
 
@@ -408,27 +350,6 @@ namespace PlacowkaOswiatowa.ViewModels
             base.Dispose();
         }
 
-        #endregion
-
-        #region Pobranie zasobów z bazy danych
-        public async Task LoadAsync()
-        {
-            try
-            {
-                //var etatyFromDb = await _repository.Etaty.GetAllAsync();
-                //_etaty = new ReadOnlyCollection<Etat>(etatyFromDb);
-                //OnPropertyChanged(() => Etaty);
-
-                //var stanowiskaFromDb = await _repository.Stanowiska.GetAllAsync();
-                //_stanowiska = new ReadOnlyCollection<Stanowisko>(stanowiskaFromDb);
-                //OnPropertyChanged(() => Stanowiska);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się załadować danych.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
         #endregion
     }
 }

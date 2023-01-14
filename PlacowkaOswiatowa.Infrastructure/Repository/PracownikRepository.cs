@@ -26,8 +26,6 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public async Task<IEnumerable<Pracownik>> GetAllAsync() =>
             await _pracownikDbSet
                 .IncludeUmowa(p => p.PracownikUmowa)
-                .Include(p => p.PracownikPrzedmiotyPracownicy)
-                    .ThenInclude(pp => pp.Przedmiot)
                 .IncludePracownicyAdresy()
                 .ToListAsync();
     }

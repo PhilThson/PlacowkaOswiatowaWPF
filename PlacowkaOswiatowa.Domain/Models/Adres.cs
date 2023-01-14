@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Models.Base;
 
@@ -89,6 +90,25 @@ namespace PlacowkaOswiatowa.Domain.Models
         public override int GetHashCode()
         {
             return PanstwoId ^ MiejscowoscId ^ UlicaId.GetValueOrDefault() ^ NumerDomu.GetHashCode() ^ NumerMieszkania.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            var addressDescription = new StringBuilder();
+            if (Panstwo != null && !string.IsNullOrEmpty(Panstwo.Nazwa))
+                addressDescription.Append(Panstwo.Nazwa);
+            if (Ulica != null && !string.IsNullOrEmpty(Ulica.Nazwa))
+                addressDescription.Append($", ul. {Ulica}");
+            if (!string.IsNullOrEmpty(NumerDomu))
+                addressDescription.Append($" {NumerDomu}");
+            if (!string.IsNullOrEmpty(NumerMieszkania))
+                addressDescription.Append($"/{NumerMieszkania}");
+            if (!string.IsNullOrEmpty(KodPocztowy))
+                addressDescription.Append($", {KodPocztowy}");
+            if (Miejscowosc != null && !string.IsNullOrEmpty(Miejscowosc.Nazwa))
+                addressDescription.Append($" {Miejscowosc.Nazwa}");
+
+            return addressDescription.ToString();
         }
     }
 }

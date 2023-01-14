@@ -9,7 +9,6 @@ namespace PlacowkaOswiatowa.Domain.Models
     {
         public Pracownik()
         {
-            PracownikUczniowie = new HashSet<Uczen>();
             PracownikUrlopy = new HashSet<Urlop>();
             PracownikOceny = new HashSet<Ocena>();
             PracownikPracownicyAdresy = new HashSet<PracownicyAdresy>();
@@ -27,7 +26,6 @@ namespace PlacowkaOswiatowa.Domain.Models
 
         public virtual Umowa PracownikUmowa { get; set; }
         public virtual Oddzial PracownikOddzial { get; set; }
-        public virtual ICollection<Uczen> PracownikUczniowie { get; set; }
         public virtual ICollection<Urlop> PracownikUrlopy { get; set; }
         public virtual ICollection<Ocena> PracownikOceny { get; set; }
         public virtual ICollection<PracownicyAdresy> PracownikPracownicyAdresy 

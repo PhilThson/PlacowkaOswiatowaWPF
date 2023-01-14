@@ -4,15 +4,10 @@ using PlacowkaOswiatowa.Domain.Models;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
 {
-    public class UczniowieConfig : IEntityTypeConfiguration<Uczen>
+    public class UczenConfig : IEntityTypeConfiguration<Uczen>
     {
         public void Configure(EntityTypeBuilder<Uczen> builder)
         {
-            builder
-                .HasOne(u => u.Wychowawca)
-                .WithMany(p => p.PracownikUczniowie)
-                .OnDelete(DeleteBehavior.NoAction);
-
             builder
                 .HasOne(u => u.Oddzial)
                 .WithMany(o => o.OddzialUczniowie)

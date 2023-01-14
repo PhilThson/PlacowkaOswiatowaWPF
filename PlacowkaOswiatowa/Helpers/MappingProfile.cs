@@ -33,31 +33,26 @@ namespace PlacowkaOswiatowa.Helpers
                     s => s.PracownikUmowa.WymiarGodzinowy))
                 ;
 
-            CreateMap<Uczen, UczenDto>();
+            CreateMap<Uczen, UczenDto>()
+                .ForMember(d => d.Wychowawca, o => o.MapFrom(s => s.Oddzial.Pracownik))
+                ;
+
+            CreateMap<UczenDto, Uczen>();
 
             CreateMap<Pracodawca, PracodawcaDto>();
 
             CreateMap<UmowaDto, Umowa>();
 
-            //CreateMap<PracownikDTO, PracownikDto>()
-            //    .ForMember(p => p.PracownikId, src => src.MapFrom(s => s.Id))
-            //    .ForMember(p => p.DataUrodzenia, 
-            //        src => src.MapFrom(s => s.DataUrodzenia.Value.ToShortDateString()))
-            //    .ForMember(p => p.PensjaBrutto, src => src.MapFrom(s => s.Pensja))
-            //    .ForMember(p => p.WymiarGodz, src => src.MapFrom(s => s.WymiarGodzinowy));
-            
-            //CreateMap<Osoba, OsobaDTO>();
-            
-            //CreateMap<UczenDTO, UczenDto>()
-            //    .ForMember(u => u.UczenId, s => s.MapFrom(s => s.Id))
-            //    .ForMember(u => u.Imie, s => s.MapFrom(s => s.Imie))
-            //    .ForMember(u => u.Nazwisko, s => s.MapFrom(s => s.Nazwisko))
-            //    .ForMember(u => u.DataUrodzenia,
-            //        s => s.MapFrom(s => s.DataUrodzenia.Value.ToShortDateString()))
-            //    .ForMember(u => u.NazwaGrupy, s => s.MapFrom(s => s.Grupa.Nazwa))
-            //    .ForMember(u => u.ImieNazwiskoWychowawcy,
-            //        s => s.MapFrom(s => 
-            //            $"{s.Wychowawca.Imie} {s.Wychowawca.Nazwisko}"));
+            CreateMap<AdresDto, Adres>();
+
+            CreateMap<CreatePracownikDto, Pracownik>();
+
+            CreateMap<string, Panstwo>()
+                .ForMember(d => d.Nazwa, o => o.MapFrom(s => s));
+            CreateMap<string, Miejscowosc>()
+                .ForMember(d => d.Nazwa, o => o.MapFrom(s => s));
+            CreateMap<string, Ulica>()
+                .ForMember(d => d.Nazwa, o => o.MapFrom(s => s));
         }
     }
 }

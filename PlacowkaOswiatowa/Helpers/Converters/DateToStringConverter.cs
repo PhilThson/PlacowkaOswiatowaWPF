@@ -10,12 +10,15 @@ namespace PlacowkaOswiatowa.Helpers.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var dateTime = value as DateTime?;
-            return dateTime.HasValue ? dateTime.Value.ToString("dd-MM-yyyy") : string.Empty;
+            return dateTime.HasValue ? dateTime.Value.ToString("dd.MM.yyyy") : string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            var strValue = value.ToString();
+            DateTime resultDateTime;
+            return DateTime.TryParseExact(strValue, "dd.MM.yyyy", new CultureInfo("pl-PL"), DateTimeStyles.None, out resultDateTime) ? 
+                resultDateTime : value;
         }
     }
 }

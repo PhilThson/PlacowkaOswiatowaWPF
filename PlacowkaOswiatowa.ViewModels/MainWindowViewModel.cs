@@ -11,12 +11,14 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -45,10 +47,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Komendy Menu i Paska narzędzi
         //TODO: dodać prywatne pola ICommand dla każdej komendy, żeby niepotrzebnie nie
         //inicjować komendy jeżeli jest wywoływana ponownie
-        public ICommand NowyTowarCommand => 
-            new BaseCommand(() => 
-                    CreateView<NowyTowarViewModel>());
-        
         public ICommand UrlopPracownikaCommand =>
             new BaseCommand(CreateViewAsync<UrlopPracownikaViewModel>);
 
@@ -60,7 +58,7 @@ namespace PlacowkaOswiatowa.ViewModels
             new BaseCommand(ShowSingleton<WszystkieFakturyViewModel>);
         
         public ICommand NowyPracownikCommand => 
-            new BaseCommand(CreateViewAsync<NowyPracownikViewModel>);
+            new BaseCommand(CreateView<NowyPracownikViewModel>);
         
         public ICommand WszyscyPracownicyCommand => 
             new BaseCommand(ShowSingletonAsync<WszyscyPracownicyViewModel>);
@@ -114,7 +112,7 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 if(_Commands == null)
                 {
-                    List<CommandViewModel> cmds = this.CreateCommands();
+                    List<CommandViewModel> cmds = CreateCommands();
                     _Commands = new ReadOnlyCollection<CommandViewModel>(cmds);
                 }
                 return _Commands;
@@ -124,16 +122,8 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             return new List<CommandViewModel>
             {
-                //new CommandViewModel(BaseResources.Towar, 
-                //    new BaseCommand(() => 
-                //        createView(_provider.GetRequiredService<NowyTowarViewModel>()))),
-                //new CommandViewModel(BaseResources.Faktury, new BaseCommand(showSingleton<WszystkieFakturyViewModel>)),
-                //new CommandViewModel(BaseResources.Faktura,
-                //    new BaseCommand(() =>
-                //        createView(_provider.GetRequiredService<NowaFakturaViewModel>()))),
                 new CommandViewModel(BaseResources.NowyPracownik, 
-                    new BaseCommand(() => 
-                        CreateView<NowyPracownikViewModel>())),
+                    new BaseCommand(() => CreateView<NowyPracownikViewModel>())),
                 new CommandViewModel(BaseResources.WszyscyPracownicy, 
                     new BaseCommand(ShowSingletonAsync<WszyscyPracownicyViewModel>)),
                 new CommandViewModel(BaseResources.NowyUczen, 
@@ -174,13 +164,19 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
         }
 
-        //Obsługa zdarzenia RequestCreateView
+        //Obsługa zdarzenia RequestCreateViewAsync
         //pozwalającego ogłosić chęć utworzenia zakładki
         //MainWindowViewModel subskrybuje do tego zdarzenia
         //i na podstawie zadanego typu tworzy nową zakładkę
         private void OnWorkspaceRequestCreateView(object? sender, Type type)
         {
-            MethodInfo method = this.GetType().GetMethod(nameof(CreateViewAsync),
+            //Pobranie nazwy metody do wywołania (alternatywa do nameof())
+            Expression<Action> create = () => CreateView<WorkspaceViewModel>();
+            Expression<Action> createAsync = () => CreateViewAsync<WszyscyPracownicyViewModel>();
+            var action = type.IsAssignableTo(typeof(ILoadable)) ? createAsync : create;
+            var methodName = (action.Body as MethodCallExpression).Method.Name;
+            //Pobranie metody i wywołanie
+            MethodInfo method = this.GetType().GetMethod(methodName,
                 BindingFlags.NonPublic | BindingFlags.Instance);
             MethodInfo genericMethod = method.MakeGenericMethod(type);
             genericMethod.Invoke(this, null);
@@ -241,18 +237,19 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         /// <summary>
-        /// Metoda tworząca ViewModel, który wymaga pobrania danych z bazy
+        /// Metoda tworząca ViewModel, który to model wymaga pobrania danych z bazy
         /// Pobiaranie następuje asynchronicznie
         /// </summary>
         /// <typeparam name="T"></typeparam>
         private void CreateViewAsync<T>()
             where T : WorkspaceViewModel, ILoadable
         {
-            //DI powinnen sobie sam 'dociągnąć' repozytorium i mappera
+            //DI inicjuje konstruktor ViewModelu
             var workspace = _provider.GetRequiredService<T>();
-            //nie oczekuje tego Taska, bo chce żeby UI już załadował przygotowaną zakładkę
-            //a w międzyczasie żeby dociągnął sobie dane z bazy
-            //po dociągnięciu, powiadomi UI że dane są dostępne
+            //Task nie jest oczekiwany w celu natychmiastowego wyświetlenia widoku
+            //a asynchronicznie zostaną pobrane dane z bazy.
+            //Po załadowaniu powiadomi UI że dane są dostępne.
+            //W przypadku niepowodzenia metoda LoadAsync wyświetli odpowiedni komunikat
             Task.Run(async () => await workspace.LoadAsync());
 
             Workspaces.Add(workspace);
@@ -358,7 +355,7 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 if (_loginViewModel == null)
                 {
-                    _loginViewModel = _provider.GetRequiredService<LoginViewModel>(); ;
+                    _loginViewModel = _provider.GetRequiredService<LoginViewModel>();
                     OnPropertyChanged(() => LoginViewModel);
                 }
                 return _loginViewModel;

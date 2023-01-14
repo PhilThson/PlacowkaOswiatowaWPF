@@ -13,6 +13,10 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces
     //        return vm;
     //    }
     //}
+    
+    /// <summary>
+    /// Interfejs pozwala na asynchroniczne pobieranie zasobów z bazy danych
+    /// </summary>
     public interface ILoadable
     {
         Task LoadAsync();
