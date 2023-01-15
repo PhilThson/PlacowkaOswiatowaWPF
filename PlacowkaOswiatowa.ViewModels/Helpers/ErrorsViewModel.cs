@@ -41,6 +41,15 @@ namespace PlacowkaOswiatowa.ViewModels.Helpers
                 OnErrorsChanged(propertyName);
         }
 
+        public void ClearAllErrors()
+        {
+            foreach (var kvp in _propertyErrors)
+            {
+                _propertyErrors.Remove(kvp.Key);
+                OnErrorsChanged(kvp.Key);
+            }
+        }
+
         public void OnErrorsChanged(string propertyName) =>
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 

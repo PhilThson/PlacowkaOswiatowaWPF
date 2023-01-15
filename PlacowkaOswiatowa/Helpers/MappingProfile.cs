@@ -37,7 +37,10 @@ namespace PlacowkaOswiatowa.Helpers
                 .ForMember(d => d.Wychowawca, o => o.MapFrom(s => s.Oddzial.Pracownik))
                 ;
 
-            CreateMap<UczenDto, Uczen>();
+            CreateMap<UczenDto, Uczen>()
+                .ForMember(d => d.Adres, o => o.Ignore())
+                .ForMember(d => d.Oddzial, o => o.Ignore())
+                ;
 
             CreateMap<Pracodawca, PracodawcaDto>();
 

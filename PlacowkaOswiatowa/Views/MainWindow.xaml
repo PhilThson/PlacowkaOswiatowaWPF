@@ -162,7 +162,8 @@
                 </ToggleButton>
                 <Separator/>
                 <ToggleButton Width="32" Height="32" Margin="2"
-                              Command="{Binding ZarobkiPracownikaCommand}">
+                              Command="{Binding ZarobkiPracownikaCommand}"
+                              ToolTip="Zarobki pracownika">
                     <ToggleButton.Background>
                         <ImageBrush ImageSource="../Icons/currency.png"/>
                     </ToggleButton.Background>

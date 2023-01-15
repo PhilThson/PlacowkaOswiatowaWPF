@@ -13,22 +13,14 @@ using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
-using System.ComponentModel;
-using PlacowkaOswiatowa.ViewModels.Helpers;
-using System.Windows.Threading;
-using System.Collections;
+using PlacowkaOswiatowa.Domain.Models.Base;
+using System.Reflection;
+using System.Linq;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable, INotifyDataErrorInfo
+    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable
     {
-        #region Prywatne pola
-        //private Uczen _uczen;
-        //private Adres _adres;
-        //private readonly IPlacowkaRepository _repository;
-        private readonly IMapper _mapper;
-        #endregion
-
         #region Pola i własności Osoby
         public string Imie
         {
@@ -39,9 +31,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.Imie = value;
 
-                    _errorsViewModel.ClearErrors(nameof(Imie));
-                    if (Item.Imie.Length > 2)
-                        _errorsViewModel.AddError(nameof(Imie), $"{nameof(Imie)} może posiadać maksymalnie 20 znaków");
+                    base.ClearErrors(nameof(Imie));
+                    if (Item.Imie.Length < 3)
+                        base.AddError(nameof(Imie), "Imię musi posiadać przynajmniej 3 znaki");
 
                     OnPropertyChanged(() => Imie);
                 }
@@ -55,6 +47,11 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DrugieImie)
                 {
                     Item.DrugieImie = value;
+
+                    base.ClearErrors(nameof(DrugieImie));
+                    if (Item.DrugieImie.Length != 0 && Item.DrugieImie.Length < 3)
+                        base.AddError(nameof(DrugieImie), "Drugie imię musi posiadać przynajmniej 3 znaki");
+
                     OnPropertyChanged(() => DrugieImie);
                 }
             }
@@ -67,6 +64,13 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Nazwisko)
                 {
                     Item.Nazwisko = value;
+
+                    //_errorsViewModel.ClearErrors(nameof(Nazwisko));
+                    base.ClearErrors(nameof(Nazwisko));
+                    if (Item.Nazwisko.Length < 3)
+                        //_errorsViewModel.AddError(nameof(Nazwisko), "Nazwisko musi posiadać przynajmniej 3 znaki");
+                        base.AddError(nameof(Nazwisko), "Nazwisko musi posiadać przynajmniej 3 znaki");
+
                     OnPropertyChanged(() => Nazwisko);
                 }
             }
@@ -91,9 +95,11 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DataUrodzenia)
                 {
                     Item.DataUrodzenia = value;
-                    _errorsViewModel.ClearErrors(nameof(DataUrodzenia));
+                    //_errorsViewModel.ClearErrors(nameof(DataUrodzenia));
+                    base.ClearErrors(nameof(DataUrodzenia));
                     if (Item.DataUrodzenia > DateTime.Today)
-                        _errorsViewModel.AddError(nameof(DataUrodzenia),
+                        //_errorsViewModel.AddError(nameof(DataUrodzenia),
+                        base.AddError(nameof(DataUrodzenia),
                             "Nieprawidłowa data urodzenia");
 
                     OnPropertyChanged(() => DataUrodzenia);
@@ -105,7 +111,10 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola i właściwości Ucznia
 
         private ReadOnlyCollection<OddzialDto> _oddzialy;
-        public ReadOnlyCollection<OddzialDto> Oddzialy => _oddzialy;
+        public ReadOnlyCollection<OddzialDto> Oddzialy
+        {
+            get => _oddzialy;
+        }
 
         public OddzialDto WybranyOddzial
         {
@@ -205,36 +214,16 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Obsługa błędów
-
-        private readonly ErrorsViewModel _errorsViewModel;
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        public bool HasErrors => _errorsViewModel.HasErrors;
-        public bool CanSave => !_errorsViewModel.HasErrors;
-
-        public IEnumerable GetErrors(string propertyName) =>
-            _errorsViewModel.GetErrors(propertyName);
-
-        #endregion
+        public bool CanSave => !base.HasErrors;
 
         #region Konstruktor
         public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.NowyUczen, repository)
+            : base(BaseResources.NowyUczen, repository, mapper)
         {
             Item = new UczenDto { Adres = new AdresDto() };
             //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
-            this.PropertyChanged += (s, e) =>
-                _SaveAndCloseCommand.OnCanExecuteChanged();
-            _mapper = mapper;
-            _errorsViewModel = new ErrorsViewModel();
-            _errorsViewModel.ErrorsChanged += ErrorsViewModel_ErrorsChanged;
-        }
-
-        private void ErrorsViewModel_ErrorsChanged(object sender, DataErrorsChangedEventArgs e)
-        {
-            ErrorsChanged?.Invoke(sender, e);
-            OnPropertyChanged(nameof(CanSave));
+            this.ErrorsChanged += (s, e) =>
+                _SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
@@ -264,33 +253,40 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                //wyzerowanie parametrów po kliknięciu:
-                //_pracownik.ClearPracownik();
-                //OnPropertyChanged(() => _pracownik.Imie);
-                //this.OnRequestCreateView(this, new EventArgs());
-
                 var uczen = _mapper.Map<Uczen>(Item);
+                var adres = _mapper.Map<Adres>(Item.Adres);
                 uczen.OddzialId = WybranyOddzial.Id;
 
-                var adres = _mapper.Map<Adres>(Item.Adres);
-
-                var czyAdresIstnieje = await _repository.Adresy.Exists(adres);
-                if (!czyAdresIstnieje)
-                {
-                    await _repository.Adresy.AddAsync(adres);
-                    await _repository.SaveAsync();
-                    //bo adresDTO jest śledzony
-                    //AdresId = _adres.Id;
-                    uczen.AdresId = adres.Id;
-                }
+                var adresFromDb = await _repository.Adresy.GetAdresAsync(adres);
+                if (adresFromDb is not null)
+                    uczen.AdresId = adresFromDb.Id;
                 else
                 {
-                    var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres);
+                    uczen.Adres = adres;
+                    //Dla powiązanych encji sprawdź czy istnieje rekord o zadanej nazwie,
+                    //jeżeli tak, to pobierz istniejący, jeżeli nie, to utwórz nowy
+                    var properties = uczen.Adres.GetType().GetProperties()
+                        .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
+                        .ToList();
 
-                    if (adresFromDb is null)
-                        throw new DataNotFoundException("Nie znaleziono adresu o podanych parametrach");
-
-                    uczen.AdresId = adresFromDb.Id;
+                    foreach (var prop in properties)
+                    {
+                        var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
+                        MethodInfo method = _repository.GetType().GetMethod("GetByName",
+                            BindingFlags.Public | BindingFlags.Instance);
+                        MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                        var result = genericMethod.Invoke(_repository, new object[] { toSearch });
+                        var entity = result as BaseDictionaryEntity<int>;
+                        if (entity != null)
+                        {
+                            //Usuń wcześniej zmapowaną wartość
+                            prop.SetValue(uczen.Adres, null);
+                            //To wyrzuca, bo już automaper utworzył powiązane klasy
+                            var propId = $"{prop.Name}Id";
+                            var propIdInfo = uczen.Adres.GetType().GetProperty(propId);
+                            propIdInfo.SetValue(uczen.Adres, entity.Id);
+                        }
+                    }
                 }
 
                 var czyIstnieje = await _repository.Uczniowie.Exists(uczen);
@@ -314,41 +310,21 @@ namespace PlacowkaOswiatowa.ViewModels
                 MessageBox.Show("Nie udało się dodać ucznia", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            //podnieść Event rozgłaszając dodanie ucznia,
+            //może rozgłaszać dodanie ucznia,
             //bo może być otwarta zakładka z listą pracowników,
             //która się nie odświeży
         }
 
         public void WyczyscFormularz()
         {
-            //Imie = "";
-            //DrugieImie = "";
-            //Nazwisko = "";
-            //DataUrodzenia = DateTime.Today;
-            //Pesel = "";
-            //Ulica = "";
-            //NumerDomu = "";
-            //NumerMieszkania = "";
-            //Miejscowosc = "";
-            //Panstwo = "";
-            //KodPocztowy = "";
-            //WybranyOddzial = null;
             Item = new UczenDto { Adres = new AdresDto() };
+            base.ClearAllErrors();
             foreach(var prop in this.GetType().GetProperties())
                 this.OnPropertyChanged(prop.Name);
         }
 
-        protected override bool SaveAndCloseCanExecute() =>
-            !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
-            !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3 &&
-            DataUrodzenia.HasValue &&
-            DataUrodzenia.Value < DateTime.Now.AddYears(-3);
+        protected override bool SaveAndCloseCanExecute() => !HasErrors;
 
-        #endregion
-
-        #region Obsługa zdarzeń
-        private void CheckForCanExecute(object? sender, EventArgs e) =>
-            _SaveAndCloseCommand.OnCanExecuteChanged();
         #endregion
 
         public override void Dispose()

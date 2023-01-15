@@ -20,10 +20,6 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>
     {
-        #region Pola prywatne
-        private readonly IMapper _mapper;
-        #endregion
-
         #region Pola i własności Osoby
         public string Imie
         {
@@ -204,11 +200,10 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Konstruktor
         public NowyPracownikViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.NowyPracownik, repository)
+            : base(BaseResources.NowyPracownik, repository, mapper)
         {
             this.PropertyChanged += (_, __) =>
-                _SaveAndCloseCommand.OnCanExecuteChanged();
-            _mapper = mapper;
+                _SaveAndCloseCommand.RaiseCanExecuteChanged();
             Item = new CreatePracownikDto { Adres = new AdresDto() };
             //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
             // - wykonywane np. w przypadku zamkniecia zkladki
@@ -218,11 +213,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody komend
         protected override async Task SaveAsync()
         {
-            //DodajPracownikaCommand.CanExecute();
-            /*logika dodawania pracownika - ustawienie jego wartosci itd.
-            zapis do bazy danych */
-            //wyzerowanie parametrów po kliknięciu:
-            //this.OnRequestCreateView(this, new EventArgs());
             try
             {
                 var pracownik = _mapper.Map<Pracownik>(Item);
@@ -267,8 +257,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 //jeżeli istnieje to przypisanie istniejącego identyfikatora
                 else
                 {
-                    var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres,
-                        includeProperties: "Panstwo,Miejscowosc,Ulica");
+                    var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres);
 
                     if (adresFromDb is null)
                         throw new DataNotFoundException("Nie znaleziono adresu o podanych parametrach");
@@ -308,39 +297,15 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public void WyczyscFormularz()
         {
-            //Imie = "";
-            //DrugieImie = "";
-            //Nazwisko = "";
-            //DataUrodzenia = DateTime.Today;
-            //Pesel = "";
-            //Ulica = "";
-            //NumerDomu = "";
-            //NumerMieszkania = "";
-            //Miejscowosc = "";
-            //Panstwo = "";
-            //KodPocztowy = "";
-            //Email = "";
-            //NrTelefonu = "";
             Item = new CreatePracownikDto() { Adres = new AdresDto() };
+            base.ClearAllErrors();
+            foreach (var prop in this.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
         #endregion
 
         #region Obsługa zdarzeń
-        private void CheckForCanExecute(object? sender, EventArgs e) =>
-            _SaveAndCloseCommand.OnCanExecuteChanged();
-
-        [Obsolete("Funkcja do walidacji przy zmianie właściwości ViewModelu")]
-        private void NowyPracownikViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Imie) ||
-                e.PropertyName == nameof(Nazwisko))
-            {
-                //nie trzeba subskrybować eventu CanExecuteChanged
-                //bo automatycznie robi to funkcja CanExecute() w BaseCommand
-                _SaveAndCloseCommand.OnCanExecuteChanged();
-            }
-        }
-
+        
         public override void Dispose()
         {
             //potrzebne w razie subskrybowania eventu z innej klasy

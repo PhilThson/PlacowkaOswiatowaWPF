@@ -19,13 +19,22 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         {
             return await _adresDbSet.AnyAsync(a => a.Id == id);
         }
-        public async Task<bool> Exists(Adres adres)
-        {
-            return await _adresDbSet.AnyAsync(a => a.Ulica == adres.Ulica &&
-                a.Miejscowosc == adres.Miejscowosc &&
+        public new async Task<bool> Exists(Adres adres) => 
+            await _adresDbSet.AnyAsync(a =>
+                a.Panstwo.Nazwa == adres.Panstwo.Nazwa &&
+                a.Ulica.Nazwa == adres.Ulica.Nazwa &&
+                a.Miejscowosc.Nazwa == adres.Miejscowosc.Nazwa &&
                 a.NumerDomu == adres.NumerDomu &&
                 a.NumerMieszkania == adres.NumerMieszkania &&
                 a.KodPocztowy == adres.KodPocztowy);
-        }
+
+        public async Task<Adres> GetAdresAsync(Adres adres) =>
+            await _adresDbSet.FirstOrDefaultAsync(a =>
+                a.Panstwo.Nazwa == adres.Panstwo.Nazwa &&
+                a.Ulica.Nazwa == adres.Ulica.Nazwa &&
+                a.Miejscowosc.Nazwa == adres.Miejscowosc.Nazwa &&
+                a.NumerDomu == adres.NumerDomu &&
+                a.NumerMieszkania == adres.NumerMieszkania &&
+                a.KodPocztowy == adres.KodPocztowy);
     }
 }

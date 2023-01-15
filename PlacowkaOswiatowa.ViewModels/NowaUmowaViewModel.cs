@@ -8,7 +8,6 @@ using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -16,15 +15,10 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowaUmowaViewModel : SingleItemViewModel<UmowaDto>, ILoadable
     {
-        #region Pola prywatne
-        private readonly IMapper _mapper;
-        #endregion
-
         #region Konstruktor
         public NowaUmowaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.NowaUmowa, repository)
+            : base(BaseResources.NowaUmowa, repository, mapper)
         {
-            _mapper = mapper;
             Item = new UmowaDto { Etat = new Etat(), Stanowisko = new Stanowisko() };
         }
         #endregion

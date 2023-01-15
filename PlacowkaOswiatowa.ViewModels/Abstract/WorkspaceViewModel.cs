@@ -6,7 +6,7 @@ using System.Windows.Input;
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
     //Klasa zawierająca dane wspólne dla wszystkich zakładek
-    public abstract class WorkspaceViewModel : MediateViewModel
+    public abstract class WorkspaceViewModel : BaseViewModel
     {
         #region Pola
         protected readonly IPlacowkaRepository _repository;
@@ -53,15 +53,6 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         public event EventHandler<Type> RequestCreateView;
         protected void OnRequestCreateView(Type type) =>
             RequestCreateView?.Invoke(this, type);
-
-        public event Action PracownikChanged;
-        protected void RaisePracownikChaged() => 
-            PracownikChanged?.Invoke();
-
-        //Event dla właśności wymagających walidacji z kodu
-        public event EventHandler RequestValidate;
-        protected void OnRequestValidate() =>
-            RequestValidate?.Invoke(this, EventArgs.Empty);
 
         #endregion
     }

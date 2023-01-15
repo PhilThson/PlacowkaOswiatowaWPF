@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Models.Base;
+using PlacowkaOswiatowa.Domain.Extensions;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {
@@ -48,8 +49,10 @@ namespace PlacowkaOswiatowa.Domain.Models
         public virtual ICollection<PracownicyAdresy> AdresPracownicyAdresy 
         { get; set; }
 
-        public static bool operator ==(Adres a1, AdresDto a2)
+        public static bool operator ==(Adres a1, AdresDto? a2)
         {
+            if (a2 is null) return false;
+
             return a1.Panstwo?.Nazwa.ToLower() == a2.Panstwo.ToLower() &&
                 a1.Miejscowosc?.Nazwa.ToLower() == a2.Miejscowosc.ToLower() &&
                 a1.Ulica?.Nazwa.ToLower() == a2.Ulica.ToLower() &&
@@ -64,7 +67,15 @@ namespace PlacowkaOswiatowa.Domain.Models
         {
             if (a2 is null) return false;
 
-            return a1.GetHashCode() == a2.GetHashCode();
+            return
+                a1.Panstwo?.Nazwa.ToLowerString() == a2.Panstwo?.Nazwa.ToLowerString() &&
+                a1.Miejscowosc?.Nazwa.ToLowerString() == a2.Miejscowosc?.Nazwa.ToLowerString() &&
+                a1.Ulica?.Nazwa.ToLowerString() == a2.Ulica?.Nazwa.ToLowerString() &&
+                a1.NumerDomu.ToLowerString() == a2.NumerDomu.ToLowerString() &&
+                a1.NumerMieszkania?.ToLowerString() == a2.NumerMieszkania.ToLowerString() &&
+                a1.KodPocztowy.ToLowerString() == a2.KodPocztowy.ToLowerString();
+
+            //return a1.GetHashCode() == a2.GetHashCode();
 
             //if (a1 is null)
             //{
@@ -89,7 +100,7 @@ namespace PlacowkaOswiatowa.Domain.Models
         }
         public override int GetHashCode()
         {
-            return PanstwoId ^ MiejscowoscId ^ UlicaId.GetValueOrDefault() ^ NumerDomu.GetHashCode() ^ NumerMieszkania.GetHashCode();
+            return PanstwoId ^ MiejscowoscId ^ UlicaId.GetValueOrDefault() ^ (NumerDomu ?? "").GetHashCode() ^ (NumerMieszkania ?? "").GetHashCode();
         }
 
         public override string ToString()

@@ -16,6 +16,7 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class ZarobkiPracownikaViewModel : WorkspaceViewModel, ILoadable
     {
+
         #region Konstruktor
         public ZarobkiPracownikaViewModel(IPlacowkaRepository repository, IMapper mapper)
             : base(repository)
@@ -23,18 +24,12 @@ namespace PlacowkaOswiatowa.ViewModels
             base.DisplayName = BaseResources.ZarobkiPracownika;
             _mapper = mapper;
             _pracownikIsVisible = "Collapsed";
-            PracownikChanged += WybranyPracownikChanged;
+            _skladki = new Skladki();
+            _wybranyPracownik = new PracownikDto();
         }
         #endregion
 
         #region Inicjacja
-        [Obsolete("Metoda statyczna do asynchronicznego ładowania ViewModelu")]
-        public static async Task<ZarobkiPracownikaViewModel> Load(IPlacowkaRepository repository, IMapper mapper)
-        {
-            ZarobkiPracownikaViewModel viewModel = new ZarobkiPracownikaViewModel(repository, mapper);
-            Task.Run(async () => await viewModel.LoadAsync());
-            return viewModel;
-        }
 
         public async Task LoadAsync()
         {
@@ -42,7 +37,6 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
                 var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicyFormDb);
-
                 _pracownicy = new ReadOnlyCollection<PracownikDto>(listaPracownikow);
                 OnPropertyChanged(() => Pracownicy);
             }
@@ -55,8 +49,16 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Pola, właściwości
-        //private readonly IPlacowkaRepository _repository;
+        
         private readonly IMapper _mapper;
+
+        private Skladki _skladki;
+        public Skladki Skladki 
+        {
+            get => _skladki;
+            set => SetProperty(ref _skladki, value);
+        }
+
 
         private ReadOnlyCollection<PracownikDto> _pracownicy;
         public ReadOnlyCollection<PracownikDto> Pracownicy
@@ -67,14 +69,14 @@ namespace PlacowkaOswiatowa.ViewModels
         private PracownikDto _wybranyPracownik;
         public PracownikDto WybranyPracownik
         {
-            get => _wybranyPracownik ??= new PracownikDto();
+            get => _wybranyPracownik;
             set
             {
                 if (value != null)
                 {
                     _wybranyPracownik = value;
                     OnPropertyChanged(() => WybranyPracownik);
-                    RaisePracownikChaged();
+                    WybranyPracownikChanged();
                     PracownikIsVisible = "Visible";
                 }
             }
@@ -209,8 +211,11 @@ namespace PlacowkaOswiatowa.ViewModels
             get => _skladkaZdrowotna;
             set
             {
-                _skladkaZdrowotna = value;
-                OnPropertyChanged(() => SkladkaZdrowotna);
+                if (value != null)
+                {
+                    _skladkaZdrowotna = value;
+                    OnPropertyChanged(() => SkladkaZdrowotna);
+                }
             }
         }
         private decimal _skladkaChorobowa;
@@ -267,21 +272,22 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody pomocnicze
         private void Oblicz()
         {
-            PensjaNetto = WynagrodzenieBrutto - SkladkaChorobowa - SkladkaEmerytalna - SkladkaRentowa - SkladkaZdrowotna;
+            
 
             //MessageBox.Show($"Obliczono pensję pracownika {Imie} {Nazwisko}", "Info",
             //        MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void WyczyscFormularz()
         {
-            WybranyPracownik = null;
+            WybranyPracownik = new PracownikDto();
+            Skladki = new Skladki();
+            PensjaNetto = 0.0m;
             WymiarGodzinowy = 0;
             Nadgodziny = 0.0;
             SkladkaZdrowotna = 0.0m;
             SkladkaChorobowa = 0.0m;
             SkladkaRentowa = 0.0m;
             SkladkaEmerytalna = 0.0m;
-            Clear();
         }
 
         private void WybranyPracownikChanged()
@@ -301,5 +307,67 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         #endregion
+    }
+
+    public class Skladki
+    {
+        #region Pola prywatne
+        private decimal _skladkaEmerytalna;
+        private decimal _skladkaRentowa;
+        private decimal _skladkaChorobowa;
+        private decimal _skladkaZdrowotna;
+        private decimal _podatek;
+        private decimal _zaliczkaNaPodatekDochodowy;
+        #endregion
+
+        #region Właściwości
+
+        #region Składki społeczne
+        public decimal SkladkaEmerytalnaProcent { get; set; }
+        public decimal SkladkaRenotwaProcent { get; set; }
+        public decimal SkladkaChorobowaProcent { get; set; }
+        #endregion
+        //obliczna z pensji brutto po odjeciu skladek społecznych
+        public decimal SkladkaZdrowotnaProcent { get; set; }
+        //po odjęciu poprzednich od kwoty brutto, odjęcie kosztów uzyskania przychodu
+        //co daje zaliczkę na podatek dochodowy
+        public decimal KosztUzyskaniaPrzychodu { get; set; } //PLN
+        //kwota pozostała po odjęciu powyższych w I progu podatkowym to 12%
+        //zwolnieni od podatku - 0%
+        public decimal PodatekProcent { get; set; }
+        //Właściwie 1/12 kwoty wolnej od podatku czyli 300 PLN
+        public decimal KwotaWolnaOdPodatku { get; set; }
+        #endregion
+
+        public Skladki()
+        {
+            SkladkaEmerytalnaProcent = 0.0976m;
+            SkladkaRenotwaProcent = 0.015m;
+            SkladkaChorobowaProcent = 0.0245m;
+            SkladkaZdrowotnaProcent = 0.09m;
+            KosztUzyskaniaPrzychodu = 250.0m;
+            PodatekProcent = 0.12m;
+            KwotaWolnaOdPodatku = 300.0m;
+        }
+
+        public decimal ObliczNetto(decimal kwotaBrutto)
+        {
+            _skladkaEmerytalna = kwotaBrutto * SkladkaEmerytalnaProcent;
+            _skladkaRentowa = kwotaBrutto * SkladkaRenotwaProcent;
+            _skladkaChorobowa = kwotaBrutto * SkladkaChorobowaProcent;
+            var skladkiSpoleczne = _skladkaEmerytalna + _skladkaRentowa + _skladkaChorobowa;
+            _skladkaZdrowotna = (kwotaBrutto - skladkiSpoleczne) * SkladkaZdrowotnaProcent;
+
+            //Wynagrodzenie pomniejszone o składki społeczne
+            var kwotaBezSkladek = kwotaBrutto - skladkiSpoleczne - _skladkaZdrowotna;
+            //kwotaBrutto -= _skladkaZdrowotna;
+            //Wyliczenie kwoty do opodatkowania
+            var kwotaDoOpodatkowania = Math.Round(kwotaBezSkladek - KosztUzyskaniaPrzychodu, 2);
+            _podatek = kwotaDoOpodatkowania * PodatekProcent;
+            //W przypadku osób zwolnionych od podatku, nie jest brane pod uwagę
+            _zaliczkaNaPodatekDochodowy = _podatek - KwotaWolnaOdPodatku;
+            var kwotaNetto = kwotaBrutto - skladkiSpoleczne - _skladkaZdrowotna - _zaliczkaNaPodatekDochodowy;
+            return kwotaNetto;
+        }
     }
 }

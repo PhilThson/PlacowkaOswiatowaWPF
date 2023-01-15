@@ -2,7 +2,7 @@
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class FlagViewModel : MediateViewModel
+    public class FlagViewModel : BaseViewModel
     {
         private bool isSet;
         public FlagViewModel(bool isSet, string name)

@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System;
 
-namespace PlacowkaOswiatowa.Infrastructure.Extensions
+namespace PlacowkaOswiatowa.Domain.Extensions
 {
     public static class CommonExtensions
     {
@@ -16,5 +16,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Extensions
                 onException.Invoke(ex);
             }
         }
+
+        public static string ToLowerString(this object obj) =>
+            obj == null ? string.Empty : obj.ToString();
     }
 }

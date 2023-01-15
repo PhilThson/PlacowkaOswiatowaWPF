@@ -17,6 +17,10 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .HasMany(u => u.UczenOceny)
                 .WithOne(o => o.Uczen)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasIndex(u => u.Pesel)
+                .IsUnique();
         }
     }
 }

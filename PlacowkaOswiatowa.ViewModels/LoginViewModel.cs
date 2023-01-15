@@ -1,27 +1,32 @@
-﻿using PlacowkaOswiatowa.Domain.Commands;
+﻿using AutoMapper;
+using PlacowkaOswiatowa.Domain.Commands;
+using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
-using PlacowkaOswiatowa.Domain.MessageBroker;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class LoginViewModel : WorkspaceViewModel
+    public class LoginViewModel : SingleItemViewModel<UzytkownikDto>
     {
         #region Konstruktor
-        public LoginViewModel(IPlacowkaRepository repository, ISignalHub signal)
-            : base(repository)
+        public LoginViewModel(ISignalHub signal, 
+            IPlacowkaRepository repository, 
+            IMapper mapper)
+            : base(BaseResources.LoginPage, repository, mapper)
         {
             _signal = signal;
-            DisplayName = BaseResources.LoginPage;
-            DisplayStatusMessage("Logowanie do aplikacji");
-            this.PropertyChanged += (s, e) => _zalogujCommand.OnCanExecuteChanged();
-            _login = "Gość";
+            //DisplayStatusMessage("Logowanie do aplikacji");
+            this.PropertyChanged += (s, e) => 
+                _SaveAndCloseCommand.RaiseCanExecuteChanged();
+            //_login = "Gość";
+            Item = new UzytkownikDto();
         }
         #endregion
 
@@ -29,48 +34,48 @@ namespace PlacowkaOswiatowa.ViewModels
 
         private readonly ISignalHub _signal;
 
-        private Uzytkownik _uzytkownik;
-
         private string _login;
         public string Login
         {
             get => _login;
-            set => SetProperty(ref _login, value);
+            set
+            {
+                if(value != Item.Login)
+                {
+                    _login = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         private string _password;
         public string Password
         {
             get => _password;
-            set => SetProperty(ref _password, value);
+            set
+            {
+                if(value != Item.Password)
+                {
+                    _password = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
-        public bool CzyPoprawne =>
+        protected override bool SaveAndCloseCanExecute() =>
             !string.IsNullOrEmpty(Login) && Login.Length >= 3 &&
             !string.IsNullOrEmpty(Password) && Password.Length >= 3;
         #endregion
 
         #region Komendy
-        private BaseCommand _zalogujCommand;
-        public ICommand ZalogujCommand
-        {
-            get
-            {
-                if (_zalogujCommand == null)
-                    _zalogujCommand =
-                        new BaseCommand(() => Zaloguj(), () => CzyPoprawne);
-                return _zalogujCommand;
-            }
-        }
-
         public ICommand AnulujCommand
         {
-            get => new BaseCommand(() => this.Close(false));
+            get => new BaseCommand(Close);
         }
         #endregion
        
         #region Logowanie
-        public async void Zaloguj()
+        protected override async Task SaveAsync()
         {
             var uzytkownik = new Uzytkownik
             {
@@ -81,7 +86,7 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 _signal.RaiseLoggedInChanged();
                 _signal.WyslijWiadomosc(this, "Witaj Gościu!");
-                Close(false);
+                Close();
             }
             else
             {
@@ -93,7 +98,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     {
                         _signal.RaiseLoggedInChanged();
                         _signal.WyslijWiadomosc(this, $"Witaj {Login} {Password}!");
-                        Close(false);
+                        Close();
                     }
                     else
                     {
@@ -105,7 +110,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    PublishException(ex);
+                    //PublishException(ex);
                     MessageBox.Show("Błąd połączenia do bazy danych", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                     _signal.WyslijWiadomosc(this, "Błąd połączenia do bazy danych.");
@@ -116,19 +121,21 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Metody pomocnicze
 
-        public override void Close(bool wasCancelled = true)
+        public void Close()
         {
-            if (wasCancelled)
-            {
-                MessageBroker.Instance.SendMessage(
-                    MessageBrokerMessages.DISPLAY_TIMEOUT_INFO_MESSAGE_TITLE,
-                       "User NOT Logged In.");
-            }
+            //if (wasCancelled)
+            //{
+            //    MessageBroker.Instance.SendMessage(
+            //        MessageBrokerMessages.DISPLAY_TIMEOUT_INFO_MESSAGE_TITLE,
+            //           "User NOT Logged In.");
+            //}
 
-            base.Close(wasCancelled);
+            //base.Close(wasCancelled);
             base.Clear();
-            Login = "Gość";
-            Password = String.Empty;
+            Item = new UzytkownikDto();
+            foreach (var prop in this.GetType().GetProperties())
+                OnPropertyChanged(prop.Name);
+
             _signal.RaiseHideLoginViewRequest();
         }
 

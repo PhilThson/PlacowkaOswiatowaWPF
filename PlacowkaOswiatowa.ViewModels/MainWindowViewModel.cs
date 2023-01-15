@@ -18,11 +18,10 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class MainWindowViewModel : MediateViewModel
+    public class MainWindowViewModel : BaseViewModel
     {
         #region Konstruktor
         private IServiceProvider _provider;
