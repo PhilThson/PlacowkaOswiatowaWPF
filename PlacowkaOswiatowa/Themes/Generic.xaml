@@ -3,6 +3,13 @@
                     xmlns:commonViews="clr-namespace:PlacowkaOswiatowa.Views.Common"
                     >
 
+    <!--Pobranie styli-->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Resources/WorkspaceResources.xaml"/>
+        <ResourceDictionary Source="/Views/Resources/DatePickerResources.xaml"/>
+        <ResourceDictionary Source="/Views/Resources/ComboBoxResources.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <Style TargetType="{x:Type commonViews:ItemsCollectionViewBase}">
         <Setter Property="Template">
             <Setter.Value>
@@ -11,46 +18,77 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                     </Border>-->
-                    <Grid Margin="0 10 0 0">
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="34"/>
-                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <ToolBar Grid.Row="0" Height="30" Margin="0 2 0 2">
-                            <!--Dodanie ikon zamiast nazw!-->
-                            <ToggleButton Content="Dodaj" Margin="0 2 0 2"/>
-                            <ToggleButton Content="Modyfikuj" Margin="0 2 0 2"/>
-                            <ToggleButton Content="Kasuj" Margin="0 2 0 2"/>
-                            <ToggleButton Content="Odswież" Margin="0 2 0 2"
+                        <TextBlock Grid.Row="0" 
+                                   Style="{StaticResource TextBlockNagłówek}" 
+                                   Text="{Binding DisplayName}"/>
+                        <Grid Grid.Row="1" Margin="0 10 0 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="34"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.Resources>
+                                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelStandardowy}"/>
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxZaokraglony}"/>
+                                <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource DatePickerZaokraglony}"/>
+                                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxZaokraglony}"/>
+                            </Grid.Resources>
+
+                                <ToolBar Grid.Row="0" Height="30" Margin="0 2 0 2">
+                                <!--Dodanie ikon zamiast nazw!-->
+                                <ToggleButton Content="Dodaj" Margin="0 2 0 2"/>
+                                <ToggleButton Content="Modyfikuj" Margin="0 2 0 2"/>
+                                <ToggleButton Content="Kasuj" Margin="0 2 0 2"/>
+                                <ToggleButton Content="Odswież" Margin="0 2 0 2"
                                           Command="{Binding UpdateCommand}"/>
-                        </ToolBar>
-                        <StackPanel Grid.Row="1" Background="Azure">
-                            <Label Content="Tu bedzie filtrowanie i sortowanie"/>
-                        </StackPanel>
-                        <!--Kazdy widok dziedziczacy z Generic.xaml bedzie wyswietlany wlasnie w sekcji ContentPresenter!-->
-                        <ContentPresenter Grid.Row="2" Margin="0 5 0 5"/>
+                            </ToolBar>
+                            <StackPanel Grid.Row="1" Background="Azure" Orientation="Horizontal">
+                                <Label Content="Filtruj po:" MinWidth="100" Margin="5 2"/>
+                                <ComboBox ItemsSource="{Binding ListOfItemsFilter}"
+                                      MinWidth="100" Margin="5 2"
+                                      SelectedValue="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedValuePath="Key"
+                                      DisplayMemberPath="Value"/>
+                                <Label Content="Szukaj po frazie:"/>
+                                <TextBox Text="{Binding SearchPhrase, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <Label Content="Sortuj po:" MinWidth="100"/>
+                                <ComboBox ItemsSource="{Binding ListOfItemsOrderBy}"
+                                      MinWidth="100" Margin="5 2"
+                                      SelectedValue="{Binding SelectedOrderBy}" 
+                                      SelectedValuePath="Key"
+                                      DisplayMemberPath="Value"/>
+                                <CheckBox Content="Czy malejaco" IsChecked="{Binding OrderDescending}" MinWidth="100" Margin="5 2"/>
+                                <Button Content="Sortuj" Command="{Binding OrderByCommand}" MinWidth="100" Margin="5 2"/>
+                            </StackPanel>
+                            <!--Kazdy widok dziedziczacy z Generic.xaml bedzie wyswietlany wlasnie w sekcji ContentPresenter!-->
+                            <ContentPresenter Grid.Row="2" Margin="0 5 0 5"/>
+                        </Grid>
+                        <Button Grid.Row="2" Style="{DynamicResource ButtonZaokraglony}" 
+                            Content="{Binding AddItemName}"
+                            Command="{Binding AddItemCommand}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!--Aby brać style z innych plików:
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Views/Controls/MyStyle.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-    -->
-
-    
     <!--<Style TargetType="{x:Type commonViews:SingleItemViewBase}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type commonViews:SingleItemViewBase}">
-                    --><!--<Border Background="{TemplateBinding Background}"
+                    -->
+    <!--<Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>--><!--
+                    </Border>-->
+    <!--
                     <Grid Margin="0 10 0 0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="34"/>
@@ -67,5 +105,7 @@
             </Setter.Value>
         </Setter>
     </Style>-->
+
+
 
 </ResourceDictionary>

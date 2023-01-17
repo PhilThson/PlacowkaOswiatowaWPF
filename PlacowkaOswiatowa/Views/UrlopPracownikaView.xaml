@@ -194,18 +194,10 @@
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
-                                <ListBox Grid.Row="1"
-                                         Grid.Column="2"
-                                         Grid.ColumnSpan="3"
-                                           Style="{StaticResource ValidationArea}"
-                                           Visibility="{Binding IsValidationVisible, 
-                                             Converter={StaticResource BoolToVisibility}}"
-                                           ItemsSource="{Binding ValidationMessages}"
-                                           DisplayMemberPath="Message" />
                             </Grid>
                         </Expander>
                         <Expander Header="Pracownik tymczasowy" Grid.Row="2" IsExpanded="True">
-                                  <!--IsEnabled="{Binding UmowaIsEnabled}"-->
+                            <!--IsEnabled="{Binding UmowaIsEnabled}"-->
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -233,7 +225,13 @@
                     </Grid>
 
                 </Expander>
-
+                <ListBox Grid.Row="3"
+                         Width="500"
+                         Style="{StaticResource ValidationArea}"
+                         Visibility="{Binding IsValidationVisible, 
+                            Converter={StaticResource BoolToVisibility}}"
+                         ItemsSource="{Binding ValidationMessages}"
+                         DisplayMemberPath="Message" />
             </Grid>
             
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -242,7 +240,7 @@
                             Style="{StaticResource ButtonZaokraglony}" FontSize="24"/>
 
                 <Button Content="Wyczyść"
-                            Command="{Binding WyczyscCommand}"
+                            Command="{Binding ClearFormCommand}"
                             Style="{StaticResource ButtonZaokraglonyCzerwony}" FontSize="24" />
             </StackPanel>
         </Grid>

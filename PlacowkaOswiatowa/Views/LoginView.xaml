@@ -82,18 +82,18 @@
                    Password="{Binding Password}"/>
             <StackPanel Grid.Row="3"
                   Grid.Column="2"
-                  HorizontalAlignment="Right"
+                  HorizontalAlignment="Left"
                   Orientation="Horizontal">
-                <Button ToolTip="Anuluj logowanie"
-                    Content="Anuluj"
-                    IsCancel="True"
-                    Style="{StaticResource CancelButton}"
-                    Command="{Binding AnulujCommand}" />
                 <Button ToolTip="Zaloguj do aplikacji"
                     Content="Login"
                     IsDefault="True"
                     Style="{StaticResource SubmitButton}"
                     Command="{Binding SaveAndCloseCommand}" />
+                <Button ToolTip="Anuluj logowanie"
+                    Content="Anuluj"
+                    IsCancel="True"
+                    Style="{StaticResource CancelButton}"
+                    Command="{Binding ClearFormCommand}" />
             </StackPanel>
             <ListBox Grid.Row="4"
                Grid.Column="2"

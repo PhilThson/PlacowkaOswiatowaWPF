@@ -29,6 +29,9 @@ namespace PlacowkaOswiatowa.Domain.Models
 
         public static bool operator ==(Osoba o1, Osoba o2)
         {
+            if (o1 is null && o2 is null) return true;
+            if (o1 is null) return false;
+            if (o2 is null) return false;
             return o1.GetHashCode() == o2.GetHashCode();
         }
         public static bool operator !=(Osoba o1, Osoba o2)

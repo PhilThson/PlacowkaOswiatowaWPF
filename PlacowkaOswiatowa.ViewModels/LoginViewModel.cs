@@ -19,7 +19,7 @@ namespace PlacowkaOswiatowa.ViewModels
         public LoginViewModel(ISignalHub signal, 
             IPlacowkaRepository repository, 
             IMapper mapper)
-            : base(BaseResources.LoginPage, repository, mapper)
+            : base(repository, mapper, BaseResources.LoginPage)
         {
             _signal = signal;
             //DisplayStatusMessage("Logowanie do aplikacji");
@@ -62,9 +62,6 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        protected override bool SaveAndCloseCanExecute() =>
-            !string.IsNullOrEmpty(Login) && Login.Length >= 3 &&
-            !string.IsNullOrEmpty(Password) && Password.Length >= 3;
         #endregion
 
         #region Komendy
@@ -75,7 +72,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
        
         #region Logowanie
-        protected override async Task SaveAsync()
+        protected override async Task<bool> SaveAsync()
         {
             var uzytkownik = new Uzytkownik
             {
@@ -116,6 +113,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     _signal.WyslijWiadomosc(this, "Błąd połączenia do bazy danych.");
                 }
             }
+            return false;
         }
         #endregion
 
@@ -123,15 +121,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public void Close()
         {
-            //if (wasCancelled)
-            //{
-            //    MessageBroker.Instance.SendMessage(
-            //        MessageBrokerMessages.DISPLAY_TIMEOUT_INFO_MESSAGE_TITLE,
-            //           "User NOT Logged In.");
-            //}
-
-            //base.Close(wasCancelled);
-            base.Clear();
+            ClearValidationMessages();
             Item = new UzytkownikDto();
             foreach (var prop in this.GetType().GetProperties())
                 OnPropertyChanged(prop.Name);
@@ -139,6 +129,12 @@ namespace PlacowkaOswiatowa.ViewModels
             _signal.RaiseHideLoginViewRequest();
         }
 
+        protected override bool SaveAndCloseCanExecute() =>
+            !string.IsNullOrEmpty(Login) && Login.Length >= 3 &&
+            !string.IsNullOrEmpty(Password) && Password.Length >= 3;
+
+        protected override void ClearForm() => Close();
+        
         #endregion
     }
 }

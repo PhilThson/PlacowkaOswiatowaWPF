@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -17,7 +18,7 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Konstruktor
         public NowaUmowaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.NowaUmowa, repository, mapper)
+            : base(repository, mapper, BaseResources.NowaUmowa)
         {
             Item = new UmowaDto { Etat = new Etat(), Stanowisko = new Stanowisko() };
         }
@@ -35,7 +36,6 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        //private PracownikDto _wybranyPracownik;
         public PracownikDto WybranyPracownik
         {
             get => Item.Pracownik;
@@ -60,7 +60,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 OnPropertyChanged(() => Pracodawcy);
             }
         }
-        //private Pracodawca _wybranyPracodawca;
+
         public PracodawcaDto WybranyPracodawca
         {
             get => Item.Pracodawca;
@@ -293,33 +293,47 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Obsługa komend
-        protected override async Task SaveAsync()
+        protected override async Task<bool> SaveAsync()
         {
             try
             {
                 var nowaUmowa = Item;
                 var umowa = _mapper.Map<Umowa>(nowaUmowa);
                 var czyIstnieje = await _repository.Umowy.Exists(Item);
-                if (!czyIstnieje)
-                {
-                    await _repository.Umowy.AddAsync(umowa);
-                    await _repository.SaveAsync();
+                if (czyIstnieje)
+                    throw new DataValidationException(
+                        "Umowa pomiędzy wybranymi podmiotami już istnieje.");
 
-                    MessageBox.Show("Dodano umowę!", "Sukces",
+                await _repository.Umowy.AddAsync(umowa);
+                await _repository.SaveAsync();
+
+                MessageBox.Show("Dodano umowę!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Umowa pomiędzy wybranymi podmiotami już istnieje.", 
-                        "Uwaga",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+
+                return true;
+            }
+            catch(DataValidationException e)
+            {
+                MessageBox.Show(e.Message, "Uwaga",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                return false;
             }
             catch (Exception)
             {
                 MessageBox.Show("Nie udało się dodać umowy", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+
+                return false;
             }
+        }
+
+        protected override void ClearForm()
+        {
+            Item = new UmowaDto { Etat = new Etat(), Stanowisko = new Stanowisko() };
+            ClearAllErrors();
+            foreach (var prop in this.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
         #endregion
     }

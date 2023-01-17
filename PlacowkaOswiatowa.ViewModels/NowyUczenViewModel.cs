@@ -5,10 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using AutoMapper;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
-using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using PlacowkaOswiatowa.Domain.DTOs;
@@ -21,6 +19,17 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable
     {
+        #region Konstruktor
+        public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper)
+            : base(repository, mapper, BaseResources.NowyUczen)
+        {
+            Item = new UczenDto { Adres = new AdresDto() };
+            //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
+            this.ErrorsChanged += (s, e) =>
+                _SaveAndCloseCommand.RaiseCanExecuteChanged();
+        }
+        #endregion
+
         #region Pola i własności Osoby
         public string Imie
         {
@@ -65,10 +74,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.Nazwisko = value;
 
-                    //_errorsViewModel.ClearErrors(nameof(Nazwisko));
                     base.ClearErrors(nameof(Nazwisko));
                     if (Item.Nazwisko.Length < 3)
-                        //_errorsViewModel.AddError(nameof(Nazwisko), "Nazwisko musi posiadać przynajmniej 3 znaki");
                         base.AddError(nameof(Nazwisko), "Nazwisko musi posiadać przynajmniej 3 znaki");
 
                     OnPropertyChanged(() => Nazwisko);
@@ -95,10 +102,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DataUrodzenia)
                 {
                     Item.DataUrodzenia = value;
-                    //_errorsViewModel.ClearErrors(nameof(DataUrodzenia));
                     base.ClearErrors(nameof(DataUrodzenia));
                     if (Item.DataUrodzenia > DateTime.Today)
-                        //_errorsViewModel.AddError(nameof(DataUrodzenia),
                         base.AddError(nameof(DataUrodzenia),
                             "Nieprawidłowa data urodzenia");
 
@@ -140,6 +145,11 @@ namespace PlacowkaOswiatowa.ViewModels
                 if(value != Item.Adres.Panstwo)
                 {
                     Item.Adres.Panstwo = value;
+
+                    ClearErrors(nameof(Panstwo));
+                    if (Item.Adres.Panstwo.Length < 1)
+                        AddError(nameof(Panstwo), "Należy podać Państwo");
+
                     OnPropertyChanged(() => Panstwo);
                 }
             }
@@ -152,6 +162,11 @@ namespace PlacowkaOswiatowa.ViewModels
                 if(value != Item.Adres.Miejscowosc)
                 {
                     Item.Adres.Miejscowosc = value;
+
+                    ClearErrors(nameof(Miejscowosc));
+                    if (Item.Adres.Miejscowosc.Length < 1)
+                        AddError(nameof(Miejscowosc), "Należy podać miejscowość");
+
                     OnPropertyChanged(() => Miejscowosc);
                 }
             }
@@ -206,27 +221,6 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Komendy
-
-        public ICommand WyczyscFormularzCommand 
-        { 
-            get => new BaseCommand(WyczyscFormularz);
-        }
-        #endregion
-
-        public bool CanSave => !base.HasErrors;
-
-        #region Konstruktor
-        public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.NowyUczen, repository, mapper)
-        {
-            Item = new UczenDto { Adres = new AdresDto() };
-            //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
-            this.ErrorsChanged += (s, e) =>
-                _SaveAndCloseCommand.RaiseCanExecuteChanged();
-        }
-        #endregion
-
         #region Pobieranie danych z bazy
 
         public async Task LoadAsync()
@@ -245,17 +239,27 @@ namespace PlacowkaOswiatowa.ViewModels
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         #endregion
 
         #region Metody
 
-        protected override async Task SaveAsync()
+        protected override async Task<bool> SaveAsync()
         {
+            CheckCanSave();
+            if (HasErrors)
+                return false;
             try
             {
                 var uczen = _mapper.Map<Uczen>(Item);
+                if (uczen.OddzialId != default)
+                    uczen.Oddzial = null;
+
+                var uczenFromDb = await _repository.Uczniowie.GetUczenByPesel(uczen.Pesel);
+                if (uczenFromDb != null)
+                    throw new DataValidationException("Uczeń o podanym nr PESEL już istnieje");
+                
                 var adres = _mapper.Map<Adres>(Item.Adres);
-                uczen.OddzialId = WybranyOddzial.Id;
 
                 var adresFromDb = await _repository.Adresy.GetAdresAsync(adres);
                 if (adresFromDb is not null)
@@ -279,9 +283,7 @@ namespace PlacowkaOswiatowa.ViewModels
                         var entity = result as BaseDictionaryEntity<int>;
                         if (entity != null)
                         {
-                            //Usuń wcześniej zmapowaną wartość
                             prop.SetValue(uczen.Adres, null);
-                            //To wyrzuca, bo już automaper utworzył powiązane klasy
                             var propId = $"{prop.Name}Id";
                             var propIdInfo = uczen.Adres.GetType().GetProperty(propId);
                             propIdInfo.SetValue(uczen.Adres, entity.Id);
@@ -289,33 +291,28 @@ namespace PlacowkaOswiatowa.ViewModels
                     }
                 }
 
-                var czyIstnieje = await _repository.Uczniowie.Exists(uczen);
+                await _repository.Uczniowie.AddAsync(uczen);
+                await _repository.SaveAsync();
 
-                if(!czyIstnieje)
-                {
-                    await _repository.Uczniowie.AddAsync(uczen);
-                    await _repository.SaveAsync();
+                MessageBox.Show("Dodano ucznia!", "Sukces",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    MessageBox.Show("Dodano ucznia!", "Sukces",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Uczeń już istnieje.", "Uwaga",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                return true;
+            }
+            catch(DataValidationException e)
+            {
+                MessageBox.Show(e.Message, "Uwaga", 
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception e)
             {
-                MessageBox.Show("Nie udało się dodać ucznia", "Błąd",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Nie udało się dodać ucznia. {e.Message}", 
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            //może rozgłaszać dodanie ucznia,
-            //bo może być otwarta zakładka z listą pracowników,
-            //która się nie odświeży
+            return false;
         }
 
-        public void WyczyscFormularz()
+        protected override void ClearForm()
         {
             Item = new UczenDto { Adres = new AdresDto() };
             base.ClearAllErrors();
@@ -324,6 +321,40 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         protected override bool SaveAndCloseCanExecute() => !HasErrors;
+
+        private void CheckCanSave()
+        {
+            if (string.IsNullOrEmpty(Imie))
+            {
+                AddError(nameof(Imie), "Należy podać imię");
+                OnPropertyChanged(nameof(Imie));
+            }
+            if (string.IsNullOrEmpty(Nazwisko))
+            {
+                AddError(nameof(Nazwisko), "Należy podać nazwisko");
+                OnPropertyChanged(nameof(Nazwisko));
+            }
+            if (string.IsNullOrEmpty(DataUrodzenia.ToString()))
+            {
+                AddError(nameof(DataUrodzenia), "Należy podać datę urodzenia");
+                OnPropertyChanged(nameof(DataUrodzenia));
+            }
+            if (string.IsNullOrEmpty(Pesel))
+            {
+                AddError(nameof(Pesel), "Należy podać PESEL");
+                OnPropertyChanged(nameof(Pesel));
+            }
+            if (string.IsNullOrEmpty(Panstwo))
+            {
+                AddError(nameof(Panstwo), "Należy podać państwo");
+                OnPropertyChanged(nameof(Panstwo));
+            }
+            if (string.IsNullOrEmpty(Miejscowosc))
+            {
+                AddError(nameof(Miejscowosc), "Należy podać miejscowość");
+                OnPropertyChanged(nameof(Miejscowosc));
+            }
+        }
 
         #endregion
 

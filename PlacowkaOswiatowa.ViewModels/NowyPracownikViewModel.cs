@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
@@ -9,17 +8,27 @@ using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>
     {
+        #region Konstruktor
+        public NowyPracownikViewModel(IPlacowkaRepository repository, IMapper mapper)
+            : base(repository, mapper, BaseResources.NowyPracownik)
+        {
+            this.PropertyChanged += (_, __) =>
+                _SaveAndCloseCommand.RaiseCanExecuteChanged();
+            Item = new CreatePracownikDto { Adres = new AdresDto() };
+            //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
+            // - wykonywane np. w przypadku zamkniecia zkladki
+        }
+        #endregion
+
         #region Pola i własności Osoby
         public string Imie
         {
@@ -187,125 +196,86 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Komendy
-
-        public ICommand WyczyscFormularzCommand => 
-            new BaseCommand(WyczyscFormularz);
-
-        protected override bool SaveAndCloseCanExecute() => 
-            !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
-            !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3;
-
-        #endregion
-
-        #region Konstruktor
-        public NowyPracownikViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.NowyPracownik, repository, mapper)
-        {
-            this.PropertyChanged += (_, __) =>
-                _SaveAndCloseCommand.RaiseCanExecuteChanged();
-            Item = new CreatePracownikDto { Adres = new AdresDto() };
-            //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
-            // - wykonywane np. w przypadku zamkniecia zkladki
-        }
-        #endregion
-
         #region Metody komend
-        protected override async Task SaveAsync()
+        protected override async Task<bool> SaveAsync()
         {
             try
             {
                 var pracownik = _mapper.Map<Pracownik>(Item);
+                
+                var pracownikFromDb = await _repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
+                if (pracownikFromDb != null)
+                    throw new DataValidationException("Pracownik o podanym numerze PESEL już istnieje");
+
                 var adres = _mapper.Map<Adres>(Item.Adres);
-
-                //Mapowanie właściwości posiadających klucz obcy do adresu
-                //jeżeli dana właściwość juz istnieje w bazie danych,
-                //to zostanie przypisany klucz obcy
-                var properties = adres.GetType().GetProperties()
-                    .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
-                    .ToList();
-                foreach(var prop in properties)
-                {
-                    var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
-                    MethodInfo method = _repository.GetType().GetMethod("GetByName",
-                        BindingFlags.Public | BindingFlags.Instance);
-                    MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
-                    var result = genericMethod.Invoke(_repository, new object[] { toSearch });
-                    var entity = result as BaseDictionaryEntity<int>;
-                    if (entity != null)
-                        prop.SetValue(adres, entity);
-                }
-
-                //jeżeli nie to zostanie utworzony nowy rekord
-                //to zrobi automaper
-                adres.Panstwo ??= new Panstwo { Nazwa = Panstwo };
-                adres.Miejscowosc ??= new Miejscowosc { Nazwa = Miejscowosc };
-                adres.Ulica ??= new Ulica { Nazwa = Ulica };
-
-                //jeżeli adres nie istnieje to dodanie do bazy
-                var czyAdresIstnieje = await _repository.Adresy.Exists(adres);
-                if (!czyAdresIstnieje)
-                {
-                    await _repository.Adresy.AddAsync(adres);
-                    await _repository.SaveAsync();
-                    
-                    pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
-                    {
-                        new PracownicyAdresy{ AdresId = adres.Id }
-                    };
-                }
-                //jeżeli istnieje to przypisanie istniejącego identyfikatora
+                var adresFromDb = await _repository.Adresy.GetAdresAsync(adres);
+                if (adresFromDb is not null)
+                    await _repository.AddEntityAsync(
+                        new PracownicyAdresy { AdresId = adresFromDb.Id, Pracownik = pracownik });
                 else
                 {
-                    var adresFromDb = await _repository.Adresy.GetAsync(a => a == adres);
+                    var properties = adres.GetType().GetProperties()
+                        .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
+                        .ToList();
 
-                    if (adresFromDb is null)
-                        throw new DataNotFoundException("Nie znaleziono adresu o podanych parametrach");
-
+                    foreach (var prop in properties)
+                    {
+                        var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
+                        MethodInfo method = _repository.GetType().GetMethod("GetByName",
+                            BindingFlags.Public | BindingFlags.Instance);
+                        MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                        var result = genericMethod.Invoke(_repository, new object[] { toSearch });
+                        var entity = result as BaseDictionaryEntity<int>;
+                        if (entity != null)
+                        {
+                            prop.SetValue(adres, null);
+                            var propId = $"{prop.Name}Id";
+                            var propIdInfo = adres.GetType().GetProperty(propId);
+                            propIdInfo.SetValue(adres, entity.Id);
+                        }
+                    }
+ 
                     pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
                     {
-                        new PracownicyAdresy{ AdresId = adresFromDb.Id }
+                        new PracownicyAdresy{ Adres = adres }
                     };
                 }
 
-                //jeżeli pracownik nie istnieje to dodanie
-                var czyIstnieje = await _repository.Pracownicy.Exists(pracownik);
-                if (!czyIstnieje)
-                {
-                    await _repository.Pracownicy.AddAsync(pracownik);
-                    await _repository.SaveAsync();
+                await _repository.Pracownicy.AddAsync(pracownik);
+                await _repository.SaveAsync();
 
-                    MessageBox.Show("Dodano pracownika!", "Sukces",
+                MessageBox.Show("Dodano pracownika!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                //w przeciwnym wypadku dodanie do bazy
-                else
-                {
-                    MessageBox.Show("Pracownik już istnieje.", "Uwaga",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                return true;
+            }
+            catch(DataValidationException e)
+            {
+                MessageBox.Show(e.Message, "Uwaga",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception e)
             {
                 MessageBox.Show("Nie udało się dodać pracownika", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            //podnieść Event rozgłaszając dodanie pracownika,
-            //bo może być otwarta zakładka z listą pracowników,
-            //która się nie odświeży
+            return false;
         }
 
-        public void WyczyscFormularz()
+        protected override void ClearForm()
         {
             Item = new CreatePracownikDto() { Adres = new AdresDto() };
             base.ClearAllErrors();
             foreach (var prop in this.GetType().GetProperties())
                 this.OnPropertyChanged(prop.Name);
         }
+
+        protected override bool SaveAndCloseCanExecute() =>
+            !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
+            !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3;
         #endregion
 
         #region Obsługa zdarzeń
-        
+
         public override void Dispose()
         {
             //potrzebne w razie subskrybowania eventu z innej klasy

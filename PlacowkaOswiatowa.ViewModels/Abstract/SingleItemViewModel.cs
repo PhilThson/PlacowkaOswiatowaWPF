@@ -2,6 +2,7 @@
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Commands;
 using PlacowkaOswiatowa.ViewModels.Helpers;
 using System;
@@ -23,13 +24,13 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         #endregion
 
         #region Konstruktor
-        public SingleItemViewModel(string displayName, 
-            IPlacowkaRepository repository,
-            IMapper mapper)
+        public SingleItemViewModel(IPlacowkaRepository repository, IMapper mapper,
+            string displayName) 
             : base(repository)
         {
             base.DisplayName = displayName;
             _mapper = mapper;
+            _ClearFormCommand = new BaseCommand(ClearForm);
             _SaveAndCloseCommand = new AsyncCommand(
                 async () => await SaveAndClose(),
                 SaveAndCloseCanExecute);
@@ -41,20 +42,22 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         protected IAsyncCommand _SaveAndCloseCommand;
         public IAsyncCommand SaveAndCloseCommand => _SaveAndCloseCommand;
 
-        protected BaseCommand _ClearCommand;
-        public ICommand ClearCommand => _ClearCommand;
+        protected BaseCommand _ClearFormCommand;
+        public ICommand ClearFormCommand => _ClearFormCommand;
 
         #endregion
 
         #region Metody
 
-        protected abstract Task SaveAsync();
+        protected abstract Task<bool> SaveAsync();
         protected async Task SaveAndClose()
         {
-            await SaveAsync();
-            base.OnRequestClose();
+            var isClosing = await SaveAsync();
+            if(isClosing)
+                OnRequestClose();
         }
         protected virtual bool SaveAndCloseCanExecute() => true;
+        protected abstract void ClearForm();
 
         #endregion
 
@@ -139,8 +142,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         }
         #endregion
 
-        #region AddBusinessRuleMessage Method
-        //Dodanie wiadomosci dot. poprawności formularza
+        #region Dodanie wiadomosci dot. poprawności formularza
         public virtual void AddValidationMessage(string propertyName, string msg)
         {
             _ValidationMessages.Add(new ValidationMessage { Message = msg, PropertyName = propertyName });
@@ -148,9 +150,8 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         }
         #endregion
 
-        #region Clear Method
-        //Wyczyszczenie informacji dot. walidacji
-        public virtual void Clear()
+        #region Wyczyszczenie informacji dot. walidacji
+        public virtual void ClearValidationMessages()
         {
             ValidationMessages.Clear();
             IsValidationVisible = false;

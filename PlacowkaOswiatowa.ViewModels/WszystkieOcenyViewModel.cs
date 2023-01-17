@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
+using AutoMapper;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -18,8 +19,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
 
         #region Konstruktor
-        public WszystkieOcenyViewModel(IPlacowkaRepository repository)
-            : base(BaseResources.WszystkieOceny, repository)
+        public WszystkieOcenyViewModel(IPlacowkaRepository repository, IMapper mapper)
+            : base(repository, mapper, BaseResources.WszystkieOceny)
         { }
         #endregion
 
@@ -41,12 +42,12 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        public override void Update()
+        protected override void Update()
         {
             Load();
         }
 
-        public override void Load()
+        protected override void Load()
         {
             List = new ObservableCollection<Ocena>
                 (

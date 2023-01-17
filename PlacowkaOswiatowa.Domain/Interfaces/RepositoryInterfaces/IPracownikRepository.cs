@@ -8,5 +8,6 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
     {
         Task<bool> UserExists(Uzytkownik uzytkownik);
         Task<IEnumerable<Pracownik>> GetAllAsync();
+        Task<Pracownik> GetPracownikByPeselAsync(string pesel);
     }
 }

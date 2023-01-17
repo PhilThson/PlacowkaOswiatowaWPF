@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
@@ -10,19 +9,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class ZarobkiPracownikaViewModel : WorkspaceViewModel, ILoadable
+    public class ZarobkiPracownikaViewModel : SingleItemViewModel<Skladki>, ILoadable
     {
 
         #region Konstruktor
         public ZarobkiPracownikaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository)
+            : base(repository, mapper, BaseResources.ZarobkiPracownika)
         {
-            base.DisplayName = BaseResources.ZarobkiPracownika;
-            _mapper = mapper;
             _pracownikIsVisible = "Collapsed";
             _skladki = new Skladki();
             _wybranyPracownik = new PracownikDto();
@@ -49,8 +45,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Pola, właściwości
-        
-        private readonly IMapper _mapper;
 
         private Skladki _skladki;
         public Skladki Skladki 
@@ -251,33 +245,15 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #endregion
 
-        #region Komendy
-        private BaseCommand _obliczCommand;
-        public ICommand ObliczCommand
-        {
-            get
-            {
-                if (_obliczCommand == null)
-                    _obliczCommand =
-                        new BaseCommand(Oblicz);
-                return _obliczCommand;
-            }
-        }
-
-        public ICommand WyczyscCommand => 
-            new BaseCommand(WyczyscFormularz);
-
-        #endregion
-
         #region Metody pomocnicze
         private void Oblicz()
         {
             
 
-            //MessageBox.Show($"Obliczono pensję pracownika {Imie} {Nazwisko}", "Info",
-            //        MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show($"Obliczono pensję pracownika {Imie} {Nazwisko}", "Info",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
         }
-        private void WyczyscFormularz()
+        protected override void ClearForm()
         {
             WybranyPracownik = new PracownikDto();
             Skladki = new Skladki();
@@ -304,6 +280,13 @@ namespace PlacowkaOswiatowa.ViewModels
             SkladkaChorobowa = WynagrodzenieBrutto * 0.0245m;
             SkladkaRentowa = WynagrodzenieBrutto * 0.015m;
             SkladkaEmerytalna = WynagrodzenieBrutto * 0.0976m;
+        }
+
+        protected override Task<bool> SaveAsync()
+        {
+            Oblicz();
+
+            return Task.FromResult(false);
         }
 
         #endregion

@@ -6,6 +6,10 @@
                     xmlns:custom="clr-namespace:PlacowkaOswiatowa.Helpers.CustomUI"
                     >
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Views/Resources/Common.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <DropShadowEffect x:Key="StandardowyShadow"
                     Color="{StaticResource ShadowColor}"
                     ShadowDepth="8"
@@ -109,6 +113,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Margin" Value="10 2" />
         <Setter Property="MaxWidth" Value="200" />
+        <Setter Property="MinHeight" Value="30" />
         <Setter Property="Padding" Value="100 1" />
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Template">

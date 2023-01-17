@@ -1,4 +1,5 @@
-﻿using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
+﻿using AutoMapper;
+using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
@@ -18,9 +19,10 @@ namespace PlacowkaOswiatowa.ViewModels
 
 
         #region Konstruktor
-        public WszystkieUrlopyViewModel(IPlacowkaRepository repository)
-            : base(BaseResources.WszystkieUrlopy, repository)
-        { }
+        public WszystkieUrlopyViewModel(IPlacowkaRepository repository, IMapper mapper)
+            : base(repository, mapper, BaseResources.WszystkieUrlopy)
+        { 
+        }
         #endregion
 
         #region Incjacja
@@ -41,12 +43,12 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        public override void Update()
+        protected override void Update()
         {
             Load();
         }
 
-        public override void Load()
+        protected override void Load()
         {
             List = new ObservableCollection<Urlop>
                 (

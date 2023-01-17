@@ -15,9 +15,6 @@ namespace PlacowkaOswiatowa.ViewModels
     public class WszystkieAdresyViewModel : ItemsCollectionViewModel<AdresDto>, ILoadable
     {
         #region Pola i komendy
-
-        private readonly IMapper _mapper;
-
         protected override Type ItemToCreateType => typeof(NowyAdresViewModel);
 
         #endregion
@@ -25,9 +22,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Konstruktor
         public WszystkieAdresyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.WszystkieAdresy, repository)
+            : base(repository, mapper, BaseResources.WszystkieAdresy)
         {
-            _mapper = mapper;
         }
         #endregion
 
@@ -51,13 +47,13 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        public override void Update()
+        protected override void Update()
         {
             Load();
         }
 
         //Ta metoda zostanie prawdopodobnie podpięta pod przycisk 'Odswież'
-        public override void Load()
+        protected override void Load()
         {
             List = new ObservableCollection<AdresDto>
                 (

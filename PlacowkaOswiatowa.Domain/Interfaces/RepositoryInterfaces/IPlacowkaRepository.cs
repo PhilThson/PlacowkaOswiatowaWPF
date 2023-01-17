@@ -20,5 +20,7 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
         Task SaveAsync();
         T GetByName<T>(string names)
             where T : BaseDictionaryEntity<int>;
+        Task AddEntityAsync<T>(T entity)
+            where T : class;
     }
 }

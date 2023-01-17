@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
+using AutoMapper;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -19,9 +20,10 @@ namespace PlacowkaOswiatowa.ViewModels
 
 
         #region Konstruktor
-        public WszystkiePrzedmiotyViewModel(IPlacowkaRepository repository)
-            : base(BaseResources.WszystkiePrzedmioty, repository)
-        { }
+        public WszystkiePrzedmiotyViewModel(IPlacowkaRepository repository, IMapper mapper)
+            : base(repository, mapper, BaseResources.WszystkiePrzedmioty)
+        { 
+        }
         #endregion
 
         #region Incjacja
@@ -42,13 +44,13 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        public override void Update()
+        protected override void Update()
         {
             Load();
         }
 
         //Ta metoda zostanie prawdopodobnie podpięta pod przycisk 'Odswież'
-        public override void Load()
+        protected override void Load()
         {
             List = new ObservableCollection<Przedmiot>
                 (

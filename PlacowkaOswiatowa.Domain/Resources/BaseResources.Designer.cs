@@ -61,11 +61,29 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj.
+        /// </summary>
+        public static string AddItem {
+            get {
+                return ResourceManager.GetString("AddItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Witaj w aplikacji Placówka Oświatowa!.
         /// </summary>
         public static string DefaultStatusMessage {
             get {
                 return ResourceManager.GetString("DefaultStatusMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dodaj ucznia.
+        /// </summary>
+        public static string DodajUcznia {
+            get {
+                return ResourceManager.GetString("DodajUcznia", resourceCulture);
             }
         }
         

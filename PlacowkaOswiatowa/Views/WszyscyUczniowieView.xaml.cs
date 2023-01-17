@@ -6,7 +6,7 @@ namespace PlacowkaOswiatowa.Views
     /// <summary>
     /// Interaction logic for WszyscyUczniowie.xaml
     /// </summary>
-    public partial class WszyscyUczniowieView : UserControl
+    public partial class WszyscyUczniowieView : ItemsCollectionViewBase
     {
         public WszyscyUczniowieView()
         {

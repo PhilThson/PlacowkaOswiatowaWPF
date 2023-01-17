@@ -9,8 +9,6 @@ namespace PlacowkaOswiatowa.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<Oddzial, OddzialDto>();
-
             CreateMap<Adres, AdresDto>()
                 .ForMember(d => d.Panstwo, o => o.MapFrom(s => s.Panstwo.Nazwa))
                 .ForMember(d => d.Miejscowosc, o => o.MapFrom(s => s.Miejscowosc.Nazwa))
@@ -39,7 +37,12 @@ namespace PlacowkaOswiatowa.Helpers
 
             CreateMap<UczenDto, Uczen>()
                 .ForMember(d => d.Adres, o => o.Ignore())
-                .ForMember(d => d.Oddzial, o => o.Ignore())
+                ;
+
+            CreateMap<Oddzial, OddzialDto>();
+
+            CreateMap<OddzialDto, Oddzial>()
+                .ForMember(d => d.Pracownik, o => o.Ignore())
                 ;
 
             CreateMap<Pracodawca, PracodawcaDto>();

@@ -22,5 +22,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             .Include(u => u.Oddzial)
                 .ThenInclude(o => o.Pracownik)
             .ToListAsync();
+
+        public async Task<Uczen> GetUczenByPesel(string pesel) =>
+            await _uczenDbSet.FirstOrDefaultAsync(u => u.Pesel == pesel);
     }
 }

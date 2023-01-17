@@ -15,19 +15,13 @@ namespace PlacowkaOswiatowa.ViewModels
     public class WszyscyPracownicyViewModel : ItemsCollectionViewModel<PracownikDto>, ILoadable
     {
         #region Pola i komendy
-        private readonly IMapper _mapper;
-        //nie można bindować do modeli które nie implementują interfejsu
-        //  INotifyPropertyChanged - może to powodować wycieki pamięci
-        //chyba żeby zastosować wrappery, które będą implementowały ten interfejs
-
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
         #endregion
 
         #region Konstruktor
         public WszyscyPracownicyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.WszyscyPracownicy, repository)
+            : base(repository, mapper, BaseResources.WszyscyPracownicy)
         {
-            _mapper = mapper;
         }
         #endregion
 
@@ -52,12 +46,12 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        public override void Update()
+        protected override void Update()
         {
             Load();
         }
 
-        public override void Load()
+        protected override void Load()
         {
             List = new ObservableCollection<PracownikDto>
                 (
@@ -66,6 +60,16 @@ namespace PlacowkaOswiatowa.ViewModels
                             _repository.Pracownicy.GetAllAsync()
                         )
                 );
+        }
+
+        protected override void OrderBy()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void Filter()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

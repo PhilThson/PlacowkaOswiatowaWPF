@@ -157,11 +157,11 @@
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Content="Oblicz" 
-                            Command="{Binding ObliczCommand}"
+                            Command="{Binding SaveAndCloseCommand}"
                             Style="{StaticResource ButtonZaokraglony}" FontSize="24"/>
 
                 <Button Content="Wyczyść"
-                            Command="{Binding WyczyscCommand}"
+                            Command="{Binding ClearFormCommand}"
                             Style="{StaticResource ButtonZaokraglonyCzerwony}" FontSize="24" />
             </StackPanel>
 

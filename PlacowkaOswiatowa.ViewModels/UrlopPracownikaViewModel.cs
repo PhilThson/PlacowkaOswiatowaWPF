@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
@@ -10,7 +9,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -18,9 +16,9 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Konstruktor
         public UrlopPracownikaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(BaseResources.UrlopPracownika, repository, mapper)
+            : base(repository, mapper, BaseResources.UrlopPracownika)
         {
-            WybranyPracownik = new PracownikDto();
+            Item = new UrlopPracownikaDto { Pracownik = new PracownikDto() };
             _pracownikIsVisible = "Collapsed";
             _isEnabled = false;
             this.PropertyChanged += (_, __) =>
@@ -67,6 +65,10 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != null)
                 {
                     PracownikIsVisible = "Visible";
+                    ClearValidationMessages();
+                    if (_wybranyPracownik.DniUrlopu < 1)
+                        AddValidationMessage(nameof(WybranyPracownik),
+                            "Wybrany pracownik ma niewystarczająco dni urlopu");
                 }
             }
         }
@@ -81,7 +83,10 @@ namespace PlacowkaOswiatowa.ViewModels
                 OnPropertyChanged(() => ZastepujacyPracownik);
                 if (value != null)
                 {
-                    OnZastepujacyPracownikChanged();
+                    base.ClearValidationMessages();
+                    if (ZastepujacyPracownik?.Id != WybranyPracownik?.Id)
+                        AddValidationMessage(nameof(ZastepujacyPracownik),
+                            "Pracownik nie może zastępować samego siebie!");
                 }
             }
         }
@@ -152,32 +157,37 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Komendy
-
-        private BaseCommand _wyczyscCommand;
-        public ICommand WyczyscCommand
+        #region Metody pomocnicze
+        protected override async Task<bool> SaveAsync()
         {
-            get
+            try
             {
-                if (_wyczyscCommand == null)
-                    _wyczyscCommand = new BaseCommand(WyczyscFormularz);
-                return _wyczyscCommand;
+                if (ValidationMessages.Count > 0)
+                {
+                    IsValidationVisible = true;
+                    return false;
+                }
+
+                //Wpis do tabeli urlopów
+                MessageBox.Show("Poprawnie dodano urlop pracownikowa", "Info",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"Nie udało się dodać urlopu pracownika. {e.Message}", 
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
         }
 
-        public bool CzyPrawidlowy =>
-            IsEnabled && string.IsNullOrEmpty(Zastepca);
+        protected override bool SaveAndCloseCanExecute() =>
+            IsEnabled && 
+            string.IsNullOrEmpty(Zastepca) &&
+            !IsValidationVisible;
 
-        #endregion
-
-        #region Metody pomocnicze
-        protected override async Task SaveAsync()
-        {
-            //Wpis do tabeli urlopów
-            MessageBox.Show($"Poprawnie dodano urlop pracownikowa", "Info",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        private void WyczyscFormularz()
+        protected override void ClearForm()
         {
             ZastepujacyPracownik = null;
             WybranyPracownik = null;
@@ -185,18 +195,13 @@ namespace PlacowkaOswiatowa.ViewModels
             FlagsViewModel = null;
             PracownikIsVisible = "Collapsed";
             Zastepca = "";
-            base.Clear();
+            Item = new UrlopPracownikaDto { Pracownik = new PracownikDto() };
+            base.ClearValidationMessages();
+            base.ClearAllErrors();
+            foreach (var prop in this.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
-
-        private void OnZastepujacyPracownikChanged()
-        {
-            base.Clear();
-            if (ZastepujacyPracownik?.Id == WybranyPracownik?.Id)
-            {
-                AddValidationMessage("Niepoprawne dane",
-                                   "Pracownik nie może zastępować samego siebie!");
-            }
-        }
+            
         #endregion
     }
 }

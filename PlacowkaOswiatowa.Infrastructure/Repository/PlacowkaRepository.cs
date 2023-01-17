@@ -57,5 +57,11 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public T GetByName<T>(string name)
             where T : BaseDictionaryEntity<int> =>
             _dbContext.Set<T>().FirstOrDefault(e => e.Nazwa == name);
+
+        public async Task AddEntityAsync<T>(T entity)
+            where T : class
+        {
+            await _dbContext.Set<T>().AddAsync(entity);
+        }
     }
 }

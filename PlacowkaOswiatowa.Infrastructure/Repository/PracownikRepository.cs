@@ -28,5 +28,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
                 .IncludeUmowa(p => p.PracownikUmowa)
                 .IncludePracownicyAdresy()
                 .ToListAsync();
+
+        public async Task<Pracownik> GetPracownikByPeselAsync(string pesel) =>
+            await _pracownikDbSet.FirstOrDefaultAsync(p => p.Pesel == pesel);
     }
 }
