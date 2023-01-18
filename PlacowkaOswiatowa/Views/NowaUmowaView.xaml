@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PlacowkaOswiatowa.Views" 
-             xmlns:converters="clr-namespace:PlacowkaOswiatowa.Helpers.Converters"
              xmlns:helpers="clr-namespace:PlacowkaOswiatowa.Domain.Helpers;assembly=PlacowkaOswiatowa.Domain"
              xmlns:enums="clr-namespace:PlacowkaOswiatowa.Domain.Enums;assembly=PlacowkaOswiatowa.Domain"
              mc:Ignorable="d">
@@ -63,14 +61,12 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="220"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="1" Content="Dane pracownika:"/>
-                            <ComboBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+                            <ComboBox Grid.Row="0" Grid.Column="2"
                                   ItemsSource="{Binding Pracownicy}"
                                   SelectedItem="{Binding WybranyPracownik, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
@@ -85,9 +81,10 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" 
-                                    Grid.ColumnSpan="2"
-                                    Visibility="{Binding PracownikIsVisible}">
+                            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="4"
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding WybranyPracownik,
+                                            Converter={StaticResource ObjectToVisibility}}">
                                 <Label Content="{Binding WybranyPracownik.Imie, UpdateSourceTrigger=PropertyChanged}"/>
                                 <Separator Width="10" Visibility="Hidden"/>
                                 <Label Content="{Binding WybranyPracownik.Nazwisko, UpdateSourceTrigger=PropertyChanged}"/>
@@ -97,10 +94,14 @@
                                 <Label Content="PESEL: "/>
                                 <Label Content="{Binding WybranyPracownik.Pesel, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
-                            <Label Grid.Row="2" Grid.Column="1" Content="Miejsce zmieszkania:"/>
-                            <Label Grid.Row="2" Grid.Column="2"
-                                Content="{Binding WybranyPracownik.Adres, UpdateSourceTrigger=PropertyChanged,
+                            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="4"
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding WybranyPracownik,
+                                            Converter={StaticResource ObjectToVisibility}}">
+                                <Label Content="Miejsce zmieszkania:" />
+                                <Label Content="{Binding WybranyPracownik.Adres, UpdateSourceTrigger=PropertyChanged,
                                     Converter={StaticResource AdresDtoToString}}"/>
+                            </StackPanel>
                         </Grid>
                     </Border>
                     <Border 
@@ -116,13 +117,12 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="250"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="1" Content="Dane pracodawcy:"/>
-                            <ComboBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+                            <ComboBox Grid.Row="0" Grid.Column="2"
                                   ItemsSource="{Binding Pracodawcy}"
                                   SelectedItem="{Binding WybranyPracodawca, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.ItemTemplate>
@@ -133,16 +133,24 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" 
-                                    Grid.ColumnSpan="2">
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"  Orientation="Horizontal" 
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding WybranyPracodawca, 
+                                            Converter={StaticResource ObjectToVisibility}}">
                                 <Label Content="{Binding WybranyPracodawca.Nazwa, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Label Content=","/>
                                 <Separator Width="10" Visibility="Hidden"/>
+                                <Label Content="Regon: "/>
                                 <Label Content="{Binding WybranyPracodawca.Regon, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
-                            <Label Grid.Row="2" Grid.Column="1" Content="Siedziba:"/>
-                            <Label Grid.Row="2" Grid.Column="2"
-                            Content="{Binding WybranyPracodawca.Adres, UpdateSourceTrigger=PropertyChanged,
-                            Converter={StaticResource AdresDtoToString}}"/>
+                            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"  Orientation="Horizontal" 
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding WybranyPracodawca, 
+                                            Converter={StaticResource ObjectToVisibility}}">
+                                <Label Content="Siedziba:" />
+                                <Label Content="{Binding WybranyPracodawca.Adres, UpdateSourceTrigger=PropertyChanged,
+                                    Converter={StaticResource AdresDtoToString}}"/>
+                            </StackPanel>
                         </Grid>
                     </Border>
 
@@ -181,8 +189,7 @@
                                 <ComboBox Grid.Column="4"
                                           ItemsSource="{Binding Source={helpers:EnumBindingSource 
                                             {x:Type enums:OkresPracyEnum}}}"
-                                          SelectedItem="{Binding OkresPracy}"
-                                          />
+                                          SelectedItem="{Binding OkresPracy}" />
 
                                 <Label Grid.Row="1" Grid.Column="1" Content="Wynagrodzenie brutto"/>
                                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
@@ -263,7 +270,7 @@
                             Style="{StaticResource ButtonZaokraglony}" FontSize="24"/>
 
                 <Button Content="Wyczyść"
-                            Command="{Binding WyczyscCommand}"
+                            Command="{Binding ClearFormCommand}"
                             Style="{StaticResource ButtonZaokraglonyCzerwony}" FontSize="24" />
             </StackPanel>
         </Grid>

@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace PlacowkaOswiatowa.Views
 {
-    public partial class WszystkiePrzedmiotyView : UserControl
+    public partial class WszystkiePrzedmiotyView : ItemsCollectionViewBase
     {
         public WszystkiePrzedmiotyView()
         {

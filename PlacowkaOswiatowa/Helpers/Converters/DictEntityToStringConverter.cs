@@ -1,17 +1,17 @@
-﻿using PlacowkaOswiatowa.Domain.Models;
+﻿using PlacowkaOswiatowa.Domain.Models.Base;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 
 namespace PlacowkaOswiatowa.Helpers.Converters
 {
-    [ValueConversion(typeof(Stanowisko), typeof(string))]
-    public class JobToStringConverter : IValueConverter
+    [ValueConversion(typeof(BaseDictionaryEntity<byte>), typeof(string))]
+    public class DictEntityToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var job = value as Stanowisko;
-            return job != null ? job.Opis : "Brak";
+            var entity = value as BaseDictionaryEntity<byte>;
+            return entity != null ? entity.Opis : "Brak";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

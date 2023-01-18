@@ -52,15 +52,17 @@ namespace PlacowkaOswiatowa
                     {
                         options.UseSqlServer(
                             context.Configuration.GetConnectionString("Default"));
-                        options.LogTo(Console.WriteLine);
-                    });
+                        options.LogTo(Console.WriteLine); 
+                    }, ServiceLifetime.Transient);
 
                     services.AddSingleton(new AplikacjaDbContextFactory(connectionString));
 
                     services.AddSingleton<MainWindow>();
                     services.AddSingleton<MainWindowViewModel>();
                     services.AddSingleton(mapper);
-                    services.AddSingleton<IPlacowkaRepository, PlacowkaRepository>();
+                    //Zmiana z Singleton na Transient
+                    //w celu uniknięcia deadlocków
+                    services.AddTransient<IPlacowkaRepository, PlacowkaRepository>();
                     //TODO: usunąć SignalHub
                     services.AddSingleton<ISignalHub, SignalHub>();
                     services.AddSingleton<LoginViewModel>();

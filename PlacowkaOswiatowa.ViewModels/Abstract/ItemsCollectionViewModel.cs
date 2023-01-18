@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.Commands;
+using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels.Abstract
@@ -19,11 +21,11 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         private ICommand _AddItemCommand;
         private ICommand _LoadCommand;
         private ICommand _UpdateCommand;
-        private ICommand _OrderByCommand;
-        private ICommand _FilterCommand;
+        //private ICommand _OrderByCommand;
+        //private ICommand _FilterCommand;
         //kolekcja wszystkich elementów
         private ObservableCollection<T> _List;
-        protected List<T> AllList { get; set; }
+        protected IEnumerable<T> AllList { get; set; }
         public List<KeyValuePair<string, string>> ListOfItemsOrderBy { get; private set; }
         public List<KeyValuePair<string, string>> ListOfItemsFilter { get; private set; }
         #endregion
@@ -47,33 +49,13 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             new BaseCommand(() => OnRequestCreateView(ItemToCreateType));
         public ICommand LoadCommand => _LoadCommand ??= new BaseCommand(Load);
         public ICommand UpdateCommand => _UpdateCommand ??= new BaseCommand(Update);
-        public ICommand OrderByCommand => _OrderByCommand ??= new BaseCommand(OrderBy);
-        public ICommand FilterCommand => _FilterCommand ??= new BaseCommand(Filter);
+        //public ICommand OrderByCommand => _OrderByCommand ??= new BaseCommand(OrderBy);
+        //public ICommand FilterCommand => _FilterCommand ??= new BaseCommand(Filter);
 
         public ObservableCollection<T> List
         {
             get => _List;
-            //tutaj rezygnuje z automatycznego ładowania, bo jest metoda, która
-            //asynchronicznie pobiera dane z bazy
-            //{
-            //    if (_List == null)
-            //    {
-            //        Load();
-            //    }
-            //    return _List;
-            //}
-            set
-            {
-                _List = value;
-                OnPropertyChanged(() => List);
-            }
-        }
-
-        private string _SelectedOrderBy;
-        public string SelectedOrderBy
-        {
-            get => _SelectedOrderBy;
-            set => SetProperty(ref _SelectedOrderBy, value);
+            set => SetProperty(ref _List, value);
         }
 
         private string _SelectedFilter;
@@ -110,7 +92,30 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         public bool OrderDescending
         {
             get => _OrderDescending;
-            set => SetProperty(ref _OrderDescending, value);
+            set
+            {
+                if (value != _OrderDescending)
+                {
+                    _OrderDescending = value;
+                    OnPropertyChanged();
+                    OrderBy();
+                }
+            }
+        }
+
+        private string _SelectedOrderBy;
+        public string SelectedOrderBy
+        {
+            get => _SelectedOrderBy;
+            set
+            {
+                if(value != _SelectedOrderBy)
+                {
+                    _SelectedOrderBy = value;
+                    OnPropertyChanged();
+                    OrderBy();
+                }
+            }
         }
 
         private T _SelectedItem;
@@ -122,17 +127,54 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         #endregion
 
+        #region Metody
+        private void OrderBy() 
+        {
+            if (string.IsNullOrEmpty(SelectedOrderBy))
+                return;
+
+            var selector = SetOrderBySelector();
+
+            List = new ObservableCollection<T>(OrderDescending
+                ? List.OrderByDescending(selector)
+                : List.OrderBy(selector));
+        }
+        private void Filter() 
+        {
+            if (string.IsNullOrEmpty(SearchPhrase))
+            {
+                List = new ObservableCollection<T>(AllList);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(SelectedFilter))
+                return;
+
+            var predicate = SetFilterPredicate();
+
+            List = new ObservableCollection<T>(AllList.Where(predicate));
+
+            OrderBy();
+        }
+        #endregion
+
         #region Abstracts
         //właściwość
         protected abstract Type ItemToCreateType { get; }
         protected abstract void Load();
         protected abstract void Update();
-        protected virtual void OrderBy() { return; }
-        protected virtual void Filter() { return; }
+        #endregion
+
+        #region Virtuals
+        protected virtual Func<T, string> SetOrderBySelector() =>
+            o => string.Empty;
+        protected virtual Func<T, bool> SetFilterPredicate() =>
+            o => true;
         protected virtual List<KeyValuePair<string, string>> SetListOfItemsFilter() =>
             new List<KeyValuePair<string, string>>();
         protected virtual List<KeyValuePair<string, string>> SetListOfItemsOrderBy() =>
             new List<KeyValuePair<string, string>>();
+
         #endregion
     }
 }

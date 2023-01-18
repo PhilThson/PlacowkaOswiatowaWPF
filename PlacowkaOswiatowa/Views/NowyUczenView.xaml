@@ -36,7 +36,7 @@
                     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxZaokraglony}"/>
                     <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource DatePickerZaokraglony}"/>
                     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxZaokraglony}"/>
-                    <!--<Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>-->
+                    <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>
                 </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -131,6 +131,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -160,6 +161,9 @@
                             <custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NumerMieszkania,
                                 UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
+                        <Label Grid.Row="2" Grid.Column="1" Content="Kod pocztowy:"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" MaxLength="6"
+                                 Text="{Binding KodPocztowy, UpdateSourceTrigger=PropertyChanged}"/>
 
                     </Grid>
                 </GroupBox>

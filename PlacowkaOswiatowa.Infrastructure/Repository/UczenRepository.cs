@@ -4,6 +4,7 @@ using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
 using PlacowkaOswiatowa.Infrastructure.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
@@ -22,6 +23,13 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             .Include(u => u.Oddzial)
                 .ThenInclude(o => o.Pracownik)
             .ToListAsync();
+
+        public IEnumerable<Uczen> GetAll() =>
+            _uczenDbSet
+            .IncludeAdres(u => u.Adres)
+            .Include(u => u.Oddzial)
+                .ThenInclude(o => o.Pracownik)
+            .ToList();
 
         public async Task<Uczen> GetUczenByPesel(string pesel) =>
             await _uczenDbSet.FirstOrDefaultAsync(u => u.Pesel == pesel);

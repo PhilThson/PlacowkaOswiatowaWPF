@@ -15,7 +15,7 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces
     //}
     
     /// <summary>
-    /// Interfejs pozwala na asynchroniczne pobieranie zasobów z bazy danych
+    /// Interfejs sygnalizuje że ma miejsce asynchroniczne pobieranie zasobów z bazy danych
     /// </summary>
     public interface ILoadable
     {

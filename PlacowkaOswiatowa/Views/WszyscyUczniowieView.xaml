@@ -3,88 +3,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:common="clr-namespace:PlacowkaOswiatowa.Views.Common" 
+             xmlns:common="clr-namespace:PlacowkaOswiatowa.Views.Common"
              xmlns:viewmodels="clr-namespace:PlacowkaOswiatowa.ViewModels;assembly=PlacowkaOswiatowa.ViewModels" 
              d:DataContext="{d:DesignInstance Type=viewmodels:WszyscyUczniowieViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <!--<Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Style="{StaticResource TextBlockNagłówek}" Text="Wszyscy uczniowie"/>
-        <common:ItemsCollectionViewBase Grid.Row="1">-->
-            <ListView ItemsSource="{Binding List}">
-                <ListView.Resources>
-                    <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemWysrodkowany}"/>
-                </ListView.Resources>
-                <!--<ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        <Setter Property="Padding" Value="5 20"/>
-                    </Style>
-                </ListView.ItemContainerStyle>-->
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="ID">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Id}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Imię ucznia">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Imie}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Nazwisko ucznia">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Nazwisko}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Data urodzenia ucznia">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding DataUrodzenia,
+    <ListView ItemsSource="{Binding List}" SelectedItem="{Binding SelectedItem}">
+        <ListView.Resources>
+            <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemWysrodkowany}"/>
+        </ListView.Resources>
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="ID">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Id}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Imię ucznia">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Imie}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Nazwisko ucznia">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nazwisko}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Data urodzenia ucznia">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DataUrodzenia,
                                          Converter={StaticResource DateToString}}"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Oddział">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Oddzial.Nazwa}"
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Oddział">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Oddzial.Nazwa}"
                                                HorizontalAlignment="Left"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Wychowawca">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Wychowawca.Imie}"
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Wychowawca">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Wychowawca.Imie}"
                                                HorizontalAlignment="Left"/>
-                                        <TextBlock Text=" "/>
-                                        <TextBlock Text="{Binding Wychowawca.Nazwisko}"
+                                <TextBlock Text=" "/>
+                                <TextBlock Text="{Binding Wychowawca.Nazwisko}"
                                                HorizontalAlignment="Left"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        <!--</common:ItemsCollectionViewBase>
-        <Button Grid.Row="2" Style="{StaticResource ButtonZaokraglony}" 
-                Content="Dodaj nowego ucznia"
-                Command="{Binding AddItemCommand}"/>
-    </Grid>-->
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+    </ListView>
 </common:ItemsCollectionViewBase>

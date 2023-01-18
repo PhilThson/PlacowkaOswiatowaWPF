@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace PlacowkaOswiatowa.Views
 {
-    public partial class WszystkieAdresyView : UserControl
+    public partial class WszystkieAdresyView : ItemsCollectionViewBase
     {
         public WszystkieAdresyView()
         {

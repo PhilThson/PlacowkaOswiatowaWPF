@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System;
 
-namespace PlacowkaOswiatowa.Domain.Extensions
+namespace PlacowkaOswiatowa.Domain.Helpers
 {
     public static class CommonExtensions
     {
-        public static async void SafeFireAndForget(this Task task, Action<Exception>? onException = null, bool continueOnCapturedContext = false)
+        public static async void SafeFireAndForget(this Task task, Action<Exception> onException = null, bool continueOnCapturedContext = false)
         {
             try
             {
@@ -18,6 +18,9 @@ namespace PlacowkaOswiatowa.Domain.Extensions
         }
 
         public static string ToLowerString(this object obj) =>
-            obj == null ? string.Empty : obj.ToString();
+            obj == null ? string.Empty : obj.ToString().ToLower();
+
+        public static string SafeToLower(object obj) =>
+            obj == null ? string.Empty : obj.ToString().ToLower();
     }
 }

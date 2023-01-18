@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
@@ -10,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -35,13 +37,12 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 var uczniowieFromDb = await _repository.Uczniowie.GetAllAsync();
                 AllList = _mapper.Map<List<UczenDto>>(uczniowieFromDb);
-
                 List = new ObservableCollection<UczenDto>(AllList);
             }
 
-            catch(Exception)
+            catch(Exception e)
             {
-                MessageBox.Show("Nie udało się pobrać listy uczniów.", "Błąd",
+                MessageBox.Show($"Nie udało się pobrać listy uczniów. {e.Message}", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -50,64 +51,47 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody
         protected override void Load()
         {
-            List = new ObservableCollection<UczenDto>
-                (
-                    _mapper.Map<IEnumerable<UczenDto>>
-                        (
-                            _repository.Uczniowie.GetAll()
-                        )
-                );
+            AllList = _mapper.Map<List<UczenDto>>(_repository.Uczniowie.GetAll());
+            List = new ObservableCollection<UczenDto>(AllList);
         }
 
         protected override void Update() => Load();
 
-        protected override void OrderBy()
-        {
-            if (string.IsNullOrEmpty(SelectedFilter))
-                return;
-
-            switch (SelectedOrderBy)
+        protected override Func<UczenDto, string> SetOrderBySelector() =>
+            SelectedOrderBy switch
             {
-                case nameof(UczenDto.Imie):
-                    List = new ObservableCollection<UczenDto>(OrderDescending
-                        ? List.OrderByDescending(item => item.Imie)
-                        : List.OrderBy(item => item.Imie));
-                    break;
-            };
-        }
-
-        protected override void Filter()
-        {
-            if (string.IsNullOrEmpty(SearchPhrase))
-            {
-                List = new ObservableCollection<UczenDto>(AllList);
-                return;
-            }
-
-            switch (SelectedFilter)
-            {
-                case nameof(UczenDto.Imie):
-                    List = new ObservableCollection<UczenDto>(AllList
-                        .Where(item => item.Imie?.Contains(SearchPhrase) ?? false));
-                    break;
-                default:
-                    List = new ObservableCollection<UczenDto>(AllList);
-                    break;
+                nameof(UczenDto.Imie) => u => u.Imie,
+                nameof(UczenDto.Nazwisko) => u => u.Nazwisko,
+                nameof(UczenDto.Oddzial.Nazwa) => u => u.Oddzial?.Nazwa,
+                _ => u => string.Empty
             };
 
-            OrderBy();
-        }
+        protected override Func<UczenDto, bool> SetFilterPredicate() =>
+            SelectedFilter switch
+            {
+                nameof(UczenDto.Imie) =>
+                    u => u.Imie?.Contains(SearchPhrase, StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(UczenDto.Nazwisko) =>
+                    u => u.Nazwisko?.Contains(SearchPhrase, StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(UczenDto.Oddzial.Nazwa) =>
+                    u => u.Oddzial?.Nazwa?.Contains(SearchPhrase, StringComparison.InvariantCultureIgnoreCase) ?? false,
+                _ => u => true
+            };
 
         protected override List<KeyValuePair<string, string>> SetListOfItemsFilter() =>
             new List<KeyValuePair<string, string>>()
             {
-                new KeyValuePair<string, string>(nameof(UczenDto.Imie), "Imię")
+                new KeyValuePair<string, string>(nameof(UczenDto.Imie), "Imię"),
+                new KeyValuePair<string, string>(nameof(UczenDto.Nazwisko), "Nazwisko"),
+                new KeyValuePair<string, string>(nameof(UczenDto.Oddzial.Nazwa), "Oddział")
             };
 
         protected override List<KeyValuePair<string, string>> SetListOfItemsOrderBy() =>
             new List<KeyValuePair<string, string>>()
             {
-                new KeyValuePair<string, string>(nameof(UczenDto.Imie), "Imię")
+                new KeyValuePair<string, string>(nameof(UczenDto.Imie), "Imię"),
+                new KeyValuePair<string, string>(nameof(UczenDto.Nazwisko), "Nazwisko"),
+                new KeyValuePair<string, string>(nameof(UczenDto.Oddzial.Nazwa), "Oddział"),
             };
 
         #endregion

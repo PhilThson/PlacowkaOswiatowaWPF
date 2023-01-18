@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Models.Base;
-using PlacowkaOswiatowa.Domain.Extensions;
+using PlacowkaOswiatowa.Domain.Helpers;
+using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {
@@ -49,13 +50,14 @@ namespace PlacowkaOswiatowa.Domain.Models
         public virtual ICollection<PracownicyAdresy> AdresPracownicyAdresy 
         { get; set; }
 
-        public static bool operator ==(Adres a1, AdresDto? a2)
+        public static bool operator ==(Adres a1, AdresDto a2)
         {
+            if (a1 is null) return false;
             if (a2 is null) return false;
 
-            return a1.Panstwo?.Nazwa.ToLower() == a2.Panstwo.ToLower() &&
-                a1.Miejscowosc?.Nazwa.ToLower() == a2.Miejscowosc.ToLower() &&
-                a1.Ulica?.Nazwa.ToLower() == a2.Ulica.ToLower() &&
+            return SafeToLower(a1.Panstwo?.Nazwa) == a2.Panstwo.ToLowerString() &&
+                SafeToLower(a1.Miejscowosc?.Nazwa) == a2.Miejscowosc.ToLowerString() &&
+                SafeToLower(a1.Ulica?.Nazwa) == a2.Ulica.ToLower() &&
                 a1.NumerDomu.ToLower() == a2.NumerDomu.ToLower() &&
                 a1.NumerMieszkania?.ToLower() == a2.NumerMieszkania?.ToLower() &&
                 a1.KodPocztowy.ToLower() == a2.KodPocztowy.ToLower();
@@ -68,9 +70,9 @@ namespace PlacowkaOswiatowa.Domain.Models
             if (a2 is null) return false;
 
             return
-                a1.Panstwo?.Nazwa.ToLowerString() == a2.Panstwo?.Nazwa.ToLowerString() &&
-                a1.Miejscowosc?.Nazwa.ToLowerString() == a2.Miejscowosc?.Nazwa.ToLowerString() &&
-                a1.Ulica?.Nazwa.ToLowerString() == a2.Ulica?.Nazwa.ToLowerString() &&
+                SafeToLower(a1.Panstwo?.Nazwa) == SafeToLower(a2.Panstwo?.Nazwa) &&
+                SafeToLower(a1.Miejscowosc?.Nazwa) == SafeToLower(a2.Miejscowosc?.Nazwa) &&
+                SafeToLower(a1.Ulica?.Nazwa) == SafeToLower(a2.Ulica?.Nazwa) &&
                 a1.NumerDomu.ToLowerString() == a2.NumerDomu.ToLowerString() &&
                 a1.NumerMieszkania?.ToLowerString() == a2.NumerMieszkania.ToLowerString() &&
                 a1.KodPocztowy.ToLowerString() == a2.KodPocztowy.ToLowerString();

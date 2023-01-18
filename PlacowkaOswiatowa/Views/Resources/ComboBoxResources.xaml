@@ -201,9 +201,9 @@
                             Focusable="False"
                             PopupAnimation="Slide">
                             <Grid x:Name="DropDown"
-                      SnapsToDevicePixels="True"
-                      MinWidth="{TemplateBinding ActualWidth}"
-                      MaxHeight="{TemplateBinding MaxDropDownHeight}">      
+                              SnapsToDevicePixels="True"
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">      
                                 <Border x:Name="DropDownBorder"
                                     CornerRadius="5"
                                     BorderThickness="1">
@@ -215,9 +215,9 @@
                                     </Border.Background>
                                 </Border>
                                 <ScrollViewer Margin="4,6,4,6"
-                            SnapsToDevicePixels="True">
+                                              SnapsToDevicePixels="True">
                                     <StackPanel IsItemsHost="True"
-                            KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
                             </Grid>
                         </Popup>
@@ -250,9 +250,9 @@
 
     <Style x:Key="ComboBoxItemZaokraglony"
        TargetType="{x:Type ComboBoxItem}">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <!--<Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />-->
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -289,6 +289,14 @@
                         </VisualStateManager.VisualStateGroups>
                         <ContentPresenter />
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="TextElement.Foreground" TargetName="Border" 
+                                    Value="{StaticResource BrushWhite}"/>
+                            <Setter Property="Panel.Background" TargetName="Border"
+                                    Value="{StaticResource ComboBoxItemMouseOverBackground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

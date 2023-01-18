@@ -7,6 +7,7 @@ using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -20,7 +21,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Konstruktor
         public WszyscyPracownicyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.WszyscyPracownicy)
+            : base(repository, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
         {
         }
         #endregion
@@ -31,46 +32,71 @@ namespace PlacowkaOswiatowa.ViewModels
             try
             {
                 var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
-                var listaPracownikow = _mapper.Map<IEnumerable<PracownikDto>>(pracownicyFormDb);
-
-                List = new ObservableCollection<PracownikDto>(listaPracownikow);
-                // 'List' jest właściwością w której setterze
-                //powiadamiany jest interfejs że nastąpiły zmiany
+                AllList = _mapper.Map<IEnumerable<PracownikDto>>(pracownicyFormDb);
+                List = new ObservableCollection<PracownikDto>(AllList);
             }
-            catch(Exception)
+            catch(Exception e)
             {
-                MessageBox.Show("Nie udało się pobrać pracowników.", "Błąd",
+                MessageBox.Show($"Nie udało się pobrać pracowników. {e.Message}", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion
 
         #region Metody
-        protected override void Update()
-        {
-            Load();
-        }
+        protected override void Update() => Load();
 
         protected override void Load()
         {
-            List = new ObservableCollection<PracownikDto>
-                (
-                    _mapper.Map<IEnumerable<PracownikDto>>
-                        (
-                            _repository.Pracownicy.GetAllAsync()
-                        )
-                );
+            AllList = _mapper.Map<IEnumerable<PracownikDto>>(_repository.Pracownicy.GetAllAsync());
+            List = new ObservableCollection<PracownikDto>(AllList);
         }
 
-        protected override void OrderBy()
-        {
-            throw new NotImplementedException();
-        }
+        protected override Func<PracownikDto, string> SetOrderBySelector() =>
+            SelectedOrderBy switch
+            {
+                nameof(PracownikDto.Imie) => p => p.Imie,
+                nameof(PracownikDto.Nazwisko) => p => p.Nazwisko,
+                nameof(PracownikDto.Stanowisko) => p => p.Stanowisko?.Opis,
+                nameof(PracownikDto.Etat) => p => p.Etat?.Opis,
+                _ => p => string.Empty
+            };
 
-        protected override void Filter()
-        {
-            throw new NotImplementedException();
-        }
+        protected override Func<PracownikDto, bool> SetFilterPredicate() =>
+            SelectedFilter switch
+            {
+                nameof(PracownikDto.Imie) =>
+                    p => p.Imie?.Contains(SearchPhrase, 
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(PracownikDto.Nazwisko) =>
+                    p => p.Nazwisko?.Contains(SearchPhrase, 
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(PracownikDto.Stanowisko) =>
+                    p => p.Stanowisko?.Opis?.Contains(SearchPhrase, 
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(PracownikDto.Etat) =>
+                    p => p.Etat?.Opis?.Contains(SearchPhrase, 
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                _ => p => true
+            };
+
+        protected override List<KeyValuePair<string, string>> SetListOfItemsFilter() =>
+            new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(nameof(PracownikDto.Imie), "Imię"),
+                new KeyValuePair<string, string>(nameof(PracownikDto.Nazwisko), "Nazwisko"),
+                new KeyValuePair<string, string>(nameof(PracownikDto.Stanowisko), "Stanowisko"),
+                new KeyValuePair<string, string>(nameof(PracownikDto.Etat), "Etat"),
+            };
+
+        protected override List<KeyValuePair<string, string>> SetListOfItemsOrderBy() =>
+            new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(nameof(PracownikDto.Imie), "Imię"),
+                new KeyValuePair<string, string>(nameof(PracownikDto.Nazwisko), "Nazwisko"),
+                new KeyValuePair<string, string>(nameof(PracownikDto.Stanowisko), "Stanowisko"),
+                new KeyValuePair<string, string>(nameof(PracownikDto.Etat), "Etat"),
+            };
         #endregion
     }
 }

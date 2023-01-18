@@ -79,6 +79,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj pracownika.
+        /// </summary>
+        public static string DodajPracownika {
+            get {
+                return ResourceManager.GetString("DodajPracownika", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dodaj ucznia.
         /// </summary>
         public static string DodajUcznia {

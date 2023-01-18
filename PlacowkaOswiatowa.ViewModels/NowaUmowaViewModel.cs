@@ -50,6 +50,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
             }
         }
+
         private ReadOnlyCollection<PracodawcaDto> _pracodawcy;
         public ReadOnlyCollection<PracodawcaDto> Pracodawcy
         {

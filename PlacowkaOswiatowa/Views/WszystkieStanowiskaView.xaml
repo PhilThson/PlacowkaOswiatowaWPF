@@ -8,14 +8,7 @@
              xmlns:common="clr-namespace:PlacowkaOswiatowa.Views.Common"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Style="{StaticResource TextBlockNagłówek}" Text="Wszystkie stanowiska"/>
         <ListView Grid.Row="1" Margin="0 25 0 0" ItemsSource="{Binding List}">
             <ListView.Resources>
                 <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemWysrodkowany}"/>
@@ -53,9 +46,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Grid.Row="2" Style="{StaticResource ButtonZaokraglony}" 
-                Content="Dodaj nowe stanowisko"
-                Command="{Binding AddItemCommand}"
-                IsEnabled="False"/>
-    </Grid>
+
 </common:ItemsCollectionViewBase>

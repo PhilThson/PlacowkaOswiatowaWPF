@@ -8,6 +8,7 @@
         <ResourceDictionary Source="/Views/Resources/WorkspaceResources.xaml"/>
         <ResourceDictionary Source="/Views/Resources/DatePickerResources.xaml"/>
         <ResourceDictionary Source="/Views/Resources/ComboBoxResources.xaml"/>
+        <ResourceDictionary Source="/Views/Resources/CheckBoxResources.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type commonViews:ItemsCollectionViewBase}">
@@ -22,7 +23,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="auto"/>
+                            <!--<RowDefinition Height="auto"/>-->
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" 
                                    Style="{StaticResource TextBlockNagłówek}" 
@@ -34,45 +35,50 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.Resources>
-                                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelStandardowy}"/>
-                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxZaokraglony}"/>
+                                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelNiski}" />
+                                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxNiski}"/>
                                 <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource DatePickerZaokraglony}"/>
                                 <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxZaokraglony}"/>
+                                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStandardowy}"/>
+                                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CustomCheckBox}" />
+                                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>
                             </Grid.Resources>
 
-                                <ToolBar Grid.Row="0" Height="30" Margin="0 2 0 2">
+                            <ToolBar Grid.Row="0" Height="30" Margin="0 2">
                                 <!--Dodanie ikon zamiast nazw!-->
-                                <ToggleButton Content="Dodaj" Margin="0 2 0 2"/>
-                                <ToggleButton Content="Modyfikuj" Margin="0 2 0 2"/>
-                                <ToggleButton Content="Kasuj" Margin="0 2 0 2"/>
-                                <ToggleButton Content="Odswież" Margin="0 2 0 2"
-                                          Command="{Binding UpdateCommand}"/>
+                                <ToggleButton Content="Dodaj" 
+                                              ToolTip="{Binding AddItemName}" 
+                                              Command="{Binding AddItemCommand}"
+                                              Margin="0 2"/>
+                                <ToggleButton Content="Modyfikuj" Margin="0 2"/>
+                                <ToggleButton Content="Kasuj" Margin="0 2"/>
+                                <ToggleButton Content="Odswież" Margin="0 2"
+                                              Command="{Binding UpdateCommand}"/>
                             </ToolBar>
-                            <StackPanel Grid.Row="1" Background="Azure" Orientation="Horizontal">
-                                <Label Content="Filtruj po:" MinWidth="100" Margin="5 2"/>
-                                <ComboBox ItemsSource="{Binding ListOfItemsFilter}"
-                                      MinWidth="100" Margin="5 2"
-                                      SelectedValue="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedValuePath="Key"
-                                      DisplayMemberPath="Value"/>
-                                <Label Content="Szukaj po frazie:"/>
-                                <TextBox Text="{Binding SearchPhrase, UpdateSourceTrigger=PropertyChanged}" />
+                            <Border Grid.Row="1" CornerRadius="5" Height="30"
+                                    Background="{StaticResource InvertedTransientBrush}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Filtruj po:" />
+                                    <ComboBox ItemsSource="{Binding ListOfItemsFilter}"
+                                          SelectedValue="{Binding SelectedFilter, UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedValuePath="Key"
+                                          DisplayMemberPath="Value"/>
+                                    <Label Content="Szukaj po frazie:"/>
+                                    <TextBox Text="{Binding SearchPhrase, UpdateSourceTrigger=PropertyChanged}" />
 
-                                <Label Content="Sortuj po:" MinWidth="100"/>
-                                <ComboBox ItemsSource="{Binding ListOfItemsOrderBy}"
-                                      MinWidth="100" Margin="5 2"
-                                      SelectedValue="{Binding SelectedOrderBy}" 
-                                      SelectedValuePath="Key"
-                                      DisplayMemberPath="Value"/>
-                                <CheckBox Content="Czy malejaco" IsChecked="{Binding OrderDescending}" MinWidth="100" Margin="5 2"/>
-                                <Button Content="Sortuj" Command="{Binding OrderByCommand}" MinWidth="100" Margin="5 2"/>
-                            </StackPanel>
+                                    <Label Content="Sortuj po:"/>
+                                    <ComboBox ItemsSource="{Binding ListOfItemsOrderBy}"
+                                          SelectedValue="{Binding SelectedOrderBy, UpdateSourceTrigger=PropertyChanged}" 
+                                          SelectedValuePath="Key"
+                                          DisplayMemberPath="Value"/>
+                                    <CheckBox Content="Czy malejaco" IsChecked="{Binding OrderDescending, 
+                                        UpdateSourceTrigger=PropertyChanged}" />
+                                    <!--<Button Content="Sortuj" Command="{Binding OrderByCommand}" />-->
+                                </StackPanel>
+                            </Border>
                             <!--Kazdy widok dziedziczacy z Generic.xaml bedzie wyswietlany wlasnie w sekcji ContentPresenter!-->
-                            <ContentPresenter Grid.Row="2" Margin="0 5 0 5"/>
+                            <ContentPresenter Grid.Row="2" Margin="0 5"/>
                         </Grid>
-                        <Button Grid.Row="2" Style="{DynamicResource ButtonZaokraglony}" 
-                            Content="{Binding AddItemName}"
-                            Command="{Binding AddItemCommand}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

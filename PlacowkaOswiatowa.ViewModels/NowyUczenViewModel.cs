@@ -90,6 +90,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Pesel)
                 {
                     Item.Pesel = value;
+                    base.ClearErrors(nameof(Pesel));
+                    if (Item.Pesel.Length < 11)
+                        base.AddError(nameof(Pesel), "Pesel musi posiadać 11 znaków");
                     OnPropertyChanged(() => Pesel);
                 }
             }
@@ -191,6 +194,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.NumerDomu)
                 {
                     Item.Adres.NumerDomu = value;
+                    ClearErrors(nameof(NumerDomu));
+                    if (Item.Adres.NumerDomu.Length < 1)
+                        AddError(nameof(NumerDomu), "Należy podać numer domu");
                     OnPropertyChanged(() => NumerDomu);
                 }
             }
@@ -215,6 +221,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.KodPocztowy)
                 {
                     Item.Adres.KodPocztowy = value;
+                    ClearErrors(nameof(KodPocztowy));
+                    if (Item.Adres.KodPocztowy.Length < 1)
+                        AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
                     OnPropertyChanged(() => KodPocztowy);
                 }
             }
@@ -246,9 +255,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override async Task<bool> SaveAsync()
         {
-            CheckCanSave();
-            if (HasErrors)
-                return false;
+            CheckRequiredProperties();
+            if (HasErrors) return false;
             try
             {
                 var uczen = _mapper.Map<Uczen>(Item);
@@ -322,7 +330,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override bool SaveAndCloseCanExecute() => !HasErrors;
 
-        private void CheckCanSave()
+        private void CheckRequiredProperties()
         {
             if (string.IsNullOrEmpty(Imie))
             {
@@ -353,6 +361,16 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 AddError(nameof(Miejscowosc), "Należy podać miejscowość");
                 OnPropertyChanged(nameof(Miejscowosc));
+            }
+            if (string.IsNullOrEmpty(NumerDomu))
+            {
+                AddError(nameof(NumerDomu), "Należy podać numer domu");
+                OnPropertyChanged(nameof(NumerDomu));
+            }
+            if (string.IsNullOrEmpty(KodPocztowy))
+            {
+                AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
+                OnPropertyChanged(nameof(KodPocztowy));
             }
         }
 

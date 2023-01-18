@@ -123,6 +123,9 @@
   <data name="DefaultStatusMessage" xml:space="preserve">
     <value>Witaj w aplikacji Placówka Oświatowa!</value>
   </data>
+  <data name="DodajPracownika" xml:space="preserve">
+    <value>Dodaj pracownika</value>
+  </data>
   <data name="DodajUcznia" xml:space="preserve">
     <value>Dodaj ucznia</value>
   </data>

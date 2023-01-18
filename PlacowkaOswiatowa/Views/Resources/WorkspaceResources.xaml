@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:local="clr-namespace:PlacowkaOswiatowa.Views"
                     xmlns:converters="clr-namespace:PlacowkaOswiatowa.Helpers.Converters"
                     xmlns:custom="clr-namespace:PlacowkaOswiatowa.Helpers.CustomUI"
                     >
@@ -14,8 +13,6 @@
                     Color="{StaticResource ShadowColor}"
                     ShadowDepth="8"
                     BlurRadius="5"/>
-
-
 
     <!--Control-->
     <Style TargetType="Control" x:Key="BaseControl">
@@ -41,6 +38,10 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
+    <Style x:Key="LabelNiski" TargetType="{x:Type Label}" 
+           BasedOn="{StaticResource LabelStandardowy}">
+        <Setter Property="FontSize" Value="14" />
+    </Style>
 
     <Style x:Key="LabelWaski" TargetType="{x:Type Label}">
         <!--<Setter Property="Height" Value="auto"/>-->
@@ -352,7 +353,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{StaticResource ButtonForeground}" />
-        <Setter Property="Background" Value="{StaticResource ButtonBorderBrush}" />
+        <Setter Property="Background" Value="{StaticResource StandardButtonBackgroundColor}" />
         <Setter Property="BorderBrush" Value="{StaticResource ButtonBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Margin" Value="10 2" />
@@ -378,15 +379,20 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <TextBlock Text="{TemplateBinding Content}" 
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                Padding="{TemplateBinding Padding}"
-                                />
+                        <TextBlock x:Name="ButtonContent"
+                            Text="{TemplateBinding Content}" 
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Padding="{TemplateBinding Padding}"
+                            />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="BorderThickness" TargetName="ButtonBorder" Value="0"/>
+                            <Setter Property="Foreground" TargetName="ButtonContent" 
+                                    Value="{StaticResource BrushWhite}" />
+                            <Setter Property="Background" TargetName="ButtonBorder" 
+                                    Value="{StaticResource StandardButtonPressedBackground}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -626,6 +632,11 @@
         <Setter Property="MinWidth" Value="200"/>
     </Style>
 
+    <Style x:Key="TextBoxNiski" TargetType="{x:Type TextBox}" 
+           BasedOn="{StaticResource TextBoxZaokraglony}">
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
     <!--ComboBox-->
     <Style x:Key="ComboBoxStandardowy" TargetType="{x:Type ComboBox}">
         <Setter Property="Margin" Value="5 2" />
@@ -634,6 +645,11 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <!--<Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />-->
+    </Style>
+
+    <Style x:Key="ComboBoxNiski" TargetType="{x:Type ComboBox}"
+           BasedOn="{StaticResource ComboBoxZaokraglony}">
+        <Setter Property="FontSize" Value="14"/>
     </Style>
 
     <!--Date Picker-->
@@ -651,20 +667,13 @@
     </Style>
 
     <!--Border-->
-    <Style TargetType="{x:Type Border}"
-         x:Key="WorkspaceBorder">
-        <Setter Property="Background"
-            Value="{StaticResource ScreenBackgroundBrush}" />
-        <Setter Property="BorderBrush"
-            Value="#FF5F5F5F" />
-        <Setter Property="CornerRadius"
-            Value="5" />
-        <Setter Property="BorderThickness"
-            Value="1" />
-        <Setter Property="Padding"
-            Value="12" />
-        <Setter Property="Margin"
-            Value="16" />
+    <Style TargetType="{x:Type Border}" x:Key="WorkspaceBorder">
+        <Setter Property="Background" Value="{StaticResource ScreenBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="#FF5F5F5F" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="12" />
+        <Setter Property="Margin" Value="16" />
     </Style>
 
     <!--List Box-->
@@ -708,6 +717,7 @@
         <Setter Property="Padding" Value="5 20"/>
     </Style>
 
+    
     <!--Konwertery-->
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <converters:InvertBooleanConverter x:Key="InvertedBool"/>
@@ -716,6 +726,7 @@
     <converters:AdresDtoToStringConverter x:Key="AdresDtoToString"/>
     <converters:AdresToStringConverter x:Key="AdresToString"/>
     <converters:EnumToCollectionConverter x:Key="EnumToCollection"/>
-    <converters:JobToStringConverter x:Key="JobToString"/>
+    <converters:DictEntityToStringConverter x:Key="DictEntityToString"/>
+    <converters:ObjectToVisibiltyConverter x:Key="ObjectToVisibility"/>
 
 </ResourceDictionary>

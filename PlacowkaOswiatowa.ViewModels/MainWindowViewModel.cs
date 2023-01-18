@@ -3,6 +3,8 @@ using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
+using PlacowkaOswiatowa.Infrastructure.DataAccess;
+using PlacowkaOswiatowa.Infrastructure.Extensions;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
@@ -243,10 +245,8 @@ namespace PlacowkaOswiatowa.ViewModels
         private void CreateViewAsync<T>()
             where T : WorkspaceViewModel, ILoadable
         {
-            //DI inicjuje konstruktor ViewModelu
+            //Provider tworzy ViewModel z kontenara zależności
             var workspace = _provider.GetRequiredService<T>();
-            //Task nie jest oczekiwany w celu natychmiastowego wyświetlenia widoku
-            //a asynchronicznie zostaną pobrane dane z bazy.
             //Po załadowaniu powiadomi UI że dane są dostępne.
             //W przypadku niepowodzenia metoda LoadAsync wyświetli odpowiedni komunikat
             Task.Run(async () => await workspace.LoadAsync());

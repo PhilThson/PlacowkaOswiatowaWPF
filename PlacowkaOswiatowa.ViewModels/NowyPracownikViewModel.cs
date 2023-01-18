@@ -38,6 +38,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Imie)
                 {
                     Item.Imie = value;
+                    base.ClearErrors(nameof(Imie));
+                    if (Item.Imie.Length < 3)
+                        base.AddError(nameof(Imie), "Imię musi posiadać przynajmniej 3 znaki");
                     OnPropertyChanged();
                 }
             }
@@ -50,6 +53,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DrugieImie)
                 {
                     Item.DrugieImie = value;
+                    base.ClearErrors(nameof(DrugieImie));
+                    if (Item.DrugieImie.Length != 0 && Item.DrugieImie.Length < 3)
+                        base.AddError(nameof(DrugieImie), "Drugie imię musi posiadać przynajmniej 3 znaki");
                     OnPropertyChanged();
                 }
             }
@@ -62,6 +68,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Nazwisko)
                 {
                     Item.Nazwisko = value;
+                    base.ClearErrors(nameof(Nazwisko));
+                    if (Item.Nazwisko.Length < 3)
+                        base.AddError(nameof(Nazwisko), "Nazwisko musi posiadać przynajmniej 3 znaki");
                     OnPropertyChanged();
                 }
             }
@@ -74,6 +83,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Pesel)
                 {
                     Item.Pesel = value;
+                    base.ClearErrors(nameof(Pesel));
+                    if (Item.Pesel.Length < 11)
+                        base.AddError(nameof(Pesel), "Pesel musi posiadać 11 znaków");
                     OnPropertyChanged();
                 }
             }
@@ -86,6 +98,10 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DataUrodzenia)
                 {
                     Item.DataUrodzenia = value;
+                    base.ClearErrors(nameof(DataUrodzenia));
+                    if (Item.DataUrodzenia > DateTime.Today)
+                        base.AddError(nameof(DataUrodzenia),
+                            "Nieprawidłowa data urodzenia");
                     OnPropertyChanged();
                 }
             }
@@ -130,6 +146,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.Panstwo)
                 {
                     Item.Adres.Panstwo = value;
+                    ClearErrors(nameof(Panstwo));
+                    if (Item.Adres.Panstwo.Length < 1)
+                        AddError(nameof(Panstwo), "Należy podać Państwo");
                     OnPropertyChanged();
                 }
             }
@@ -142,6 +161,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.Miejscowosc)
                 {
                     Item.Adres.Miejscowosc = value;
+                    ClearErrors(nameof(Miejscowosc));
+                    if (Item.Adres.Miejscowosc.Length < 1)
+                        AddError(nameof(Miejscowosc), "Należy podać miejscowość");
                     OnPropertyChanged();
                 }
             }
@@ -166,6 +188,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.NumerDomu)
                 {
                     Item.Adres.NumerDomu = value;
+                    ClearErrors(nameof(NumerDomu));
+                    if (Item.Adres.NumerDomu.Length < 1)
+                        AddError(nameof(NumerDomu), "Należy podać numer domu");
                     OnPropertyChanged();
                 }
             }
@@ -190,6 +215,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Adres.KodPocztowy)
                 {
                     Item.Adres.KodPocztowy = value;
+                    ClearErrors(nameof(KodPocztowy));
+                    if (Item.Adres.KodPocztowy.Length < 1)
+                        AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
                     OnPropertyChanged();
                 }
             }
@@ -199,6 +227,8 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody komend
         protected override async Task<bool> SaveAsync()
         {
+            CheckRequiredProperties();
+            if (HasErrors) return false;
             try
             {
                 var pracownik = _mapper.Map<Pracownik>(Item);
@@ -255,7 +285,7 @@ namespace PlacowkaOswiatowa.ViewModels
             }
             catch (Exception e)
             {
-                MessageBox.Show("Nie udało się dodać pracownika", "Error",
+                MessageBox.Show($"Nie udało się dodać pracownika. {e.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return false;
@@ -269,9 +299,51 @@ namespace PlacowkaOswiatowa.ViewModels
                 this.OnPropertyChanged(prop.Name);
         }
 
-        protected override bool SaveAndCloseCanExecute() =>
-            !string.IsNullOrEmpty(Imie) && Imie.Length >= 3 &&
-            !string.IsNullOrEmpty(Nazwisko) && Nazwisko.Length >= 3;
+        protected override bool SaveAndCloseCanExecute() => !HasErrors;
+
+        private void CheckRequiredProperties()
+        {
+            if (string.IsNullOrEmpty(Imie))
+            {
+                AddError(nameof(Imie), "Należy podać imię");
+                OnPropertyChanged(nameof(Imie));
+            }
+            if (string.IsNullOrEmpty(Nazwisko))
+            {
+                AddError(nameof(Nazwisko), "Należy podać nazwisko");
+                OnPropertyChanged(nameof(Nazwisko));
+            }
+            if (string.IsNullOrEmpty(DataUrodzenia.ToString()))
+            {
+                AddError(nameof(DataUrodzenia), "Należy podać datę urodzenia");
+                OnPropertyChanged(nameof(DataUrodzenia));
+            }
+            if (string.IsNullOrEmpty(Pesel))
+            {
+                AddError(nameof(Pesel), "Należy podać PESEL");
+                OnPropertyChanged(nameof(Pesel));
+            }
+            if (string.IsNullOrEmpty(Panstwo))
+            {
+                AddError(nameof(Panstwo), "Należy podać państwo");
+                OnPropertyChanged(nameof(Panstwo));
+            }
+            if (string.IsNullOrEmpty(Miejscowosc))
+            {
+                AddError(nameof(Miejscowosc), "Należy podać miejscowość");
+                OnPropertyChanged(nameof(Miejscowosc));
+            }
+            if (string.IsNullOrEmpty(NumerDomu))
+            {
+                AddError(nameof(NumerDomu), "Należy podać numer domu");
+                OnPropertyChanged(nameof(NumerDomu));
+            }
+            if (string.IsNullOrEmpty(KodPocztowy))
+            {
+                AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
+                OnPropertyChanged(nameof(KodPocztowy));
+            }
+        }
         #endregion
 
         #region Obsługa zdarzeń
