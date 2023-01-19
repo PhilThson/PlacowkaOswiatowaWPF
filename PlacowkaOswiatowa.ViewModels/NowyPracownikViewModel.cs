@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
+using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Models.Base;
@@ -15,7 +16,7 @@ using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>
+    public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>, IEditable
     {
         #region Konstruktor
         public NowyPracownikViewModel(IPlacowkaRepository repository, IMapper mapper)
@@ -342,6 +343,31 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
                 OnPropertyChanged(nameof(KodPocztowy));
+            }
+        }
+        #endregion
+
+        #region Inicjacja
+        public async Task LoadItem(object objId)
+        {
+            try
+            {
+                var pracownikFromDb = await _repository.Pracownicy.GetByIdAsync((int)objId) ??
+                    throw new DataNotFoundException(
+                        $"Nie znaleziono pracownika o podanym identyfikatorze ({objId})");
+
+                base.DisplayName = BaseResources.EdycjaPracownika;
+                base.AddItemName = BaseResources.SaveItem;
+
+                Item = _mapper.Map<CreatePracownikDto>(pracownikFromDb);
+                Item.Adres ??= new AdresDto();
+                foreach (var prop in this.GetType().GetProperties())
+                    this.OnPropertyChanged(prop.Name);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"Nie udało się pobrać danych pracownika. {e.Message}", 
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         #endregion

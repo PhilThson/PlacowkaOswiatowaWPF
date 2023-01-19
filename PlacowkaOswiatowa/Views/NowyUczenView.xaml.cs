@@ -1,11 +1,12 @@
-﻿using System.Windows.Controls;
+﻿using PlacowkaOswiatowa.Views.Common;
+using System.Windows.Controls;
 
 namespace PlacowkaOswiatowa.Views
 {
     /// <summary>
     /// Interaction logic for NowyUczenView.xaml
     /// </summary>
-    public partial class NowyUczenView : UserControl
+    public partial class NowyUczenView : SingleItemViewBase
     {
         public NowyUczenView()
         {

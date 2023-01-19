@@ -16,12 +16,10 @@ namespace PlacowkaOswiatowa.ViewModels
     public class LoginViewModel : SingleItemViewModel<UzytkownikDto>
     {
         #region Konstruktor
-        public LoginViewModel(ISignalHub signal, 
-            IPlacowkaRepository repository, 
-            IMapper mapper)
+        public LoginViewModel(IPlacowkaRepository repository, IMapper mapper)
             : base(repository, mapper, BaseResources.LoginPage)
         {
-            _signal = signal;
+            _signal = SignalHub<string>.Instance;
             //DisplayStatusMessage("Logowanie do aplikacji");
             this.PropertyChanged += (s, e) => 
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -32,7 +30,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Pola i Właściwości
 
-        private readonly ISignalHub _signal;
+        private readonly ISignalHub<string> _signal;
 
         private string _login;
         public string Login
@@ -82,7 +80,7 @@ namespace PlacowkaOswiatowa.ViewModels
             if (uzytkownik.Email == "Gość" && uzytkownik.HashHasla == "1234")
             {
                 _signal.RaiseLoggedInChanged();
-                _signal.WyslijWiadomosc(this, "Witaj Gościu!");
+                _signal.SendMessage(this, "Witaj Gościu!");
                 Close();
             }
             else
@@ -94,7 +92,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     if (czyJestPracownikiem == true)
                     {
                         _signal.RaiseLoggedInChanged();
-                        _signal.WyslijWiadomosc(this, $"Witaj {Login} {Password}!");
+                        _signal.SendMessage(this, $"Witaj {Login} {Password}!");
                         Close();
                     }
                     else
@@ -102,7 +100,7 @@ namespace PlacowkaOswiatowa.ViewModels
                         AddValidationMessage("LoginFailed",
                                         "Niepoprawny login i/lub hasło.");
 
-                        _signal.WyslijWiadomosc(this, "Nie udało się zalogować.");
+                        _signal.SendMessage(this, "Nie udało się zalogować.");
                     }
                 }
                 catch (Exception ex)
@@ -110,7 +108,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     //PublishException(ex);
                     MessageBox.Show("Błąd połączenia do bazy danych", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
-                    _signal.WyslijWiadomosc(this, "Błąd połączenia do bazy danych.");
+                    _signal.SendMessage(this, "Błąd połączenia do bazy danych.");
                 }
             }
             return false;

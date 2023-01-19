@@ -97,6 +97,24 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edycja pracownika.
+        /// </summary>
+        public static string EdycjaPracownika {
+            get {
+                return ResourceManager.GetString("EdycjaPracownika", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edycja ucznia.
+        /// </summary>
+        public static string EdycjaUcznia {
+            get {
+                return ResourceManager.GetString("EdycjaUcznia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Faktura.
         /// </summary>
         public static string Faktura {
@@ -147,6 +165,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         public static string NowyUczen {
             get {
                 return ResourceManager.GetString("NowyUczen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zapisz.
+        /// </summary>
+        public static string SaveItem {
+            get {
+                return ResourceManager.GetString("SaveItem", resourceCulture);
             }
         }
         

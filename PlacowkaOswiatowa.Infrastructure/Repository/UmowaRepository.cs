@@ -18,7 +18,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public async Task<bool> Exists(UmowaDto umowa)
         {
             return await _umowaDbSet.AnyAsync(u => u.PracodawcaId == umowa.Pracodawca.Id &&
-                                                u.PracownikId == umowa.Pracownik.Id);
+                                                u.PracownikId == (int)umowa.Pracownik.Id);
         }
     }
 }

@@ -63,8 +63,6 @@ namespace PlacowkaOswiatowa
                     //Zmiana z Singleton na Transient
                     //w celu uniknięcia deadlocków
                     services.AddTransient<IPlacowkaRepository, PlacowkaRepository>();
-                    //TODO: usunąć SignalHub
-                    services.AddSingleton<ISignalHub, SignalHub>();
                     services.AddSingleton<LoginViewModel>();
                     services.AddSingleton<WszyscyPracownicyViewModel>();
                     services.AddSingleton<WszyscyUczniowieViewModel>();

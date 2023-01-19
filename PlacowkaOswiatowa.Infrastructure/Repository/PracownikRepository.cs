@@ -4,6 +4,7 @@ using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
 using PlacowkaOswiatowa.Infrastructure.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
@@ -31,5 +32,12 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<Pracownik> GetPracownikByPeselAsync(string pesel) =>
             await _pracownikDbSet.FirstOrDefaultAsync(p => p.Pesel == pesel);
+
+        public async Task<Pracownik> GetByIdAsync(int id) =>
+            await _pracownikDbSet
+                .Where(p => p.Id == id)
+                .IncludeUmowa(p => p.PracownikUmowa)
+                .IncludePracownicyAdresy()
+                .FirstOrDefaultAsync();
     }
 }

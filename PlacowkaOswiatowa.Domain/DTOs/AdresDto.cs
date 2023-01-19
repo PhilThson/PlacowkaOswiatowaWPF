@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using System.Text;
 
 namespace PlacowkaOswiatowa.Domain.DTOs
 {
-    public class AdresDto
+    public class AdresDto : IBaseEntity<object>
     {
-        public int Id { get; set; }
+        public object Id { get; set; }
         public string Panstwo { get; set; }
         public string Miejscowosc { get; set; }
         public string Ulica { get; set; }

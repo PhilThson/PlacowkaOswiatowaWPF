@@ -19,6 +19,7 @@ namespace PlacowkaOswiatowa.Domain.Commands
             _canExecute = canExecute ?? (() => true);
             _command = command;
         }
+
         public void Execute(object parameter) =>
             _command();
 

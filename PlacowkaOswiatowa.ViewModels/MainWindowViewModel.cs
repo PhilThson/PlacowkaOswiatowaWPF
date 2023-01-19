@@ -3,14 +3,13 @@ using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
-using PlacowkaOswiatowa.Infrastructure.DataAccess;
-using PlacowkaOswiatowa.Infrastructure.Extensions;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -27,22 +26,26 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Konstruktor
         private IServiceProvider _provider;
-        private readonly ISignalHub _signal;
+        private readonly ISignalHub<string> _signal;
+        private readonly ISignalHub<ViewHandler> _signalView;
 
         public MainWindowViewModel(IServiceProvider serviceProvider)
         {
             _provider = serviceProvider;
-            _signal = serviceProvider.GetRequiredService<ISignalHub>();
+            _signal = SignalHub<string>.Instance;
+            _signalView = SignalHub<ViewHandler>.Instance;
             _sideMenuVisibility = "Collapsed";
             _sideMenuLocation = "Left";
             _workspacesVisibility = "Collapsed";
             _loginViewVisibility = "Collapsed";
             //wyświetlanie panelu logowania
             _isLoggedIn = true;
-            _signal.NowaWiadomosc += (s, m) => StatusMessage = m;
+            _signal.NewMessage += (s, m) => StatusMessage = m;
             _signal.LoggedInChanged += () => IsLoggedIn = true;
             _signal.HideLogingRequest += () => ChangeLoginViewVisibility();
+            _signalView.NewViewRequested += (s, vh) => NewViewRequested(s, vh);
         }
+
         #endregion
 
         #region Komendy Menu i Paska narzędzi
@@ -194,6 +197,30 @@ namespace PlacowkaOswiatowa.ViewModels
             }
             this.Workspaces.Remove(workspace); 
         }
+
+        private void NewViewRequested(object sender, ViewHandler viewHandler)
+        {
+            try
+            {
+                _ = viewHandler ?? throw new ArgumentNullException("Nie podano wymaganego argumentu");
+                _ = viewHandler.Value ?? throw new ArgumentNullException("Wybrano rekordu do edycji");
+                if(viewHandler.ViewType.GetType().GetInterfaces().Contains(typeof(IEditable)))
+                    throw new ArgumentException("Żądany widok nie służy do edycji");
+
+                var workspace = _provider.GetRequiredService(viewHandler.ViewType) as WorkspaceViewModel;
+                if (viewHandler.ViewType.IsAssignableTo(typeof(ILoadable)))
+                    Task.Run(async () => await (workspace as ILoadable).LoadAsync());
+
+                Task.Run(async () => await (workspace as IEditable).LoadItem(viewHandler.Value));
+                Workspaces.Add(workspace);
+                SetActiveWorkspace(workspace);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"Nie udało się utworzyć widoku. {e.Message}",
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         #endregion
 
         #region Funkcje pomocnicze
@@ -233,8 +260,8 @@ namespace PlacowkaOswiatowa.ViewModels
             where T : WorkspaceViewModel
         {
             var workspace = _provider.GetRequiredService<T>();
-            this.Workspaces.Add(workspace);
-            this.SetActiveWorkspace(workspace);
+            Workspaces.Add(workspace);
+            SetActiveWorkspace(workspace);
         }
 
         /// <summary>
@@ -326,10 +353,10 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             LoginViewVisibility = LoginViewVisibility == "Visible" ? "Collapsed" : "Visible";
             if(LoginViewVisibility == "Visible")
-                _signal.WyslijWiadomosc(this, "Logowanie do aplikacji...");
+                _signal.SendMessage(this, "Logowanie do aplikacji...");
             else
                 if(!IsLoggedIn)
-                    _signal.WyslijWiadomosc(this, BaseResources.DefaultStatusMessage);
+                    _signal.SendMessage(this, BaseResources.DefaultStatusMessage);
         }
         #endregion
 

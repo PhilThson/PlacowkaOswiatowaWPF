@@ -9,5 +9,6 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
         Task<IEnumerable<Uczen>> GetAllAsync();
         IEnumerable<Uczen> GetAll();
         Task<Uczen> GetUczenByPesel(string pesel);
+        Task<Uczen> GetByIdAsync(int id);
     }
 }

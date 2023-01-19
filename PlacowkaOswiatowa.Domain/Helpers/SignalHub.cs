@@ -2,33 +2,52 @@
 
 namespace PlacowkaOswiatowa.Domain.Helpers
 {
-    public class SignalHub : ISignalHub
+    public class SignalHub<T> : ISignalHub<T> 
+        where T : class
     {
+        private static SignalHub<T> _Instance;
+        public static SignalHub<T> Instance
+        {
+            get => _Instance ??= new SignalHub<T>();
+        }
+
+        private SignalHub()
+        {
+
+        }
+
         public event Action LoggedInChanged;
         public void RaiseLoggedInChanged() => LoggedInChanged?.Invoke();
 
         public event Action HideLogingRequest;
         public void RaiseHideLoginViewRequest() => HideLogingRequest?.Invoke();
 
-        public event EventHandler<string> NowaWiadomosc;
-        public void WyslijWiadomosc(object wysylacz, string wiadomosc)
-        {
-            RozglosWiadomosc(wysylacz, wiadomosc);
-        }
+        public event EventHandler<T> NewMessage;
+        public void SendMessage(object sender, T message = null) =>
+            RaiseNewMessage(sender, message);
             
-        private void RozglosWiadomosc(object sender, string message)
-        {
-            NowaWiadomosc?.Invoke(sender, message);
-        }
+        private void RaiseNewMessage(object sender, T message) =>
+            NewMessage?.Invoke(sender, message);
+
+        public event EventHandler<T> NewViewRequested;
+
+        public void RaiseCreateView(object sender, T obj = null) =>
+            NewViewRequested?.Invoke(sender, obj);
     }
 
-    public interface ISignalHub
+    public interface ISignalHub<T> where T : class
     {
         event Action LoggedInChanged;
         event Action HideLogingRequest;
-        event EventHandler<string> NowaWiadomosc;
-        void WyslijWiadomosc(object wysylacz, string wiadomosc);
+        /// <summary>
+        /// Zdarzenie do obsługi rozgłaszania wiadomości
+        /// </summary>
+        event EventHandler<T> NewMessage;
+        void SendMessage(object sender, T message = null);
         void RaiseLoggedInChanged();
         void RaiseHideLoginViewRequest();
+
+        public event EventHandler<T> NewViewRequested;
+        public void RaiseCreateView(object sender, T obj = null);
     }
 }

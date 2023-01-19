@@ -33,5 +33,14 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<Uczen> GetUczenByPesel(string pesel) =>
             await _uczenDbSet.FirstOrDefaultAsync(u => u.Pesel == pesel);
+
+        public async Task<Uczen> GetByIdAsync(int id) =>
+            await _uczenDbSet
+            .Where(u => u.Id == id)
+            .IncludeAdres(u => u.Adres)
+            .Include(u => u.Oddzial)
+                .ThenInclude(o => o.Pracownik)
+            .FirstOrDefaultAsync();
+
     }
 }

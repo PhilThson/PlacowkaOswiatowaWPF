@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.Commands;
-using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
 using System;
@@ -12,15 +12,18 @@ using System.Windows.Input;
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
     public abstract class ItemsCollectionViewModel<T> : WorkspaceViewModel
+        where T : IBaseEntity<object>
     {
         #region Pola prywatne i właściwości
         protected readonly IMapper _mapper;
+        protected readonly ISignalHub<ViewHandler> _signalView;
 
         public string AddItemName { get; set; }
 
         private ICommand _AddItemCommand;
         private ICommand _LoadCommand;
         private ICommand _UpdateCommand;
+        private ICommand _EditCommand;
         //private ICommand _OrderByCommand;
         //private ICommand _FilterCommand;
         //kolekcja wszystkich elementów
@@ -36,9 +39,11 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             : base(repository)
         {
             _mapper = mapper;
-            base.DisplayName = displayName;
+            _signalView = SignalHub<ViewHandler>.Instance;
+            DisplayName = displayName;
             AddItemName = string.IsNullOrEmpty(addItemName) ?
                 BaseResources.AddItem : addItemName;
+
             ListOfItemsOrderBy = SetListOfItemsOrderBy();
             ListOfItemsFilter = SetListOfItemsFilter();
         }
@@ -49,6 +54,10 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             new BaseCommand(() => OnRequestCreateView(ItemToCreateType));
         public ICommand LoadCommand => _LoadCommand ??= new BaseCommand(Load);
         public ICommand UpdateCommand => _UpdateCommand ??= new BaseCommand(Update);
+        public ICommand EditCommand => _EditCommand ??= new BaseCommand(Edit);
+
+        //Zrezygnowałem z komend na rzecz wprowadzania filtrowania i sortowania
+        //podczas PropertyChange wybranych ComboBoxów i TextBoxów
         //public ICommand OrderByCommand => _OrderByCommand ??= new BaseCommand(OrderBy);
         //public ICommand FilterCommand => _FilterCommand ??= new BaseCommand(Filter);
 
@@ -156,10 +165,19 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
             OrderBy();
         }
+        private void Edit()
+        {
+            var viewHandler = new ViewHandler
+            {
+                Value = SelectedItem?.Id,
+                ViewType = ItemToCreateType
+            };
+            _signalView.RaiseCreateView(this, viewHandler);
+        }
         #endregion
 
         #region Abstracts
-        //właściwość
+        //właściwość określająca jaki typ zakładki dany ViewModel może utworzyć
         protected abstract Type ItemToCreateType { get; }
         protected abstract void Load();
         protected abstract void Update();
@@ -167,9 +185,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         #region Virtuals
         protected virtual Func<T, string> SetOrderBySelector() =>
-            o => string.Empty;
+            item => string.Empty;
         protected virtual Func<T, bool> SetFilterPredicate() =>
-            o => true;
+            item => true;
         protected virtual List<KeyValuePair<string, string>> SetListOfItemsFilter() =>
             new List<KeyValuePair<string, string>>();
         protected virtual List<KeyValuePair<string, string>> SetListOfItemsOrderBy() =>

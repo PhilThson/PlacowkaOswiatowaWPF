@@ -95,7 +95,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Dane pracownika
         public int PracownikId
         {
-            get => WybranyPracownik.Id;
+            get => (int)WybranyPracownik.Id;
             set 
             { 
                 if(value != default(int))
@@ -268,7 +268,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         private void WybranyPracownikChanged()
         {
-            PracownikId = WybranyPracownik.Id;
+            PracownikId = (int)WybranyPracownik.Id;
             Imie = WybranyPracownik.Imie;
             Nazwisko = WybranyPracownik.Nazwisko;
             DataUrodzenia = WybranyPracownik.DataUrodzenia;

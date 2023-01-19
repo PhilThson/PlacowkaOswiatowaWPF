@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
@@ -7,7 +8,6 @@ using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,12 +17,14 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
+        private readonly ISignalHub<ViewHandler> _signal;
         #endregion
 
         #region Konstruktor
         public WszyscyPracownicyViewModel(IPlacowkaRepository repository, IMapper mapper)
             : base(repository, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
         {
+            _signal = SignalHub<ViewHandler>.Instance;
         }
         #endregion
 

@@ -11,7 +11,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -19,6 +18,7 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola, właściwości, komendy
         protected override Type ItemToCreateType => typeof(NowyUczenViewModel);
+        private readonly ISignalHub<ViewHandler> _signal;
         //public ICollectionView StudentsCollectionView { get; set; }
         #endregion
 
@@ -26,6 +26,7 @@ namespace PlacowkaOswiatowa.ViewModels
         public WszyscyUczniowieViewModel(IPlacowkaRepository repository, IMapper mapper)
             : base(repository, mapper, BaseResources.WszyscyUczniowie, BaseResources.DodajUcznia)
         {
+            _signal = SignalHub<ViewHandler>.Instance;
             //StudentsCollectionView = CollectionViewSource.GetDefaultView(List);
         }
         #endregion
@@ -49,13 +50,13 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
+        protected override void Update() => Load();
+
         protected override void Load()
         {
             AllList = _mapper.Map<List<UczenDto>>(_repository.Uczniowie.GetAll());
             List = new ObservableCollection<UczenDto>(AllList);
         }
-
-        protected override void Update() => Load();
 
         protected override Func<UczenDto, string> SetOrderBySelector() =>
             SelectedOrderBy switch

@@ -17,7 +17,7 @@ using System.Linq;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable
+    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable, IEditable
     {
         #region Konstruktor
         public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper)
@@ -230,27 +230,6 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Pobieranie danych z bazy
-
-        public async Task LoadAsync()
-        {
-            try
-            {
-                var grupyFromDb = await _repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
-                var listaOddzialow = _mapper.Map<List<OddzialDto>>(grupyFromDb);
-
-                _oddzialy = new ReadOnlyCollection<OddzialDto>(listaOddzialow);
-                OnPropertyChanged(() => Oddzialy);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się załadować oddziałów.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        #endregion
-
         #region Metody
 
         protected override async Task<bool> SaveAsync()
@@ -376,6 +355,51 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #endregion
 
+        #region Inicjacja
+
+        public async Task LoadAsync()
+        {
+            try
+            {
+                var oddzialyFromDb = await _repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
+                var listaOddzialow = _mapper.Map<List<OddzialDto>>(oddzialyFromDb);
+
+                _oddzialy = new ReadOnlyCollection<OddzialDto>(listaOddzialow);
+                OnPropertyChanged(() => Oddzialy);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Nie udało się załadować oddziałów.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public async Task LoadItem(object objId)
+        {
+            try
+            {
+                var uczenFromDb = await _repository.Uczniowie.GetByIdAsync((int)objId) ??
+                    throw new DataNotFoundException(
+                        $"Nie znaleziono ucznia o podanym identyfikatorze ({objId})");
+
+                base.DisplayName = BaseResources.EdycjaUcznia;
+                base.AddItemName = BaseResources.SaveItem;
+
+                Item = _mapper.Map<UczenDto>(uczenFromDb);
+                Item.Adres ??= new AdresDto();
+                foreach (var prop in this.GetType().GetProperties())
+                    this.OnPropertyChanged(prop.Name);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Nie udało się pobrać danych ucznia. {e.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+
+        #region Helpers
         public override void Dispose()
         {
             //potrzebne w razie subskrybowania eventu z innej klasy
@@ -384,5 +408,6 @@ namespace PlacowkaOswiatowa.ViewModels
             //this.PropertyChanged -= NowyUczenViewModel_PropertyChanged;
             base.Dispose();
         }
+        #endregion
     }
 }

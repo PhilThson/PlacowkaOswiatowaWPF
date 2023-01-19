@@ -31,6 +31,10 @@ namespace PlacowkaOswiatowa.Helpers
                     s => s.PracownikUmowa.WymiarGodzinowy))
                 ;
 
+            CreateMap<Pracownik, CreatePracownikDto>()
+                .ForMember(d => d.Adres, o => o.MapFrom(
+                        s => s.PracownikPracownicyAdresy.FirstOrDefault().Adres));
+
             CreateMap<Uczen, UczenDto>()
                 .ForMember(d => d.Wychowawca, o => o.MapFrom(s => s.Oddzial.Pracownik))
                 ;
@@ -59,6 +63,12 @@ namespace PlacowkaOswiatowa.Helpers
                 .ForMember(d => d.Nazwa, o => o.MapFrom(s => s));
             CreateMap<string, Ulica>()
                 .ForMember(d => d.Nazwa, o => o.MapFrom(s => s));
+
+            CreateMap<Przedmiot, PrzedmiotDto>();
+
+            CreateMap<Ocena, OcenaDto>();
+
+            CreateMap<Stanowisko, StanowiskoDto>();
         }
     }
 }

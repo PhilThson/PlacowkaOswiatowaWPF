@@ -1,15 +1,16 @@
-﻿using PlacowkaOswiatowa.Domain.Models;
+﻿using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using System;
 
 namespace PlacowkaOswiatowa.Domain.DTOs
 {
-    public class PracownikDto
+    public class PracownikDto : IBaseEntity<object>
     {
         //Warstwa pośrednicząca przydatna do wyświetlania danych
         //np. format DateTime można przekonwertować na string
         //nie trzeba zawierać wszystkich danych
         //można dokonywać sprawdzeń
-        public int Id { get; set; }
+        public object Id { get; set; }
         public string Imie { get; set; }
         public string DrugieImie { get; set; }
         public string Nazwisko { get; set; }

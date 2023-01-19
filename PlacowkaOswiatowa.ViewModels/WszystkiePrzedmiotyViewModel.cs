@@ -1,6 +1,5 @@
 ﻿using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
-using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System.Collections.ObjectModel;
@@ -8,10 +7,12 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 using AutoMapper;
+using PlacowkaOswiatowa.Domain.DTOs;
+using System.Collections.Generic;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class WszystkiePrzedmiotyViewModel : ItemsCollectionViewModel<Przedmiot>, ILoadable
+    public class WszystkiePrzedmiotyViewModel : ItemsCollectionViewModel<PrzedmiotDto>, ILoadable
     {
 
         #region Pola, właściwości, komendy
@@ -31,9 +32,9 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var listaPrzedmiotow = await _repository.Przedmioty.GetAllAsync();
-
-                List = new ObservableCollection<Przedmiot>(listaPrzedmiotow);
+                var przedmiotyFromDb = await _repository.Przedmioty.GetAllAsync();
+                AllList = _mapper.Map<List<PrzedmiotDto>>(przedmiotyFromDb);
+                List = new ObservableCollection<PrzedmiotDto>(AllList);
             }
             catch (Exception)
             {
@@ -52,10 +53,8 @@ namespace PlacowkaOswiatowa.ViewModels
         //Ta metoda zostanie prawdopodobnie podpięta pod przycisk 'Odswież'
         protected override void Load()
         {
-            List = new ObservableCollection<Przedmiot>
-                (
-                    _repository.Przedmioty.GetAll()
-                );
+            AllList = _mapper.Map<List<PrzedmiotDto>>(_repository.Przedmioty.GetAll());
+            List = new ObservableCollection<PrzedmiotDto>(AllList);
         }
         #endregion
     }

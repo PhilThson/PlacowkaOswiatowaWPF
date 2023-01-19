@@ -20,15 +20,19 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
     {
         #region Pola i właściwości
         public T Item { get; set; }
+        public string AddItemName { get; set; }
         protected readonly IMapper _mapper;
         #endregion
 
         #region Konstruktor
         public SingleItemViewModel(IPlacowkaRepository repository, IMapper mapper,
-            string displayName) 
+            string displayName, string addItemName = null) 
             : base(repository)
         {
-            base.DisplayName = displayName;
+            DisplayName = displayName;
+            AddItemName = string.IsNullOrEmpty(addItemName) ?
+               BaseResources.AddItem : addItemName;
+
             _mapper = mapper;
             _ClearFormCommand = new BaseCommand(ClearForm);
             _SaveAndCloseCommand = new AsyncCommand(
