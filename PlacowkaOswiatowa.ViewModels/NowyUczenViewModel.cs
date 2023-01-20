@@ -14,16 +14,25 @@ using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Models.Base;
 using System.Reflection;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using PlacowkaOswiatowa.Infrastructure.DataAccess;
+using PlacowkaOswiatowa.Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable, IEditable
     {
+        #region Pola prywatne
+        private readonly IServiceProvider _provider;
+        #endregion
+
         #region Konstruktor
-        public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper)
+        public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper, IServiceProvider provider)
             : base(repository, mapper, BaseResources.NowyUczen)
         {
-            Item = new UczenDto { Adres = new AdresDto() };
+            _provider = provider;
+            Item = new UczenDto { Adres = new AdresDto(), Oddzial = new OddzialDto() };
             //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
             this.ErrorsChanged += (s, e) =>
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -118,10 +127,11 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Pola i właściwości Ucznia
 
-        private ReadOnlyCollection<OddzialDto> _oddzialy;
-        public ReadOnlyCollection<OddzialDto> Oddzialy
+        private ObservableCollection<OddzialDto> _oddzialy;
+        public ObservableCollection<OddzialDto> Oddzialy
         {
             get => _oddzialy;
+            set => SetProperty(ref _oddzialy, value);
         }
 
         public OddzialDto WybranyOddzial
@@ -129,10 +139,10 @@ namespace PlacowkaOswiatowa.ViewModels
             get => Item.Oddzial;
             set
             {
-                if(value != null && value != Item.Oddzial)
+                if(value != Item.Oddzial)
                 {
                     Item.Oddzial = value;
-                    OnPropertyChanged(() => WybranyOddzial);
+                    OnPropertyChanged();
                 }
             }
         }
@@ -301,7 +311,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void ClearForm()
         {
-            Item = new UczenDto { Adres = new AdresDto() };
+            Item = new UczenDto { Adres = new AdresDto(), Oddzial = new OddzialDto() };
             base.ClearAllErrors();
             foreach(var prop in this.GetType().GetProperties())
                 this.OnPropertyChanged(prop.Name);
@@ -361,11 +371,18 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var oddzialyFromDb = await _repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
+                var oddzialyFromDb = new List<Oddzial>();
+                //Zabezpieczenie przed próbą dostępu do db kontekstu, który jest w użyciu
+                using (var scope = _provider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    oddzialyFromDb = await repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
+                }
+                
                 var listaOddzialow = _mapper.Map<List<OddzialDto>>(oddzialyFromDb);
 
-                _oddzialy = new ReadOnlyCollection<OddzialDto>(listaOddzialow);
-                OnPropertyChanged(() => Oddzialy);
+                Oddzialy = new ObservableCollection<OddzialDto>(listaOddzialow);
+                //OnPropertyChanged(() => Oddzialy);
             }
             catch (Exception e)
             {
@@ -378,17 +395,29 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var uczenFromDb = await _repository.Uczniowie.GetByIdAsync((int)objId) ??
+                Uczen uczenFromDb = null;
+                using (var scope = _provider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    uczenFromDb = await repository.Uczniowie.GetByIdAsync((int)objId);
+                }
+                _ = uczenFromDb ??
                     throw new DataNotFoundException(
                         $"Nie znaleziono ucznia o podanym identyfikatorze ({objId})");
 
                 base.DisplayName = BaseResources.EdycjaUcznia;
                 base.AddItemName = BaseResources.SaveItem;
+                _ = Oddzialy;
 
                 Item = _mapper.Map<UczenDto>(uczenFromDb);
                 Item.Adres ??= new AdresDto();
-                foreach (var prop in this.GetType().GetProperties())
+                foreach (var prop in Item.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);
+                foreach (var prop in Item.Adres.GetType().GetProperties())
+                    this.OnPropertyChanged(prop.Name);
+                WybranyOddzial = Item.Oddzial;
+                OnPropertyChanged(() => WybranyOddzial);
+                //OnPropertyChanged(() => Oddzialy);
             }
             catch (Exception e)
             {

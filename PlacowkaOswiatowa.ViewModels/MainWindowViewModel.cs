@@ -168,22 +168,30 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
         }
 
-        //Obsługa zdarzenia RequestCreateViewAsync
-        //pozwalającego ogłosić chęć utworzenia zakładki
-        //MainWindowViewModel subskrybuje do tego zdarzenia
+        //MainWindowViewModel nasłuchuje zdarzenia RequestCreateViewAsync
         //i na podstawie zadanego typu tworzy nową zakładkę
         private void OnWorkspaceRequestCreateView(object? sender, Type type)
         {
-            //Pobranie nazwy metody do wywołania (alternatywa do nameof())
-            Expression<Action> create = () => CreateView<WorkspaceViewModel>();
-            Expression<Action> createAsync = () => CreateViewAsync<WszyscyPracownicyViewModel>();
-            var action = type.IsAssignableTo(typeof(ILoadable)) ? createAsync : create;
-            var methodName = (action.Body as MethodCallExpression).Method.Name;
-            //Pobranie metody i wywołanie
-            MethodInfo method = this.GetType().GetMethod(methodName,
-                BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo genericMethod = method.MakeGenericMethod(type);
-            genericMethod.Invoke(this, null);
+            try
+            {
+                _ = type ?? throw new ArgumentNullException(
+                        "Nie podano typu zakładki do utworzenia");
+                //Pobranie nazwy metody do wywołania (alternatywa do nameof())
+                Expression<Action> create = () => CreateView<WorkspaceViewModel>();
+                Expression<Action> createAsync = () => CreateViewAsync<WszyscyPracownicyViewModel>();
+                var action = type.IsAssignableTo(typeof(ILoadable)) ? createAsync : create;
+                var methodName = (action.Body as MethodCallExpression).Method.Name;
+                //Pobranie metody i wywołanie
+                MethodInfo method = this.GetType().GetMethod(methodName,
+                    BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo genericMethod = method.MakeGenericMethod(type);
+                genericMethod.Invoke(this, null);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"Nie udało się utworzyć widoku. {e.Message}",
+                    "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void OnWorkspaceRequestClose(object? sender, EventArgs e)
@@ -209,8 +217,11 @@ namespace PlacowkaOswiatowa.ViewModels
 
                 var workspace = _provider.GetRequiredService(viewHandler.ViewType) as WorkspaceViewModel;
                 if (viewHandler.ViewType.IsAssignableTo(typeof(ILoadable)))
-                    Task.Run(async () => await (workspace as ILoadable).LoadAsync());
+                    //tutaj chciałby, żeby najpierw załadowały się potrzebne dane, 
+                    Task.Run(async () => await (workspace as ILoadable).LoadAsync()).GetAwaiter().GetResult();
+                //(workspace as ILoadable).LoadAsync();
 
+                //a następnie pobrany zostanie rekord do edycji
                 Task.Run(async () => await (workspace as IEditable).LoadItem(viewHandler.Value));
                 Workspaces.Add(workspace);
                 SetActiveWorkspace(workspace);

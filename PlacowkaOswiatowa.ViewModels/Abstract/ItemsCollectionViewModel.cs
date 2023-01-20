@@ -178,12 +178,12 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         #region Abstracts
         //właściwość określająca jaki typ zakładki dany ViewModel może utworzyć
-        protected abstract Type ItemToCreateType { get; }
         protected abstract void Load();
         protected abstract void Update();
         #endregion
 
         #region Virtuals
+        protected virtual Type ItemToCreateType { get; }
         protected virtual Func<T, string> SetOrderBySelector() =>
             item => string.Empty;
         protected virtual Func<T, bool> SetFilterPredicate() =>
