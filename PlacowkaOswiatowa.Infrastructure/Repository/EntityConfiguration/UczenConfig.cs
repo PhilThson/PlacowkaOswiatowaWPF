@@ -21,6 +21,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             builder
                 .HasIndex(u => u.Pesel)
                 .IsUnique();
+
+            builder.HasQueryFilter(u => u.CzyAktywny);
         }
     }
 }

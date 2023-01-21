@@ -53,13 +53,6 @@ namespace PlacowkaOswiatowa.ViewModels
         //inicjować komendy jeżeli jest wywoływana ponownie
         public ICommand UrlopPracownikaCommand =>
             new BaseCommand(CreateViewAsync<UrlopPracownikaViewModel>);
-
-        public ICommand NowaFakturaCommand => 
-            new BaseCommand(() => 
-                    CreateView<NowaFakturaViewModel>());
-        
-        public ICommand FakturyCommand => 
-            new BaseCommand(ShowSingleton<WszystkieFakturyViewModel>);
         
         public ICommand NowyPracownikCommand => 
             new BaseCommand(CreateView<NowyPracownikViewModel>);

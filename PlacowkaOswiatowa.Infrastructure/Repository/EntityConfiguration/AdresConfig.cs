@@ -22,6 +22,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .HasOne(a => a.Ulica)
                 .WithMany(p => p.UlicaAdresy)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasQueryFilter(a => a.CzyAktywny);
         }
     }
 }

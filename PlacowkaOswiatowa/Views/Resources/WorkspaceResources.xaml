@@ -728,5 +728,6 @@
     <converters:EnumToCollectionConverter x:Key="EnumToCollection"/>
     <converters:DictEntityToStringConverter x:Key="DictEntityToString"/>
     <converters:ObjectToVisibiltyConverter x:Key="ObjectToVisibility"/>
+    <converters:ObjectToEnableConverter x:Key="ObjectToEnable"/>
 
 </ResourceDictionary>

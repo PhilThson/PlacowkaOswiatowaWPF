@@ -94,10 +94,8 @@
                 <MenuItem Header="_Księgowość" IsEnabled="{Binding IsLoggedIn}">
                     <MenuItem Header="Faktury">
                         <MenuItem Header="Wszystkie" 
-                                  Command="{Binding FakturyCommand}" 
                                   IsEnabled="False"/>
                         <MenuItem Header="Dodawanie" 
-                                  Command="{Binding NowaFakturaCommand}" 
                                   IsEnabled="False"/>
                         <MenuItem Header="Zarobki pracownika" 
                                   ToolTip="Oblicz zarobki pracownika"
@@ -177,14 +175,12 @@
                 </ToggleButton>
                 <Separator/>
                 <ToggleButton Width="32" Height="32" Margin="2" 
-                              Command="{Binding NowaFakturaCommand}"
                               ToolTip="Nowa faktura" IsEnabled="False">
                     <ToggleButton.Background>
                         <ImageBrush ImageSource="../Icons/briefcase.png"/>
                     </ToggleButton.Background>
                 </ToggleButton>
                 <ToggleButton Width="32" Height="32" Margin="2"
-                        Command="{Binding FakturyCommand}"
                         ToolTip="Wszystkie faktury" IsEnabled="False">
                     <ToggleButton.Background>
                         <ImageBrush ImageSource="../Icons/networking.png"/>

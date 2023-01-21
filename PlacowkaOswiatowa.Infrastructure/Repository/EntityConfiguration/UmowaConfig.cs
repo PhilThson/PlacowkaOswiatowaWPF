@@ -38,6 +38,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .HasOne(u => u.Stanowisko)
                 .WithMany(s => s.StanowiskoUmowy)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasQueryFilter(u => u.CzyAktywny);
         }
     }
 }

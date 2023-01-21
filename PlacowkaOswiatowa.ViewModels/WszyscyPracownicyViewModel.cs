@@ -3,6 +3,7 @@ using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
@@ -17,6 +18,8 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
+        protected override Type EntityType => typeof(Pracownik);
+
         private readonly ISignalHub<ViewHandler> _signal;
         #endregion
 
@@ -50,7 +53,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            AllList = _mapper.Map<IEnumerable<PracownikDto>>(_repository.Pracownicy.GetAllAsync());
+            AllList = _mapper.Map<IEnumerable<PracownikDto>>(_repository.Pracownicy.GetAll());
             List = new ObservableCollection<PracownikDto>(AllList);
         }
 

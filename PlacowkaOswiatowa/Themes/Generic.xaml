@@ -52,8 +52,14 @@
                                               Margin="0 2"/>
                                 <ToggleButton Content="Modyfikuj"
                                               Command="{Binding EditCommand}"
+                                              IsEnabled="{Binding SelectedItem, 
+                                                Converter={StaticResource ObjectToEnable}}"
                                               Margin="0 2"/>
-                                <ToggleButton Content="Kasuj" Margin="0 2"/>
+                                <ToggleButton Content="Usuń" 
+                                              Command="{Binding DeleteCommand}"
+                                              IsEnabled="{Binding SelectedItem,
+                                                Converter={StaticResource ObjectToEnable}}"
+                                              Margin="0 2"/>
                                 <ToggleButton Content="Odswież" Margin="0 2"
                                               Command="{Binding UpdateCommand}"/>
                             </ToolBar>

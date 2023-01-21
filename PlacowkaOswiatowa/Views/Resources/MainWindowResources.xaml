@@ -11,18 +11,6 @@
         <views:UrlopPracownikaView/>
     </DataTemplate>
 
-    <!--<DataTemplate DataType="{x:Type viewmodels:NowyTowarViewModel}">
-        <views:NowyTowarView/>
-    </DataTemplate>-->
-
-    <DataTemplate DataType="{x:Type viewmodels:NowaFakturaViewModel}">
-        <views:NowaFakturaView/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type viewmodels:WszystkieFakturyViewModel}">
-        <views:WszystkieFakturyView/>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type viewmodels:NowyPracownikViewModel}">
         <views:NowyPracownikView />
     </DataTemplate>

@@ -9,6 +9,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
         public void Configure(EntityTypeBuilder<Pracownik> builder)
         {
             builder.HasIndex(p => p.Pesel).IsUnique();
+            builder.HasQueryFilter(p => p.CzyAktywny);
         }
     }
 }

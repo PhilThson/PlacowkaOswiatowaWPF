@@ -68,8 +68,6 @@ namespace PlacowkaOswiatowa
                     services.AddSingleton<WszyscyUczniowieViewModel>();
                     services.AddTransient<NowyPracownikViewModel>();
                     services.AddTransient<NowyUczenViewModel>();
-                    services.AddTransient<NowaFakturaViewModel>();
-                    services.AddTransient<WszystkieFakturyViewModel>();
                     services.AddTransient<ZarobkiPracownikaViewModel>();
                     services.AddTransient<UrlopPracownikaViewModel>();
                     services.AddSingleton<WszystkieAdresyViewModel>();

@@ -3,12 +3,12 @@ using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -18,6 +18,8 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola, właściwości, komendy
         protected override Type ItemToCreateType => typeof(NowyUczenViewModel);
+        protected override Type EntityType => typeof(Uczen);
+
         private readonly ISignalHub<ViewHandler> _signal;
         //public ICollectionView StudentsCollectionView { get; set; }
         #endregion

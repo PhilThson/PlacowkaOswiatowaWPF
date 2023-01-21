@@ -1,4 +1,5 @@
-﻿using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models.Base;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
 using System;
@@ -58,10 +59,24 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             where T : BaseDictionaryEntity<int> =>
             _dbContext.Set<T>().FirstOrDefault(e => e.Nazwa == name);
 
+        public T GetById<T>(int id)
+            where T : BaseEntity<int> =>
+            _dbContext.Set<T>().FirstOrDefault(e => e.Id == id);
+
         public async Task AddEntityAsync<T>(T entity)
             where T : class
         {
             await _dbContext.Set<T>().AddAsync(entity);
+        }
+
+        public void DeleteEntity<T>(T entityToDelete)
+            where T : BaseEntity<int>
+        {
+            if (_dbContext.Entry(entityToDelete).State == EntityState.Detached)
+                _dbContext.Set<T>().Attach(entityToDelete);
+
+            entityToDelete.CzyAktywny = false;
+            _dbContext.SaveChanges();
         }
     }
 }
