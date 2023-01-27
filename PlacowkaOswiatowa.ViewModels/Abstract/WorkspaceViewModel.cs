@@ -8,21 +8,29 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
     //Klasa zawierająca dane wspólne dla wszystkich zakładek
     public abstract class WorkspaceViewModel : BaseViewModel
     {
-        #region Pola
-        protected readonly IPlacowkaRepository _repository;
+        #region Pola i właściwości
+        protected readonly IServiceProvider _serviceProvider;
 
-        public string DisplayName { get; set; }
+        //ze względu na asynchroniczne tworzenie zakładek do edycji, 
+        //wyświetlana nazwa zakładki może się zmienić już po jej utworzeniu
+        private string _displayName;
+        public string DisplayName 
+        { 
+            get => _displayName; 
+            set => SetProperty(ref _displayName, value); 
+        }
         #endregion
 
         #region Konstruktor
-        public WorkspaceViewModel(IPlacowkaRepository repository)
+        public WorkspaceViewModel(IServiceProvider serviceProvider)
         {
-            _repository = repository;
+            _serviceProvider = serviceProvider;
         }
         #endregion
 
         #region Komendy
         private BaseCommand _CloseCommand;
+
         public ICommand CloseCommand
         {
             get

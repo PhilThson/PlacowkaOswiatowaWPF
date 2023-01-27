@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
 {
-    public class PracownikRepository : BaseEntityRepository<Pracownik, int>, IPracownikRepository
+    public class PracownikRepository : BaseEntityRepository<Pracownik, int>, 
+        IPracownikRepository
     {
         private readonly DbSet<Pracownik> _pracownikDbSet;
 
@@ -24,13 +25,13 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
                                             p.Nazwisko == uzytkownik.HashHasla);
         }
 
-        public async Task<IEnumerable<Pracownik>> GetAllAsync() =>
+        public async Task<List<Pracownik>> GetAllAsync() =>
             await _pracownikDbSet
                 .IncludeUmowa(p => p.PracownikUmowa)
                 .IncludePracownicyAdresy()
                 .ToListAsync();
 
-        public IEnumerable<Pracownik> GetAll() =>
+        public List<Pracownik> GetAll() =>
             _pracownikDbSet
                 .IncludeUmowa(p => p.PracownikUmowa)
                 .IncludePracownicyAdresy()

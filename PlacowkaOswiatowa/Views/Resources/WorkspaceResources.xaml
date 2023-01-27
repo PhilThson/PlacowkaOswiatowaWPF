@@ -729,5 +729,7 @@
     <converters:DictEntityToStringConverter x:Key="DictEntityToString"/>
     <converters:ObjectToVisibiltyConverter x:Key="ObjectToVisibility"/>
     <converters:ObjectToEnableConverter x:Key="ObjectToEnable"/>
+    <converters:PracownikDtoToStringConverter x:Key="PracownikDtoToString"/>
+    <converters:BaseEntityToIsEnabledConverter x:Key="BaseEntityToIsEnabled"/>
 
 </ResourceDictionary>

@@ -18,17 +18,17 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
         IPracodawcaRepository Pracodawcy { get; }
         bool CanConnect();
         Task SaveAsync();
+        void Save();
+        void Dispose();
 
-        T GetByName<T>(string names)
-            where T : BaseDictionaryEntity<int>;
+        T GetByName<T>(string names) where T : BaseDictionaryEntity<int>;
 
-        public T GetById<T>(int id)
-            where T : BaseEntity<int>;
+        public T GetById<T>(int id) where T : BaseEntity<int>;
 
-        Task AddEntityAsync<T>(T entity)
-            where T : class;
+        Task AddAsync<T>(T entity) where T : class;
 
-        public void DeleteEntity<T>(T entityToDelete)
-            where T : BaseEntity<int>;
+        public void Delete<T>(T entityToDelete) where T : BaseEntity<int>;
+
+        void Update<T>(T entity) where T : class;
     }
 }

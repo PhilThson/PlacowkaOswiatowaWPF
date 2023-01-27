@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
 {
-    public class PracodawcaRepository : BaseEntityRepository<Pracodawca, byte>, IPracodawcaRepository
+    public class PracodawcaRepository : BaseEntityRepository<Pracodawca, byte>, 
+        IPracodawcaRepository
     {
         private readonly DbSet<Pracodawca> _pracodawcaSet;
 
@@ -17,7 +18,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             _pracodawcaSet = context.Set<Pracodawca>();
         }
 
-        public async Task<IEnumerable<Pracodawca>> GetAllAsync() =>
+        public async Task<List<Pracodawca>> GetAllAsync() =>
             await _pracodawcaSet
                 .IncludeAdres(p => p.Adres)
                 .ToListAsync();

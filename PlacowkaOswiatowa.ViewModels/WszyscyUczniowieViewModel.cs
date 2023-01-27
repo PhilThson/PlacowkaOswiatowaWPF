@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
@@ -25,8 +26,8 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Konstruktor
-        public WszyscyUczniowieViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.WszyscyUczniowie, BaseResources.DodajUcznia)
+        public WszyscyUczniowieViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.WszyscyUczniowie, BaseResources.DodajUcznia)
         {
             _signal = SignalHub<ViewHandler>.Instance;
             //StudentsCollectionView = CollectionViewSource.GetDefaultView(List);
@@ -38,8 +39,13 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var uczniowieFromDb = await _repository.Uczniowie.GetAllAsync();
-                AllList = _mapper.Map<List<UczenDto>>(uczniowieFromDb);
+                var uczniowie = new List<Uczen>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    uczniowie = await repository.Uczniowie.GetAllAsync();
+                }
+                AllList = _mapper.Map<List<UczenDto>>(uczniowie);
                 List = new ObservableCollection<UczenDto>(AllList);
             }
 
@@ -56,7 +62,13 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            AllList = _mapper.Map<List<UczenDto>>(_repository.Uczniowie.GetAll());
+            var uczniowie = new List<Uczen>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                uczniowie = repository.Uczniowie.GetAll();
+            }
+            AllList = _mapper.Map<List<UczenDto>>(uczniowie);
             List = new ObservableCollection<UczenDto>(AllList);
         }
 

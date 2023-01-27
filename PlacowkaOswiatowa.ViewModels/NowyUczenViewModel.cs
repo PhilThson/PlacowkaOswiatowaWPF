@@ -15,24 +15,17 @@ using PlacowkaOswiatowa.Domain.Models.Base;
 using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using PlacowkaOswiatowa.Infrastructure.DataAccess;
-using PlacowkaOswiatowa.Infrastructure.Repository;
-using Microsoft.EntityFrameworkCore;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, ILoadable, IEditable
+    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, 
+        ILoadable, IEditable
     {
-        #region Pola prywatne
-        private readonly IServiceProvider _provider;
-        #endregion
-
         #region Konstruktor
-        public NowyUczenViewModel(IPlacowkaRepository repository, IMapper mapper, IServiceProvider provider)
-            : base(repository, mapper, BaseResources.NowyUczen)
+        public NowyUczenViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.NowyUczen)
         {
-            _provider = provider;
-            Item = new UczenDto { Adres = new AdresDto(), Oddzial = new OddzialDto() };
+            Item = new UczenDto { Adres = new AdresDto() };
             //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
             this.ErrorsChanged += (s, e) =>
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -134,7 +127,7 @@ namespace PlacowkaOswiatowa.ViewModels
             set => SetProperty(ref _oddzialy, value);
         }
 
-        public OddzialDto WybranyOddzial
+        public OddzialDto Oddzial
         {
             get => Item.Oddzial;
             set
@@ -142,6 +135,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if(value != Item.Oddzial)
                 {
                     Item.Oddzial = value;
+                    ClearErrors(nameof(Oddzial));
                     OnPropertyChanged();
                 }
             }
@@ -252,44 +246,49 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (uczen.OddzialId != default)
                     uczen.Oddzial = null;
 
-                var uczenFromDb = await _repository.Uczniowie.GetUczenByPesel(uczen.Pesel);
-                if (uczenFromDb != null)
-                    throw new DataValidationException("Uczeń o podanym nr PESEL już istnieje");
-                
-                var adres = _mapper.Map<Adres>(Item.Adres);
-
-                var adresFromDb = await _repository.Adresy.GetAdresAsync(adres);
-                if (adresFromDb is not null)
-                    uczen.AdresId = adresFromDb.Id;
-                else
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    uczen.Adres = adres;
-                    //Dla powiązanych encji sprawdź czy istnieje rekord o zadanej nazwie,
-                    //jeżeli tak, to pobierz istniejący, jeżeli nie, to utwórz nowy
-                    var properties = uczen.Adres.GetType().GetProperties()
-                        .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
-                        .ToList();
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    foreach (var prop in properties)
+                    var uczenFromDb = await repository.Uczniowie.GetUczenByPesel(uczen.Pesel);
+                    if (uczenFromDb != null)
+                        throw new DataValidationException("Uczeń o podanym nr PESEL już istnieje");
+
+                    var adres = _mapper.Map<Adres>(Item.Adres);
+
+                    var adresFromDb = await repository.Adresy.GetAdresAsync(adres);
+                    if (adresFromDb is not null)
+                        uczen.AdresId = adresFromDb.Id;
+                    else
                     {
-                        var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
-                        MethodInfo method = _repository.GetType().GetMethod("GetByName",
-                            BindingFlags.Public | BindingFlags.Instance);
-                        MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
-                        var result = genericMethod.Invoke(_repository, new object[] { toSearch });
-                        var entity = result as BaseDictionaryEntity<int>;
-                        if (entity != null)
+                        uczen.Adres = adres;
+                        //Dla powiązanych encji sprawdź czy istnieje rekord o zadanej nazwie,
+                        //jeżeli tak, to pobierz istniejący, jeżeli nie, to utwórz nowy
+                        var properties = uczen.Adres.GetType().GetProperties()
+                            .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
+                            .ToList();
+
+                        foreach (var prop in properties)
                         {
-                            prop.SetValue(uczen.Adres, null);
-                            var propId = $"{prop.Name}Id";
-                            var propIdInfo = uczen.Adres.GetType().GetProperty(propId);
-                            propIdInfo.SetValue(uczen.Adres, entity.Id);
+                            var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
+                            MethodInfo method = repository.GetType().GetMethod("GetByName",
+                                BindingFlags.Public | BindingFlags.Instance);
+                            MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                            var result = genericMethod.Invoke(repository, new object[] { toSearch });
+                            var entity = result as BaseDictionaryEntity<int>;
+                            if (entity != null)
+                            {
+                                prop.SetValue(uczen.Adres, null);
+                                var propId = $"{prop.Name}Id";
+                                var propIdInfo = uczen.Adres.GetType().GetProperty(propId);
+                                propIdInfo.SetValue(uczen.Adres, entity.Id);
+                            }
                         }
                     }
-                }
 
-                await _repository.Uczniowie.AddAsync(uczen);
-                await _repository.SaveAsync();
+                    await repository.Uczniowie.AddAsync(uczen);
+                    await repository.SaveAsync();
+                }
 
                 MessageBox.Show("Dodano ucznia!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -312,56 +311,20 @@ namespace PlacowkaOswiatowa.ViewModels
         protected override void ClearForm()
         {
             Item = new UczenDto { Adres = new AdresDto(), Oddzial = new OddzialDto() };
-            base.ClearAllErrors();
-            foreach(var prop in this.GetType().GetProperties())
-                this.OnPropertyChanged(prop.Name);
+            base.ClearForm();
         }
 
-        protected override bool SaveAndCloseCanExecute() => !HasErrors;
-
-        private void CheckRequiredProperties()
-        {
-            if (string.IsNullOrEmpty(Imie))
-            {
-                AddError(nameof(Imie), "Należy podać imię");
-                OnPropertyChanged(nameof(Imie));
-            }
-            if (string.IsNullOrEmpty(Nazwisko))
-            {
-                AddError(nameof(Nazwisko), "Należy podać nazwisko");
-                OnPropertyChanged(nameof(Nazwisko));
-            }
-            if (string.IsNullOrEmpty(DataUrodzenia.ToString()))
-            {
-                AddError(nameof(DataUrodzenia), "Należy podać datę urodzenia");
-                OnPropertyChanged(nameof(DataUrodzenia));
-            }
-            if (string.IsNullOrEmpty(Pesel))
-            {
-                AddError(nameof(Pesel), "Należy podać PESEL");
-                OnPropertyChanged(nameof(Pesel));
-            }
-            if (string.IsNullOrEmpty(Panstwo))
-            {
-                AddError(nameof(Panstwo), "Należy podać państwo");
-                OnPropertyChanged(nameof(Panstwo));
-            }
-            if (string.IsNullOrEmpty(Miejscowosc))
-            {
-                AddError(nameof(Miejscowosc), "Należy podać miejscowość");
-                OnPropertyChanged(nameof(Miejscowosc));
-            }
-            if (string.IsNullOrEmpty(NumerDomu))
-            {
-                AddError(nameof(NumerDomu), "Należy podać numer domu");
-                OnPropertyChanged(nameof(NumerDomu));
-            }
-            if (string.IsNullOrEmpty(KodPocztowy))
-            {
-                AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
-                OnPropertyChanged(nameof(KodPocztowy));
-            }
-        }
+        private void CheckRequiredProperties() =>
+            base.CheckRequiredProperties(
+                nameof(Imie),
+                nameof(Nazwisko),
+                nameof(DataUrodzenia),
+                nameof(Pesel),
+                nameof(Oddzial),
+                "Adres.Panstwo",
+                "Adres.Miejscowosc",
+                "Adres.NumerDomu",
+                "Adres.KodPocztowy");
 
         #endregion
 
@@ -373,7 +336,7 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 var oddzialyFromDb = new List<Oddzial>();
                 //Zabezpieczenie przed próbą dostępu do db kontekstu, który jest w użyciu
-                using (var scope = _provider.CreateScope())
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
                     oddzialyFromDb = await repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
@@ -396,10 +359,14 @@ namespace PlacowkaOswiatowa.ViewModels
             try
             {
                 Uczen uczenFromDb = null;
-                using (var scope = _provider.CreateScope())
+                var uczenId = Convert.ToInt32(objId);
+                if (uczenId == default)
+                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+                using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    uczenFromDb = await repository.Uczniowie.GetByIdAsync((int)objId);
+                    uczenFromDb = await repository.Uczniowie.GetByIdAsync(uczenId);
                 }
                 _ = uczenFromDb ??
                     throw new DataNotFoundException(
@@ -407,21 +374,15 @@ namespace PlacowkaOswiatowa.ViewModels
 
                 base.DisplayName = BaseResources.EdycjaUcznia;
                 base.AddItemName = BaseResources.SaveItem;
-                _ = Oddzialy;
 
                 Item = _mapper.Map<UczenDto>(uczenFromDb);
                 Item.Adres ??= new AdresDto();
-                foreach (var prop in Item.GetType().GetProperties())
+                foreach (var prop in this.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);
-                foreach (var prop in Item.Adres.GetType().GetProperties())
-                    this.OnPropertyChanged(prop.Name);
-                WybranyOddzial = Item.Oddzial;
-                OnPropertyChanged(() => WybranyOddzial);
-                //OnPropertyChanged(() => Oddzialy);
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Nie udało się pobrać danych ucznia. {e.Message}",
+                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

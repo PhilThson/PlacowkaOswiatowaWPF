@@ -40,20 +40,15 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             _dbContext = dbContext;
         }
 
-        public bool CanConnect()
-        {
-            return _dbContext.Database.CanConnect();
-        }
+        public bool CanConnect() =>
+            _dbContext.Database.CanConnect();
 
-        public async Task SaveAsync()
-        {
+        public async Task SaveAsync() =>
             await _dbContext.SaveChangesAsync();
-        }
 
-        public void Dispose()
-        {
-            _dbContext.Dispose();
-        }
+        public void Save() => _dbContext.SaveChanges();
+
+        public void Dispose() => _dbContext.Dispose();
 
         public T GetByName<T>(string name)
             where T : BaseDictionaryEntity<int> =>
@@ -63,20 +58,24 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             where T : BaseEntity<int> =>
             _dbContext.Set<T>().FirstOrDefault(e => e.Id == id);
 
-        public async Task AddEntityAsync<T>(T entity)
-            where T : class
-        {
+        public async Task AddAsync<T>(T entity)
+            where T : class =>
             await _dbContext.Set<T>().AddAsync(entity);
-        }
 
-        public void DeleteEntity<T>(T entityToDelete)
+        public void Delete<T>(T entity)
             where T : BaseEntity<int>
         {
-            if (_dbContext.Entry(entityToDelete).State == EntityState.Detached)
-                _dbContext.Set<T>().Attach(entityToDelete);
+            if (_dbContext.Entry(entity).State == EntityState.Detached)
+                _dbContext.Set<T>().Attach(entity);
 
-            entityToDelete.CzyAktywny = false;
-            _dbContext.SaveChanges();
+            entity.CzyAktywny = false;
+        }
+
+        public void Update<T>(T entity)
+            where T : class
+        {
+            _dbContext.Set<T>().Attach(entity);
+            _dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
 }

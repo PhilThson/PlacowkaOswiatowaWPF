@@ -129,11 +129,17 @@
   <data name="DodajUcznia" xml:space="preserve">
     <value>Dodaj ucznia</value>
   </data>
+  <data name="DodajUmowe" xml:space="preserve">
+    <value>Dodaj umowę</value>
+  </data>
   <data name="EdycjaPracownika" xml:space="preserve">
     <value>Edycja pracownika</value>
   </data>
   <data name="EdycjaUcznia" xml:space="preserve">
     <value>Edycja ucznia</value>
+  </data>
+  <data name="EdycjaUmowy" xml:space="preserve">
+    <value>Edycja umowy</value>
   </data>
   <data name="Faktura" xml:space="preserve">
     <value>Faktura</value>
@@ -179,6 +185,9 @@
   </data>
   <data name="WszystkieStanowiska" xml:space="preserve">
     <value>Wszystkie Stanowiska</value>
+  </data>
+  <data name="WszystkieUmowy" xml:space="preserve">
+    <value>Wszystkie umowy</value>
   </data>
   <data name="WszystkieUrlopy" xml:space="preserve">
     <value>Wszystkie Urlopy</value>

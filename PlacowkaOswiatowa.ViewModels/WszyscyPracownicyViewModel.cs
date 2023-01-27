@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
@@ -24,8 +25,8 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Konstruktor
-        public WszyscyPracownicyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
+        public WszyscyPracownicyViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
         {
             _signal = SignalHub<ViewHandler>.Instance;
         }
@@ -36,8 +37,13 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
-                AllList = _mapper.Map<IEnumerable<PracownikDto>>(pracownicyFormDb);
+                var pracownicy = new List<Pracownik>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    pracownicy = await repository.Pracownicy.GetAllAsync();
+                }
+                AllList = _mapper.Map<IEnumerable<PracownikDto>>(pracownicy);
                 List = new ObservableCollection<PracownikDto>(AllList);
             }
             catch(Exception e)
@@ -53,7 +59,13 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            AllList = _mapper.Map<IEnumerable<PracownikDto>>(_repository.Pracownicy.GetAll());
+            var pracownicy = new List<Pracownik>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                pracownicy = repository.Pracownicy.GetAll();
+            }
+            AllList = _mapper.Map<List<PracownikDto>>(pracownicy);
             List = new ObservableCollection<PracownikDto>(AllList);
         }
 

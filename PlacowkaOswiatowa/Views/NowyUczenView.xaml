@@ -88,27 +88,11 @@
                 <Label Grid.Row="0" Grid.Column="1" Content="Oddział:"/>
                 <ComboBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" x:Name="OddzialComboBox"
                           ItemsSource="{Binding Oddzialy, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedValue="{Binding WybranyOddzial, Mode=TwoWay}"
+                          SelectedValue="{Binding Oddzial, Mode=TwoWay}"
                           DisplayMemberPath="Nazwa"
-                          Text="{Binding WybranyOddzial.Nazwa, 
+                          Text="{Binding Oddzial.Nazwa, 
                             UpdateSourceTrigger=PropertyChanged}"
                           />
-                <!--<TextBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" TextWrapping="Wrap" 
-                          Text="{Binding WybranyOddzial.Nazwa, UpdateSourceTrigger=PropertyChanged}"/>-->
-                    <!--<ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Nazwa}"/>
-                                <TextBlock Text=", Wychowawca: "/>
-                                <TextBlock Text="{Binding Pracownik.Imie}"/>
-                                <TextBlock Text=" "/>
-                                <TextBlock Text="{Binding Pracownik.Nazwisko}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                    
-                </ComboBox>-->
-
             </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="2" Header="Adres ucznia">

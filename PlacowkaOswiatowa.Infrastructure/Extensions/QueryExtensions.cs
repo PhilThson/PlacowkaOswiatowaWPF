@@ -37,5 +37,13 @@ namespace PlacowkaOswiatowa.Infrastructure.Extensions
             .Include(p => p.PracownikPracownicyAdresy).ThenInclude(pa => pa.Adres).ThenInclude(a => a.Miejscowosc)
             .Include(p => p.PracownikPracownicyAdresy).ThenInclude(pa => pa.Adres).ThenInclude(a => a.Ulica)
             ;
+
+        public static IQueryable<T> IncludePracodawca<T>(this IQueryable<T> query,
+            Expression<Func<T, Pracodawca>> expression) where T : class =>
+            query
+            .Include(expression).ThenInclude(p => p.Adres).ThenInclude(a => a.Panstwo)
+            .Include(expression).ThenInclude(p => p.Adres).ThenInclude(a => a.Miejscowosc)
+            .Include(expression).ThenInclude(p => p.Adres).ThenInclude(a => a.Ulica)
+            ;
     }
 }

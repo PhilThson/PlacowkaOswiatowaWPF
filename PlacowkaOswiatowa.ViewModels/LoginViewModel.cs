@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
@@ -16,8 +17,8 @@ namespace PlacowkaOswiatowa.ViewModels
     public class LoginViewModel : SingleItemViewModel<UzytkownikDto>
     {
         #region Konstruktor
-        public LoginViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.LoginPage)
+        public LoginViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.LoginPage)
         {
             _signal = SignalHub<string>.Instance;
             //DisplayStatusMessage("Logowanie do aplikacji");
@@ -87,8 +88,12 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 try
                 {
-                    bool czyJestPracownikiem = await _repository.Pracownicy.UserExists(uzytkownik);
-
+                    bool czyJestPracownikiem = false;
+                    using (var provider = _serviceProvider.CreateScope())
+                    {
+                        var repository = provider.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                        czyJestPracownikiem = await repository.Pracownicy.UserExists(uzytkownik);
+                    }
                     if (czyJestPracownikiem == true)
                     {
                         _signal.RaiseLoggedInChanged();

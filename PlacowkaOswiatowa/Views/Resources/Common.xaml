@@ -160,6 +160,7 @@
     <Color x:Key="StandardButtonBackgroundColor">#FF4682B4</Color>
     <Color x:Key="StandardButtonMouseEnterBackgroundColor">#FF0000CD</Color>
     <Color x:Key="StandardButtonPressedBackgroundColor">#FF0F3656</Color>
+    <Color x:Key="StandardButtonForegroundColor">#FFFF</Color>
 
     <Color x:Key="RedButtonBackgroundColor">#FFB22222</Color>
     <Color x:Key="RedButtonBackgroundDisabledColor">#FFCD5C5C</Color>

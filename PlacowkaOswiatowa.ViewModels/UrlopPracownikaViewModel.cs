@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
@@ -15,8 +17,8 @@ namespace PlacowkaOswiatowa.ViewModels
     public class UrlopPracownikaViewModel : SingleItemViewModel<UrlopPracownikaDto>, ILoadable
     {
         #region Konstruktor
-        public UrlopPracownikaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.UrlopPracownika)
+        public UrlopPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.UrlopPracownika)
         {
             Item = new UrlopPracownikaDto { Pracownik = new PracownikDto() };
             _pracownikIsVisible = "Collapsed";
@@ -32,10 +34,14 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
-                var pracownicy = _mapper.Map<List<PracownikDto>>(pracownicyFormDb);
-
-                _pracownicy = new ReadOnlyCollection<PracownikDto>(pracownicy);
+                var pracownicy = new List<Pracownik>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    pracownicy = await repository.Pracownicy.GetAllAsync();
+                }
+                var pracownicyList = _mapper.Map<List<PracownikDto>>(pracownicy);
+                _pracownicy = new ReadOnlyCollection<PracownikDto>(pracownicyList);
                 OnPropertyChanged(() => Pracownicy);
             }
             catch (Exception e)

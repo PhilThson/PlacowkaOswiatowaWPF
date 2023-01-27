@@ -6,10 +6,6 @@ namespace PlacowkaOswiatowa.Domain.DTOs
 {
     public class PracownikDto : IBaseEntity<object>
     {
-        //Warstwa pośrednicząca przydatna do wyświetlania danych
-        //np. format DateTime można przekonwertować na string
-        //nie trzeba zawierać wszystkich danych
-        //można dokonywać sprawdzeń
         public object Id { get; set; }
         public string Imie { get; set; }
         public string DrugieImie { get; set; }

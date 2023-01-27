@@ -6,6 +6,6 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
 {
     public interface IPracodawcaRepository : IBaseEntityRepository<Pracodawca, byte>
     {
-        Task<IEnumerable<Pracodawca>> GetAllAsync();
+        Task<List<Pracodawca>> GetAllAsync();
     }
 }

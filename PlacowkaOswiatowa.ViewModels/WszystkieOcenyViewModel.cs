@@ -9,6 +9,9 @@ using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using AutoMapper;
 using PlacowkaOswiatowa.Domain.DTOs;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using PlacowkaOswiatowa.Domain.Models;
+using System.Linq;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -20,8 +23,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
 
         #region Konstruktor
-        public WszystkieOcenyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.WszystkieOceny)
+        public WszystkieOcenyViewModel(IServiceProvider serviceProvide, IMapper mapper)
+            : base(serviceProvide, mapper, BaseResources.WszystkieOceny)
         { }
         #endregion
 
@@ -30,9 +33,14 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var ocenyFromDb = await _repository.Oceny.GetAllAsync(
-                    includeProperties: "Uczen,Pracownik,Przedmiot");
-                AllList = _mapper.Map<List<OcenaDto>>(ocenyFromDb);
+                var oceny = new List<Ocena>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    oceny = await repository.Oceny.GetAllAsync(
+                        includeProperties: "Uczen,Pracownik,Przedmiot");
+                }
+                AllList = _mapper.Map<List<OcenaDto>>(oceny);
                 List = new ObservableCollection<OcenaDto>(AllList);
             }
             catch (Exception)
@@ -51,9 +59,14 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            AllList = _mapper.Map<List<OcenaDto>>(
-                    _repository.Oceny.GetAll(
-                        includeProperties: "Uczen,Pracownik,Przedmiot"));
+            var oceny = new List<Ocena>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                oceny = repository.Oceny.GetAll(
+                    includeProperties: "Uczen,Pracownik,Przedmiot").ToList();
+            }
+            AllList = _mapper.Map<List<OcenaDto>>(oceny);
             List = new ObservableCollection<OcenaDto>(AllList);
         }
         #endregion

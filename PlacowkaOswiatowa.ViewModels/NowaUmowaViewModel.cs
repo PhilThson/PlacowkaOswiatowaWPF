@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
@@ -14,19 +15,27 @@ using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowaUmowaViewModel : SingleItemViewModel<UmowaDto>, ILoadable
+    public class NowaUmowaViewModel : SingleItemViewModel<UmowaDto>, 
+        ILoadable, IEditable
     {
         #region Konstruktor
-        public NowaUmowaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.NowaUmowa)
+        public NowaUmowaViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.NowaUmowa)
         {
-            Item = new UmowaDto { Etat = new Etat(), Stanowisko = new Stanowisko() };
+            Item = new UmowaDto();
         }
         #endregion
 
         #region Właściwości umowy
-        private ReadOnlyCollection<PracownikDto> _pracownicy;
-        public ReadOnlyCollection<PracownikDto> Pracownicy
+        private bool _IsForEdit;
+        public bool IsForEdit 
+        {
+            get => _IsForEdit;
+            set => SetProperty(ref _IsForEdit, value);
+        }
+
+        private ObservableCollection<PracownikDto> _pracownicy;
+        public ObservableCollection<PracownikDto> Pracownicy
         {
             get => _pracownicy;
             set
@@ -36,17 +45,17 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        public PracownikDto WybranyPracownik
+        public PracownikDto Pracownik
         {
             get => Item.Pracownik;
             set
             {
-                Item.Pracownik = value;
-                OnPropertyChanged(() => WybranyPracownik);
-                if (value != null)
+                if (value != Item.Pracownik && value != null) 
                 {
-                    //RaisePracownikChaged();
-                    //PracownikIsVisible = "Visible";
+                    Item.Pracownik = value;
+                    ClearErrors(nameof(Pracownik));
+
+                    OnPropertyChanged(() => Pracownik);
                 }
             }
         }
@@ -62,7 +71,7 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        public PracodawcaDto WybranyPracodawca
+        public PracodawcaDto Pracodawca
         {
             get => Item.Pracodawca;
             set
@@ -70,9 +79,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Pracodawca)
                 {
                     Item.Pracodawca = value;
-                    OnPropertyChanged(() => WybranyPracodawca);
-                    //RaisePracownikChaged();
-                    //PracownikIsVisible = "Visible";
+                    ClearErrors(nameof(Pracodawca));
+                    OnPropertyChanged(() => Pracodawca);
                 }
             }
         }
@@ -84,6 +92,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DataRozpoczeciaPracy)
                 {
                     Item.DataRozpoczeciaPracy = value;
+                    ClearErrors(nameof(DataRozpoczeciaPracy));
                     OnPropertyChanged(() => DataRozpoczeciaPracy);
                 }
             }
@@ -108,6 +117,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.DataZawarciaUmowy)
                 {
                     Item.DataZawarciaUmowy = value;
+                    ClearErrors(nameof(DataZawarciaUmowy));
                     OnPropertyChanged(() => DataZawarciaUmowy);
                 }
             }
@@ -144,6 +154,11 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.MiejsceWykonywaniaPracy)
                 {
                     Item.MiejsceWykonywaniaPracy = value;
+                    ClearErrors(nameof(MiejsceWykonywaniaPracy));
+                    if (Item.MiejsceWykonywaniaPracy.Length < 1)
+                        AddError(nameof(MiejsceWykonywaniaPracy), 
+                            "Należy podać miejsce wykonywanej pracy");
+
                     OnPropertyChanged(() => MiejsceWykonywaniaPracy);
                 }
             }
@@ -156,6 +171,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.WymiarCzasuPracy)
                 {
                     Item.WymiarCzasuPracy = value;
+                    ClearErrors(nameof(WymiarCzasuPracy));
                     OnPropertyChanged(() => WymiarCzasuPracy);
                 }
             }
@@ -180,6 +196,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.OkresPracy)
                 {
                     Item.OkresPracy = value;
+                    ClearErrors(nameof(OkresPracy));
                     OnPropertyChanged(() => OkresPracy);
                 }
             }
@@ -208,8 +225,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
             }
         }
-        private ReadOnlyCollection<Stanowisko> _stanowiska;
-        public ReadOnlyCollection<Stanowisko> Stanowiska
+        private ObservableCollection<Stanowisko> _stanowiska;
+        public ObservableCollection<Stanowisko> Stanowiska
         {
             get => _stanowiska;
             set
@@ -218,7 +235,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 OnPropertyChanged(() => Stanowiska);
             }
         }
-        public Stanowisko WybraneStanowisko
+        public Stanowisko Stanowisko
         {
             get => Item.Stanowisko;
             set
@@ -226,12 +243,13 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Stanowisko)
                 {
                     Item.Stanowisko = value;
-                    OnPropertyChanged(() => WybraneStanowisko);
+                    ClearErrors(nameof(Stanowisko));
+                    OnPropertyChanged(() => Stanowisko);
                 }
             }
         }
-        private ReadOnlyCollection<Etat> _etaty;
-        public ReadOnlyCollection<Etat> Etaty
+        private ObservableCollection<Etat> _etaty;
+        public ObservableCollection<Etat> Etaty
         {
             get => _etaty;
             set
@@ -240,7 +258,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 OnPropertyChanged(() => Etaty);
             }
         }
-        public Etat WybranyEtat
+        public Etat Etat
         {
             get => Item.Etat;
             set
@@ -248,7 +266,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.Etat)
                 {
                     Item.Etat = value;
-                    OnPropertyChanged(() => WybranyEtat);
+                    ClearErrors(nameof(Etat));
+                    OnPropertyChanged(() => Etat);
                 }
             }
         }
@@ -260,6 +279,10 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.WynagrodzenieBrutto)
                 {
                     Item.WynagrodzenieBrutto = value;
+                    ClearErrors(nameof(WynagrodzenieBrutto));
+                    if (Item.WynagrodzenieBrutto == 0)
+                        AddError(nameof(WynagrodzenieBrutto), "Należy podać wynagrodzenie");
+
                     OnPropertyChanged(() => WynagrodzenieBrutto);
                 }
             }
@@ -271,19 +294,28 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var etatyFromDb = await _repository.Etaty.GetAllAsync();
-                Etaty = new ReadOnlyCollection<Etat>(etatyFromDb);
+                var pracownicy = new List<Pracownik>();
+                var pracodawcy = new List<Pracodawca>();
+                var etaty = new List<Etat>();
+                var stanowiska = new List<Stanowisko>();
+                using (var scoper = _serviceProvider.CreateScope())
+                {
+                    var repository = scoper.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                var stanowiskaFromDb = await _repository.Stanowiska.GetAllAsync();
-                Stanowiska = new ReadOnlyCollection<Stanowisko>(stanowiskaFromDb);
+                    pracownicy = await repository.Pracownicy.GetAllAsync(
+                        p => p.PracownikUmowa == null, "PracownikUmowa");
+                    pracodawcy = await repository.Pracodawcy.GetAllAsync();
+                    etaty = await repository.Etaty.GetAllAsync();
+                    stanowiska = await repository.Stanowiska.GetAllAsync();
+                }
+                var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicy);
+                Pracownicy = new ObservableCollection<PracownikDto>(listaPracownikow);
 
-                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
-                var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicyFormDb);
-                Pracownicy = new ReadOnlyCollection<PracownikDto>(listaPracownikow);
-
-                var pracodawcyFromDb = await _repository.Pracodawcy.GetAllAsync();
-                var listaPracodawcow = _mapper.Map<List<PracodawcaDto>>(pracodawcyFromDb);
+                var listaPracodawcow = _mapper.Map<List<PracodawcaDto>>(pracodawcy);
                 Pracodawcy = new ReadOnlyCollection<PracodawcaDto>(listaPracodawcow);
+
+                Etaty = new ObservableCollection<Etat>(etaty);
+                Stanowiska = new ObservableCollection<Stanowisko>(stanowiska);
             }
             catch (Exception)
             {
@@ -291,24 +323,69 @@ namespace PlacowkaOswiatowa.ViewModels
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        public async Task LoadItem(object objId)
+        {
+            try
+            {
+                Umowa umowa = null;
+                var umowaId = Convert.ToInt32(objId);
+                if (umowaId == default)
+                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    umowa = await repository.Umowy.GetByIdAsync(umowaId) ?? 
+                        throw new DataNotFoundException(
+                            $"Nie znaleziono umowy o podanym identyfikatorze ({umowaId})");
+                }
+
+                Item = _mapper.Map<UmowaDto>(umowa);
+
+                base.DisplayName = BaseResources.EdycjaUmowy;
+                base.AddItemName = BaseResources.SaveItem;
+                IsForEdit = true;
+
+                foreach (var prop in Item.GetType().GetProperties())
+                    this.OnPropertyChanged(prop.Name);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         #endregion
 
         #region Obsługa komend
         protected override async Task<bool> SaveAsync()
         {
+            CheckRequiredProperties();
+            if (HasErrors) return false;
             try
             {
-                var nowaUmowa = Item;
-                var umowa = _mapper.Map<Umowa>(nowaUmowa);
-                var czyIstnieje = await _repository.Umowy.Exists(Item);
-                if (czyIstnieje)
-                    throw new DataValidationException(
-                        "Umowa pomiędzy wybranymi podmiotami już istnieje.");
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    var umowa = _mapper.Map<Umowa>(Item);
+                    if (umowa.Id == default)
+                    {
+                        //nie jest spradzane, ponieważ do wyboru są tylko pracownicy bez umowy
+                        //var czyIstnieje = await _repository.Umowy.Exists(Item);
+                        //if (czyIstnieje)
+                        //    throw new DataValidationException(
+                        //        "Umowa pomiędzy wybranymi podmiotami już istnieje.");
 
-                await _repository.Umowy.AddAsync(umowa);
-                await _repository.SaveAsync();
+                        await repository.Umowy.AddAsync(umowa);
+                    }
+                    else
+                        repository.Update(umowa);
 
-                MessageBox.Show("Dodano umowę!", "Sukces",
+                    await repository.SaveAsync();
+                }
+
+                MessageBox.Show("Zapisano umowę!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
                 return true;
@@ -331,11 +408,26 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void ClearForm()
         {
-            Item = new UmowaDto { Etat = new Etat(), Stanowisko = new Stanowisko() };
-            ClearAllErrors();
-            foreach (var prop in this.GetType().GetProperties())
-                this.OnPropertyChanged(prop.Name);
+            Item = new UmowaDto();
+            base.ClearForm();
         }
+        #endregion
+
+        #region Metody prywatne
+        private void CheckRequiredProperties() =>
+            base.CheckRequiredProperties(
+                nameof(Pracownik),
+                nameof(Pracodawca),
+                nameof(WynagrodzenieBrutto),
+                nameof(MiejsceWykonywaniaPracy),
+                nameof(WymiarCzasuPracy),
+                nameof(OkresPracy),
+                nameof(DataZawarciaUmowy),
+                nameof(Etat),
+                nameof(Stanowisko),
+                nameof(DataRozpoczeciaPracy)
+                );
+
         #endregion
     }
 }

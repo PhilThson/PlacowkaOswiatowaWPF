@@ -13,41 +13,47 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
     public abstract class SingleItemViewModel<T> : WorkspaceViewModel, INotifyDataErrorInfo
+        //where T : new()
     {
         #region Pola i właściwości
         public T Item { get; set; }
-        public string AddItemName { get; set; }
+
+        private string _AddItemName;
+        public string AddItemName 
+        {
+            get => _AddItemName;
+            set => SetProperty(ref _AddItemName, value);
+        }
+
         protected readonly IMapper _mapper;
         #endregion
 
         #region Konstruktor
-        public SingleItemViewModel(IPlacowkaRepository repository, IMapper mapper,
+        public SingleItemViewModel(IServiceProvider serviceProvider, IMapper mapper,
             string displayName, string addItemName = null) 
-            : base(repository)
+            : base(serviceProvider)
         {
+            _mapper = mapper;
             DisplayName = displayName;
             AddItemName = string.IsNullOrEmpty(addItemName) ?
                BaseResources.AddItem : addItemName;
-
-            _mapper = mapper;
-            _ClearFormCommand = new BaseCommand(ClearForm);
-            _SaveAndCloseCommand = new AsyncCommand(
-                async () => await SaveAndClose(),
-                SaveAndCloseCanExecute);
         }
         #endregion
 
         #region Komendy
 
         protected IAsyncCommand _SaveAndCloseCommand;
-        public IAsyncCommand SaveAndCloseCommand => _SaveAndCloseCommand;
+        public IAsyncCommand SaveAndCloseCommand => _SaveAndCloseCommand ??=
+            new AsyncCommand(async () => await SaveAndClose(), SaveAndCloseCanExecute);
 
-        protected BaseCommand _ClearFormCommand;
-        public ICommand ClearFormCommand => _ClearFormCommand;
+        protected ICommand _ClearFormCommand;
+        public ICommand ClearFormCommand => _ClearFormCommand ??=
+            new BaseCommand(ClearForm);
 
         #endregion
 
@@ -60,8 +66,48 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             if(isClosing)
                 OnRequestClose();
         }
-        protected virtual bool SaveAndCloseCanExecute() => true;
-        protected abstract void ClearForm();
+        protected virtual bool SaveAndCloseCanExecute() => !HasErrors;
+        protected virtual void ClearForm()
+        {
+            //Niektóre Item'y muszą tworzyć zagnieżdżone właściwości
+            //będące obiektami np. Pracownik.Adres
+            //Item = new T();
+            ClearAllErrors();
+            foreach (var property in Item.GetType().GetProperties())
+                OnPropertyChanged(property.Name);
+        }
+
+        protected void CheckRequiredProperties(params string[] requiredProperties)
+        {
+            if (requiredProperties.Length < 1) return;
+            foreach (var requiredProperty in requiredProperties)
+            {
+                if (string.IsNullOrEmpty(SafeToLower(GetPropertyValue(Item, requiredProperty))))
+                {
+                    var propertyName = requiredProperty.Split('.').Last();
+                    ClearErrors(propertyName);
+                    AddError(propertyName, $"Parametr {propertyName} jest wymagany");
+                    OnPropertyChanged(propertyName);
+                }
+            }
+        }
+
+        private object GetPropertyValue(object src, string propName)
+        {
+            if (src == null) throw new ArgumentException("Brak obiektu do sprawdzenia", "src");
+            if (propName == null) throw new ArgumentException("Brak właściwości do sprawdzenia", "propName");
+
+            if (propName.Contains(".")) //dla właściwości zagnieżdżonych
+            {
+                var temp = propName.Split(new char[] { '.' }, 2);
+                return GetPropertyValue(GetPropertyValue(src, temp[0]), temp[1]);
+            }
+            else
+            {
+                var prop = src.GetType().GetProperty(propName);
+                return prop != null ? prop.GetValue(src, null) : null;
+            }
+        }
 
         #endregion
 

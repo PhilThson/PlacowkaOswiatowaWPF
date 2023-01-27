@@ -27,7 +27,7 @@ namespace PlacowkaOswiatowa.Domain.Models
         [MaxLength(128)]
         public string OpisWynagrodzenia { get; set; }
 
-        [MaxLength(64)]
+        [MaxLength(256)]
         public string MiejsceWykonywaniaPracy { get; set; }
 
         [MaxLength(32)]

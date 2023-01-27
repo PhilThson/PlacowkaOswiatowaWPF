@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PlacowkaOswiatowa.Infrastructure.Repository
 {
+    //repozytorium encji z kluczem złożonym, dlatego nie dziedziczy po BaseRepository
     public class UrlopRepository : IUrlopRepository
     {
         private readonly DbSet<Urlop> _urlopDbSet;
@@ -22,12 +23,12 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             return _urlopDbSet.Any(e => e.PracownikId == idPracownika && e.PoczatekUrlopu == poczatekUrlopu);
         }
 
-        public IEnumerable<Urlop> GetAll()
+        public List<Urlop> GetAll()
         {
             return _urlopDbSet.Include(u => u.Pracownik).ToList();
         }
 
-        public async Task<IEnumerable<Urlop>> GetAllAsync()
+        public async Task<List<Urlop>> GetAllAsync()
         {
             return await _urlopDbSet.Include(u => u.Pracownik).ToListAsync();
         }

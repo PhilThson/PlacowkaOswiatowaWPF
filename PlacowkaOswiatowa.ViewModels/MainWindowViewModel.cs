@@ -43,7 +43,7 @@ namespace PlacowkaOswiatowa.ViewModels
             _signal.NewMessage += (s, m) => StatusMessage = m;
             _signal.LoggedInChanged += () => IsLoggedIn = true;
             _signal.HideLogingRequest += () => ChangeLoginViewVisibility();
-            _signalView.NewViewRequested += (s, vh) => NewViewRequested(s, vh);
+            _signalView.NewViewRequested += (s, vh) => OnNewEditViewRequested(s, vh);
         }
 
         #endregion
@@ -83,6 +83,9 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public ICommand NowaUmowaCommand =>
             new BaseCommand(CreateViewAsync<NowaUmowaViewModel>);
+
+        public ICommand WszystkieUmowyCommand =>
+            new BaseCommand(ShowSingletonAsync<WszystkieUmowyViewModel>);
 
         public ICommand ChangeSideMenuVisibilityCommand => 
             new BaseCommand(() => ChangeSideMenuVisibility());
@@ -145,6 +148,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 return _Workspaces;
             }
         }
+        #endregion
+
+        #region Obsługa zdarzeń
         private void OnWorkspacesChanged(object? sender, NotifyCollectionChangedEventArgs e) 
         {
             if (e.NewItems != null && e.NewItems.Count != 0)
@@ -161,7 +167,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
         }
 
-        //MainWindowViewModel nasłuchuje zdarzenia RequestCreateViewAsync
+        //MainWindow nasłuchuje zdarzenia RequestCreateView
         //i na podstawie zadanego typu tworzy nową zakładkę
         private void OnWorkspaceRequestCreateView(object? sender, Type type)
         {
@@ -171,6 +177,9 @@ namespace PlacowkaOswiatowa.ViewModels
                         "Nie podano typu zakładki do utworzenia");
                 //Pobranie nazwy metody do wywołania (alternatywa do nameof())
                 Expression<Action> create = () => CreateView<WorkspaceViewModel>();
+                //tutaj z racji na to żeby pobrać nazwę metody generycznej, której paramatrem
+                //jest klasa dziedzicząca po WorkspaceViewModel i implementująca ILoadable
+                //przykładowo podaję WszyscyPracownicyViewModel
                 Expression<Action> createAsync = () => CreateViewAsync<WszyscyPracownicyViewModel>();
                 var action = type.IsAssignableTo(typeof(ILoadable)) ? createAsync : create;
                 var methodName = (action.Body as MethodCallExpression).Method.Name;
@@ -199,29 +208,37 @@ namespace PlacowkaOswiatowa.ViewModels
             this.Workspaces.Remove(workspace); 
         }
 
-        private void NewViewRequested(object sender, ViewHandler viewHandler)
+        //Wywyołanie widoku edycji rekordu
+        private void OnNewEditViewRequested(object sender, ViewHandler viewHandler)
         {
             try
             {
                 _ = viewHandler ?? throw new ArgumentNullException("Nie podano wymaganego argumentu");
                 _ = viewHandler.Value ?? throw new ArgumentNullException("Wybrano rekordu do edycji");
-                if(viewHandler.ViewType.GetType().GetInterfaces().Contains(typeof(IEditable)))
+                if (!viewHandler.ViewType.IsAssignableTo(typeof(IEditable)))
                     throw new ArgumentException("Żądany widok nie służy do edycji");
 
                 var workspace = _provider.GetRequiredService(viewHandler.ViewType) as WorkspaceViewModel;
                 if (viewHandler.ViewType.IsAssignableTo(typeof(ILoadable)))
-                    //tutaj chciałby, żeby najpierw załadowały się potrzebne dane, 
-                    Task.Run(async () => await (workspace as ILoadable).LoadAsync()).GetAwaiter().GetResult();
-                //(workspace as ILoadable).LoadAsync();
+                {
+                    //tutaj można albo zaczekać, żeby najpierw załadowały się potrzebne dane:
+                    //Task.Run(async () => await (workspace as ILoadable).LoadAsync()).GetAwaiter().GetResult();
+                    //albo w wersji 'FireAndForget' uruchomić i nie czekać, z tym że wtedy wywoływany
+                    //ViewModel musi zabezpieczyć się przed wykorzystaniem zajętego DbContext'u
+                    //ew. założyć że funkcja LoadAsync spodziewa się klasy ogólnej repozytorium
+                    //jako parametru, a w tym miejscu tworzyć osobne ServiceScope'y IPlacowkaRepository,
+                    //i przekazywać tak utworzone repozytoria do funkcji
+                    Task.Run(async () => await (workspace as ILoadable).LoadAsync());
+                }
 
-                //a następnie pobrany zostanie rekord do edycji
+                //następnie pobrany zostanie rekord do edycji
                 Task.Run(async () => await (workspace as IEditable).LoadItem(viewHandler.Value));
                 Workspaces.Add(workspace);
                 SetActiveWorkspace(workspace);
             }
             catch(Exception e)
             {
-                MessageBox.Show($"Nie udało się utworzyć widoku. {e.Message}",
+                MessageBox.Show($"Nie udało się utworzyć widoku do edycji. {e.Message}",
                     "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -251,6 +268,7 @@ namespace PlacowkaOswiatowa.ViewModels
             else
                 this.SetActiveWorkspace(workspace);
         }
+        //synchroniczne wywołanie widoku wszystkich elementów
         private void ShowSingleton<T>() where T : WorkspaceViewModel
         {
             var workspace = this.Workspaces.FirstOrDefault(vm => vm is T) as T;
@@ -259,7 +277,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 //workspace = Activator.CreateInstance(typeof(T)) as T;
             this.SetActiveWorkspace(workspace);
         }
-
+        //synchroniczne wywołanie widoku pojedynczego elemtu
         private void CreateView<T>()
             where T : WorkspaceViewModel
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
@@ -19,8 +20,8 @@ namespace PlacowkaOswiatowa.ViewModels
     public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>, IEditable
     {
         #region Konstruktor
-        public NowyPracownikViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.NowyPracownik)
+        public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.NowyPracownik)
         {
             this.PropertyChanged += (_, __) =>
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -141,10 +142,10 @@ namespace PlacowkaOswiatowa.ViewModels
         //public int? AdresId { get; set; }
         public string Panstwo
         {
-            get => Item.Adres.Panstwo;
+            get => Item.Adres?.Panstwo;
             set
             {
-                if (value != Item.Adres.Panstwo)
+                if (value != Item.Adres?.Panstwo)
                 {
                     Item.Adres.Panstwo = value;
                     ClearErrors(nameof(Panstwo));
@@ -156,10 +157,10 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         public string Miejscowosc
         {
-            get => Item.Adres.Miejscowosc;
+            get => Item.Adres?.Miejscowosc;
             set
             {
-                if (value != Item.Adres.Miejscowosc)
+                if (value != Item.Adres?.Miejscowosc)
                 {
                     Item.Adres.Miejscowosc = value;
                     ClearErrors(nameof(Miejscowosc));
@@ -171,10 +172,10 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         public string Ulica
         {
-            get => Item.Adres.Ulica;
+            get => Item.Adres?.Ulica;
             set
             {
-                if (value != Item.Adres.Ulica)
+                if (value != Item.Adres?.Ulica)
                 {
                     Item.Adres.Ulica = value;
                     OnPropertyChanged();
@@ -233,47 +234,56 @@ namespace PlacowkaOswiatowa.ViewModels
             try
             {
                 var pracownik = _mapper.Map<Pracownik>(Item);
-                
-                var pracownikFromDb = await _repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
-                if (pracownikFromDb != null)
-                    throw new DataValidationException("Pracownik o podanym numerze PESEL już istnieje");
 
-                var adres = _mapper.Map<Adres>(Item.Adres);
-                var adresFromDb = await _repository.Adresy.GetAdresAsync(adres);
-                if (adresFromDb is not null)
-                    await _repository.AddEntityAsync(
-                        new PracownicyAdresy { AdresId = adresFromDb.Id, Pracownik = pracownik });
-                else
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    var properties = adres.GetType().GetProperties()
-                        .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
-                        .ToList();
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    foreach (var prop in properties)
+
+                    var pracownikFromDb = await repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
+                    if (pracownik.Id == default)
                     {
-                        var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
-                        MethodInfo method = _repository.GetType().GetMethod("GetByName",
-                            BindingFlags.Public | BindingFlags.Instance);
-                        MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
-                        var result = genericMethod.Invoke(_repository, new object[] { toSearch });
-                        var entity = result as BaseDictionaryEntity<int>;
-                        if (entity != null)
-                        {
-                            prop.SetValue(adres, null);
-                            var propId = $"{prop.Name}Id";
-                            var propIdInfo = adres.GetType().GetProperty(propId);
-                            propIdInfo.SetValue(adres, entity.Id);
-                        }
+                        if (pracownikFromDb != null)
+                            throw new DataValidationException("Pracownik o podanym numerze PESEL już istnieje");
                     }
- 
-                    pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
+
+                    var adres = _mapper.Map<Adres>(Item.Adres);
+                    var adresFromDb = await repository.Adresy.GetAdresAsync(adres);
+                    if (adresFromDb is not null)
+                        await repository.AddAsync(
+                            new PracownicyAdresy { AdresId = adresFromDb.Id, Pracownik = pracownik });
+                    else
+                    {
+                        var properties = adres.GetType().GetProperties()
+                            .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
+                            .ToList();
+
+                        foreach (var prop in properties)
+                        {
+                            var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
+                            MethodInfo method = repository.GetType().GetMethod("GetByName",
+                                BindingFlags.Public | BindingFlags.Instance);
+                            MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
+                            var result = genericMethod.Invoke(repository, new object[] { toSearch });
+                            var entity = result as BaseDictionaryEntity<int>;
+                            if (entity != null)
+                            {
+                                prop.SetValue(adres, null);
+                                var propId = $"{prop.Name}Id";
+                                var propIdInfo = adres.GetType().GetProperty(propId);
+                                propIdInfo.SetValue(adres, entity.Id);
+                            }
+                        }
+
+                        pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
                     {
                         new PracownicyAdresy{ Adres = adres }
                     };
-                }
+                    }
 
-                await _repository.Pracownicy.AddAsync(pracownik);
-                await _repository.SaveAsync();
+                    await repository.Pracownicy.AddAsync(pracownik);
+                    await repository.SaveAsync();
+                }
 
                 MessageBox.Show("Dodano pracownika!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -295,56 +305,20 @@ namespace PlacowkaOswiatowa.ViewModels
         protected override void ClearForm()
         {
             Item = new CreatePracownikDto() { Adres = new AdresDto() };
-            base.ClearAllErrors();
-            foreach (var prop in this.GetType().GetProperties())
-                this.OnPropertyChanged(prop.Name);
+            base.ClearForm();
         }
 
-        protected override bool SaveAndCloseCanExecute() => !HasErrors;
+        private void CheckRequiredProperties() =>
+            base.CheckRequiredProperties(
+                nameof(Imie),
+                nameof(Nazwisko),
+                nameof(DataUrodzenia),
+                nameof(Pesel),
+                "Adres.Panstwo",
+                "Adres.Miejscowosc",
+                "Adres.NumerDomu",
+                "Adres.KodPocztowy");
 
-        private void CheckRequiredProperties()
-        {
-            if (string.IsNullOrEmpty(Imie))
-            {
-                AddError(nameof(Imie), "Należy podać imię");
-                OnPropertyChanged(nameof(Imie));
-            }
-            if (string.IsNullOrEmpty(Nazwisko))
-            {
-                AddError(nameof(Nazwisko), "Należy podać nazwisko");
-                OnPropertyChanged(nameof(Nazwisko));
-            }
-            if (string.IsNullOrEmpty(DataUrodzenia.ToString()))
-            {
-                AddError(nameof(DataUrodzenia), "Należy podać datę urodzenia");
-                OnPropertyChanged(nameof(DataUrodzenia));
-            }
-            if (string.IsNullOrEmpty(Pesel))
-            {
-                AddError(nameof(Pesel), "Należy podać PESEL");
-                OnPropertyChanged(nameof(Pesel));
-            }
-            if (string.IsNullOrEmpty(Panstwo))
-            {
-                AddError(nameof(Panstwo), "Należy podać państwo");
-                OnPropertyChanged(nameof(Panstwo));
-            }
-            if (string.IsNullOrEmpty(Miejscowosc))
-            {
-                AddError(nameof(Miejscowosc), "Należy podać miejscowość");
-                OnPropertyChanged(nameof(Miejscowosc));
-            }
-            if (string.IsNullOrEmpty(NumerDomu))
-            {
-                AddError(nameof(NumerDomu), "Należy podać numer domu");
-                OnPropertyChanged(nameof(NumerDomu));
-            }
-            if (string.IsNullOrEmpty(KodPocztowy))
-            {
-                AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
-                OnPropertyChanged(nameof(KodPocztowy));
-            }
-        }
         #endregion
 
         #region Inicjacja
@@ -352,21 +326,33 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var pracownikFromDb = await _repository.Pracownicy.GetByIdAsync((int)objId) ??
-                    throw new DataNotFoundException(
-                        $"Nie znaleziono pracownika o podanym identyfikatorze ({objId})");
+                var pracownikId = Convert.ToInt32(objId);
+                if (pracownikId == default)
+                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+                Pracownik pracownik = null;
+
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+
+
+                    pracownik = await repository.Pracownicy.GetByIdAsync(pracownikId);
+                }
+                _ = pracownik ?? throw new DataNotFoundException(
+                        $"Nie znaleziono pracownika o podanym identyfikatorze ({pracownikId})");
 
                 base.DisplayName = BaseResources.EdycjaPracownika;
                 base.AddItemName = BaseResources.SaveItem;
 
-                Item = _mapper.Map<CreatePracownikDto>(pracownikFromDb);
+                Item = _mapper.Map<CreatePracownikDto>(pracownik);
                 Item.Adres ??= new AdresDto();
                 foreach (var prop in this.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);
             }
             catch(Exception e)
             {
-                MessageBox.Show($"Nie udało się pobrać danych pracownika. {e.Message}", 
+                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

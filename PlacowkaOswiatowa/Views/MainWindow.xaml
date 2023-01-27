@@ -102,7 +102,7 @@
                                   Command="{Binding ZarobkiPracownikaCommand}"/>
                     </MenuItem>
                     <MenuItem Header="Umowy">
-                        <MenuItem Header="Wszystkie" IsEnabled="False"/>
+                        <MenuItem Header="Wszystkie" Command="{Binding WszystkieUmowyCommand}"/>
                         <MenuItem Header="Nowa" Command="{Binding NowaUmowaCommand}"/>
                     </MenuItem>
                 </MenuItem>
@@ -175,13 +175,15 @@
                 </ToggleButton>
                 <Separator/>
                 <ToggleButton Width="32" Height="32" Margin="2" 
-                              ToolTip="Nowa faktura" IsEnabled="False">
+                              ToolTip="Nowa umowa"
+                              Command="{Binding NowaUmowaCommand}">
                     <ToggleButton.Background>
                         <ImageBrush ImageSource="../Icons/briefcase.png"/>
                     </ToggleButton.Background>
                 </ToggleButton>
                 <ToggleButton Width="32" Height="32" Margin="2"
-                        ToolTip="Wszystkie faktury" IsEnabled="False">
+                              ToolTip="Wszystkie umowy"
+                              Command="{Binding WszystkieUmowyCommand}">
                     <ToggleButton.Background>
                         <ImageBrush ImageSource="../Icons/networking.png"/>
                     </ToggleButton.Background>

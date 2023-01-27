@@ -207,16 +207,30 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             return Uczniowie;
         }
 
+        public static List<Pracodawca> PracodawcySeed()
+        {
+            var pracodawcaFaker = new Faker<Pracodawca>()
+                .UseSeed(4132)
+                .RuleFor(p => p.Id, f => (byte)(f.IndexFaker + 1))
+                .RuleFor(p => p.Nazwa, f => f.Company.CompanyName())
+                .RuleFor(p => p.AdresId, f => f.PickRandom(Adresy).Id)
+                .RuleFor(p => p.Regon, f => f.Random.ReplaceNumbers("#########"))
+                .RuleFor(p => p.CzyAktywny, f => true)
+                ;
+
+            Pracodawcy = pracodawcaFaker.Generate(5);
+            return Pracodawcy;
+        }
+
         public static List<Umowa> UmowySeed()
         {
             var umowaFaker = new Faker<Umowa>()
                 .UseSeed(7876)
                 .RuleFor(u => u.Id, f => f.IndexFaker + 1)
                 .RuleFor(u => u.PracownikId, f => ++f.IndexVariable)
-                .RuleFor(u => u.PracodawcaId, Pracodawcy.First().Id)
+                .RuleFor(u => u.PracodawcaId, f => f.PickRandom(Pracodawcy).Id)
                 .RuleFor(u => u.WynagrodzenieBrutto, f => f.Finance.Amount(2800, 10000))
-                //Z racji na to że w adresie są klucze obce, to nie wpisuje się Panstwo, Miejscowosc, Ulica
-                .RuleFor(u => u.MiejsceWykonywaniaPracy, Adresy.First().ToString())
+                .RuleFor(u => u.MiejsceWykonywaniaPracy, f => f.Address.FullAddress())
                 .RuleFor(u => u.WymiarCzasuPracy, f => f.PickRandom<WymiarCzasuPracyEnum>().GetDescription())
                 .RuleFor(u => u.WymiarGodzinowy, f => f.Random.Int(15, 40))
                 .RuleFor(u => u.OkresPracy, f => f.PickRandom<OkresPracyEnum>().GetDescription())
@@ -225,8 +239,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .RuleFor(u => u.StanowiskoId, f => f.PickRandom(Stanowiska).Id)
                 .RuleFor(u => u.DataRozpoczeciaPracy, (f, current) => current.DataZawarciaUmowy.AddDays(f.Random.Number(1, 10)))
                 .RuleFor(u => u.DataUtworzenia, f => f.Date.Recent(10))
-                .RuleFor(u => u.CzyAktywny, f => true);
-            ;
+                .RuleFor(u => u.CzyAktywny, f => true)
+                ;
 
             Umowy = umowaFaker.Generate(Pracownicy.Count);
             return Umowy;
@@ -328,23 +342,6 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
             };
 
             return Uzytkownicy;
-        }
-
-        public static List<Pracodawca> PracodawcySeed()
-        {
-            Pracodawcy = new List<Pracodawca>
-            {
-                new Pracodawca
-                {
-                    Id = 1,
-                    Nazwa = "Zespół Szkół nr 1 im. Janusza Korczaka",
-                    AdresId = 1,
-                    Regon = "012345678",
-                    CzyAktywny = true
-                }
-            };
-
-            return Pracodawcy;
         }
         #endregion
     }

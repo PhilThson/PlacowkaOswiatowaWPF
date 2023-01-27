@@ -1,11 +1,13 @@
-﻿using PlacowkaOswiatowa.Domain.Models;
+﻿using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlacowkaOswiatowa.Domain.DTOs
 {
-    public class UmowaDto
+    public class UmowaDto : IBaseEntity<object>
     {
+        public object Id { get; set; }
         public PracownikDto Pracownik { get; set; }
         public PracodawcaDto Pracodawca { get; set; }
         public decimal WynagrodzenieBrutto { get; set; }

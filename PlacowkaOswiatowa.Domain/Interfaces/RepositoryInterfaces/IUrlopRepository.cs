@@ -7,8 +7,8 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
 {
     public interface IUrlopRepository
     {
-        Task<IEnumerable<Urlop>> GetAllAsync();
-        IEnumerable<Urlop> GetAll();
+        Task<List<Urlop>> GetAllAsync();
+        List<Urlop> GetAll();
         bool Exists(int idPracownika, DateTime poczatekUrlopu);
     }
 }

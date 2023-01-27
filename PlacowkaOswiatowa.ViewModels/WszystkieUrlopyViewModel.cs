@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
@@ -20,8 +22,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
 
         #region Konstruktor
-        public WszystkieUrlopyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.WszystkieUrlopy)
+        public WszystkieUrlopyViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.WszystkieUrlopy)
         { 
         }
         #endregion
@@ -31,8 +33,13 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var urlopFromDb = await _repository.Urlopy.GetAllAsync();
-                AllList = _mapper.Map<List<UrlopPracownikaDto>>(urlopFromDb);
+                var urlopy = new List<Urlop>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    urlopy = await repository.Urlopy.GetAllAsync();
+                }
+                AllList = _mapper.Map<List<UrlopPracownikaDto>>(urlopy);
                 List = new ObservableCollection<UrlopPracownikaDto>(AllList);
             }
             catch (Exception)
@@ -51,7 +58,13 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            AllList = _mapper.Map<List<UrlopPracownikaDto>>(_repository.Urlopy.GetAll());
+            var urlopy = new List<Urlop>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                urlopy = repository.Urlopy.GetAll();
+            }
+            AllList = _mapper.Map<List<UrlopPracownikaDto>>(urlopy);
             List = new ObservableCollection<UrlopPracownikaDto>(AllList);
         }
         #endregion

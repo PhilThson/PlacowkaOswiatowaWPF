@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
+using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
@@ -16,8 +18,8 @@ namespace PlacowkaOswiatowa.ViewModels
     {
 
         #region Konstruktor
-        public ZarobkiPracownikaViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.ZarobkiPracownika)
+        public ZarobkiPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.ZarobkiPracownika)
         {
             _pracownikIsVisible = "Collapsed";
             _skladki = new Skladki();
@@ -31,8 +33,13 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var pracownicyFormDb = await _repository.Pracownicy.GetAllAsync();
-                var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicyFormDb);
+                var pracownicy = new List<Pracownik>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    pracownicy = await repository.Pracownicy.GetAllAsync();
+                }
+                var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicy);
                 _pracownicy = new ReadOnlyCollection<PracownikDto>(listaPracownikow);
                 OnPropertyChanged(() => Pracownicy);
             }

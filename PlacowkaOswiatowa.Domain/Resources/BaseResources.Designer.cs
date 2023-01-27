@@ -97,6 +97,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dodaj umowę.
+        /// </summary>
+        public static string DodajUmowe {
+            get {
+                return ResourceManager.GetString("DodajUmowe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edycja pracownika.
         /// </summary>
         public static string EdycjaPracownika {
@@ -111,6 +120,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         public static string EdycjaUcznia {
             get {
                 return ResourceManager.GetString("EdycjaUcznia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edycja umowy.
+        /// </summary>
+        public static string EdycjaUmowy {
+            get {
+                return ResourceManager.GetString("EdycjaUmowy", resourceCulture);
             }
         }
         
@@ -246,6 +264,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         public static string WszystkieStanowiska {
             get {
                 return ResourceManager.GetString("WszystkieStanowiska", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wszystkie umowy.
+        /// </summary>
+        public static string WszystkieUmowy {
+            get {
+                return ResourceManager.GetString("WszystkieUmowy", resourceCulture);
             }
         }
         

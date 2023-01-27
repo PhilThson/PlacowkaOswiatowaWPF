@@ -97,14 +97,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type commonViews:SingleItemViewBase}">
-                    
-    <!--<Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>-->
-
                     <Grid>
-
                         <Grid.RowDefinitions>
                             <RowDefinition Height="10"/>
                             <RowDefinition Height="*"/>
@@ -123,14 +116,15 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
 
-                            <Label Grid.Row="0" Content="{Binding DisplayName}" 
+                            <Label Grid.Row="0" Content="{Binding DisplayName, 
+                                        UpdateSourceTrigger=PropertyChanged}" 
                                    Style="{StaticResource LabelNagłówek}"/>
                             <ContentPresenter Grid.Row="1" Margin="0 5"/>
                             <StackPanel Grid.Row="2" Orientation="Horizontal" 
                                         HorizontalAlignment="Center">
-                                <Button Content="{Binding AddItemName}" 
-                                        Command="{Binding SaveAndCloseCommand, 
-                                            UpdateSourceTrigger=PropertyChanged}"
+                                <Button Content="{Binding AddItemName, 
+                                            UpdateSourceTrigger=PropertyChanged}" 
+                                        Command="{Binding SaveAndCloseCommand}"
                                         Style="{StaticResource ButtonZaokraglony}" 
                                         FontSize="24"/>
                                 <Button Content="Wyczyść"

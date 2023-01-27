@@ -17,14 +17,14 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             _uczenDbSet = dbContext.Set<Uczen>();
         }
 
-        public async Task<IEnumerable<Uczen>> GetAllAsync() =>
+        public async Task<List<Uczen>> GetAllAsync() =>
             await _uczenDbSet
             .IncludeAdres(u => u.Adres)
             .Include(u => u.Oddzial)
                 .ThenInclude(o => o.Pracownik)
             .ToListAsync();
 
-        public IEnumerable<Uczen> GetAll() =>
+        public List<Uczen> GetAll() =>
             _uczenDbSet
             .IncludeAdres(u => u.Adres)
             .Include(u => u.Oddzial)

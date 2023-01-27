@@ -9,6 +9,9 @@ using System.Windows;
 using AutoMapper;
 using PlacowkaOswiatowa.Domain.DTOs;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using PlacowkaOswiatowa.Domain.Models;
+using System.Linq;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -21,8 +24,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
 
         #region Konstruktor
-        public WszystkiePrzedmiotyViewModel(IPlacowkaRepository repository, IMapper mapper)
-            : base(repository, mapper, BaseResources.WszystkiePrzedmioty)
+        public WszystkiePrzedmiotyViewModel(IServiceProvider serviceProvider, IMapper mapper)
+            : base(serviceProvider, mapper, BaseResources.WszystkiePrzedmioty)
         { 
         }
         #endregion
@@ -32,8 +35,13 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                var przedmiotyFromDb = await _repository.Przedmioty.GetAllAsync();
-                AllList = _mapper.Map<List<PrzedmiotDto>>(przedmiotyFromDb);
+                var przedmioty = new List<Przedmiot>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    przedmioty = await repository.Przedmioty.GetAllAsync();
+                }
+                AllList = _mapper.Map<List<PrzedmiotDto>>(przedmioty);
                 List = new ObservableCollection<PrzedmiotDto>(AllList);
             }
             catch (Exception)
@@ -53,7 +61,13 @@ namespace PlacowkaOswiatowa.ViewModels
         //Ta metoda zostanie prawdopodobnie podpięta pod przycisk 'Odswież'
         protected override void Load()
         {
-            AllList = _mapper.Map<List<PrzedmiotDto>>(_repository.Przedmioty.GetAll());
+            var przedmioty = new List<Przedmiot>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                przedmioty = repository.Przedmioty.GetAll().ToList();
+            }
+            AllList = _mapper.Map<List<PrzedmiotDto>>(przedmioty);
             List = new ObservableCollection<PrzedmiotDto>(AllList);
         }
         #endregion

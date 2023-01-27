@@ -51,7 +51,20 @@ namespace PlacowkaOswiatowa.Helpers
 
             CreateMap<Pracodawca, PracodawcaDto>();
 
-            CreateMap<UmowaDto, Umowa>();
+            CreateMap<Umowa, UmowaDto>();
+
+            //taka konfiguracja, ze względu na wybieranie poniższych właściwości
+            //z ComboBoxów oraz wymagalności na każdej z nich
+            CreateMap<UmowaDto, Umowa>()
+                .ForMember(d => d.PracownikId, o => o.MapFrom(s => s.Pracownik.Id))
+                .ForMember(d => d.PracodawcaId, o => o.MapFrom(s => s.Pracodawca.Id))
+                .ForMember(d => d.StanowiskoId, o => o.MapFrom(s => s.Stanowisko.Id))
+                .ForMember(d => d.EtatId, o => o.MapFrom(s => s.Etat.Id))
+                .ForMember(d => d.Pracownik, o => o.Ignore())
+                .ForMember(d => d.Pracodawca, o => o.Ignore())
+                .ForMember(d => d.Stanowisko, o => o.Ignore())
+                .ForMember(d => d.Etat, o => o.Ignore())
+                ;
 
             CreateMap<AdresDto, Adres>();
 

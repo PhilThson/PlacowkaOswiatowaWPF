@@ -18,10 +18,6 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .WithOne(o => o.Uczen)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasIndex(u => u.Pesel)
-                .IsUnique();
-
             builder.HasQueryFilter(u => u.CzyAktywny);
         }
     }

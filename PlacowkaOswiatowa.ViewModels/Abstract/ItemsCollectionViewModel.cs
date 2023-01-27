@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Helpers;
@@ -39,9 +40,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         #endregion
 
         #region Konstruktor
-        public ItemsCollectionViewModel(IPlacowkaRepository repository, IMapper mapper,
+        public ItemsCollectionViewModel(IServiceProvider serviceProvider, IMapper mapper,
             string displayName, string addItemName = null)
-            : base(repository)
+            : base(serviceProvider)
         {
             _mapper = mapper;
             _signalView = SignalHub<ViewHandler>.Instance;
@@ -197,14 +198,19 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
                     MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
                     return;
 
-                var method = _repository.GetType().GetMethod("GetById", BindingFlags.Public | BindingFlags.Instance);
-                var result = method.MakeGenericMethod(EntityType).Invoke(_repository, new object[] { SelectedItem.Id });
-                var entity = result as BaseEntity<int>;
-                if (entity == null)
-                    throw new DataNotFoundException($"Nie znaleziono rekordu o podanym identyfikatorze ({SelectedItem.Id})");
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                _repository.DeleteEntity(entity);
+                    var method = repository.GetType().GetMethod("GetById", BindingFlags.Public | BindingFlags.Instance);
+                    var result = method.MakeGenericMethod(EntityType).Invoke(repository, new object[] { SelectedItem.Id });
+                    var entity = result as BaseEntity<int>;
+                    if (entity == null)
+                        throw new DataNotFoundException($"Nie znaleziono rekordu o podanym identyfikatorze ({SelectedItem.Id})");
 
+                    repository.Delete(entity);
+                    repository.Save();
+                }
                 MessageBox.Show("Poprawnie usunięto rekord", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
                 Update();
             }
