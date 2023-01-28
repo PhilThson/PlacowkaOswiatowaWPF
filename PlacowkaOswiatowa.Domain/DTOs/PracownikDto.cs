@@ -23,5 +23,7 @@ namespace PlacowkaOswiatowa.Domain.DTOs
         public Stanowisko Stanowisko { get; set; }
         public Etat Etat { get; set; }
         public AdresDto Adres { get; set; }
+        public DateTime? DataZawarciaUmowy { get; set; }
+        public string OkresPracy { get; set; }
     }
 }

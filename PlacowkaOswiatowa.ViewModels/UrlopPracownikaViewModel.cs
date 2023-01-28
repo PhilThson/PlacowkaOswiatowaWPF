@@ -20,15 +20,23 @@ namespace PlacowkaOswiatowa.ViewModels
         public UrlopPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.UrlopPracownika)
         {
-            Item = new UrlopPracownikaDto { Pracownik = new PracownikDto() };
+            Item = new UrlopPracownikaDto 
+            { 
+                Pracownik = new PracownikDto(),
+                //{ Stanowisko = new StanowiskoDto},
+
+                PoczatekUrlopu = DateTime.Today,
+                KoniecUrlopu = DateTime.Today
+            };
             _pracownikIsVisible = "Collapsed";
             _isEnabled = false;
-            this.PropertyChanged += (_, __) =>
-                _SaveAndCloseCommand.RaiseCanExecuteChanged();
+            //Przycisk zapisu będzie dostępny jeżeli nie będzie błędów
+            //this.PropertyChanged += (_, __) =>
+            //    _SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
-        #region Inicjacja
+        #region Inicjalizacja
 
         public async Task LoadAsync()
         {
@@ -55,44 +63,49 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola, właściwości
 
         private ReadOnlyCollection<PracownikDto> _pracownicy;
-        public ReadOnlyCollection<PracownikDto> Pracownicy
-        {
-            get => _pracownicy;
-        }
+        public ReadOnlyCollection<PracownikDto> Pracownicy => _pracownicy;
+        //{
+        //    get => _pracownicy;
+        //}
 
-        private PracownikDto _wybranyPracownik;
-        public PracownikDto WybranyPracownik
+        public PracownikDto Pracownik
         {
-            get => _wybranyPracownik;
+            get => Item.Pracownik;
             set
             {
-                _wybranyPracownik = value;
-                OnPropertyChanged(() => WybranyPracownik);
-                if (value != null)
+                if(value != Item.Pracownik)
                 {
+                    Item.Pracownik = value;
+                    OnPropertyChanged();
                     PracownikIsVisible = "Visible";
                     ClearValidationMessages();
-                    if (_wybranyPracownik.DniUrlopu < 1)
-                        AddValidationMessage(nameof(WybranyPracownik),
+                    if (Item.Pracownik.DniUrlopu < 1)
+                        AddValidationMessage(nameof(Pracownik),
                             "Wybrany pracownik ma niewystarczająco dni urlopu");
+
+                    OnPropertyChanged(() => DataRozpoczeciaPracy);
+                    OnPropertyChanged(() => DataZawarciaUmowy);
+                    OnPropertyChanged(() => OkresPracy);
+                    OnPropertyChanged(() => Stanowisko);
                 }
             }
         }
 
-        private PracownikDto? _zastepujacyPracownik;
-        public PracownikDto? ZastepujacyPracownik
+        private PracownikDto _WybranyZastepujacyPracownik;
+        public PracownikDto WybranyZastepujacyPracownik
         {
-            get => _zastepujacyPracownik;
+            get => _WybranyZastepujacyPracownik;
             set
             {
-                _zastepujacyPracownik = value;
-                OnPropertyChanged(() => ZastepujacyPracownik);
-                if (value != null)
+                if (value != _WybranyZastepujacyPracownik)
                 {
+                    _WybranyZastepujacyPracownik = value;
                     base.ClearValidationMessages();
-                    if (ZastepujacyPracownik?.Id != WybranyPracownik?.Id)
+                    if (_WybranyZastepujacyPracownik?.Id == Item.Pracownik?.Id)
                         AddValidationMessage(nameof(ZastepujacyPracownik),
-                            "Pracownik nie może zastępować samego siebie!");
+                            "Pracownik nie może zastępować samego siebie.");
+
+                    OnPropertyChanged();
                 }
             }
         }
@@ -147,33 +160,131 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public bool UmowaIsEnabled => false;
 
-        private string _zastepca;
-        public string Zastepca
+        public DateTime PoczatekUrlopu
         {
-            get => _zastepca;
-            set 
-            { 
-                if(value != null)
+            get => Item.PoczatekUrlopu;
+            set
+            {
+                if (value != Item.PoczatekUrlopu)
                 {
-                    _zastepca = value;
-                    OnPropertyChanged(() => Zastepca);
-                }
+                    Item.PoczatekUrlopu = value;
+                    ClearErrors(nameof(PoczatekUrlopu));
+                    if (Item.PoczatekUrlopu < DateTime.Today)
+                        AddError(nameof(PoczatekUrlopu),
+                            "Nieprawidłowa data rozpoczęcia urlopu");
 
+                    OnPropertyChanged(() => PoczatekUrlopu);
+                }
+            }
+        }
+        public DateTime KoniecUrlopu
+        {
+            get => Item.KoniecUrlopu;
+            set
+            {
+                if (value != Item.KoniecUrlopu)
+                {
+                    Item.KoniecUrlopu = value;
+                    ClearErrors(nameof(KoniecUrlopu));
+                    if (Item.KoniecUrlopu.Date < Item.PoczatekUrlopu.Date)
+                        AddError(nameof(KoniecUrlopu),
+                            "Nieprawidłowa data zakończenia urlopu");
+
+                    OnPropertyChanged(() => PoczatekUrlopu);
+                }
+            }
+        }
+        public DateTime? DataRozpoczeciaPracy
+        {
+            get => Item.Pracownik.DataRozpoczeciaPracy;
+            set
+            {
+                if (value != Item.Pracownik.DataRozpoczeciaPracy)
+                {
+                    Item.Pracownik.DataRozpoczeciaPracy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public DateTime? DataZawarciaUmowy
+        {
+            get => Item.Pracownik.DataZawarciaUmowy;
+            set
+            {
+                if (value != Item.Pracownik.DataZawarciaUmowy)
+                {
+                    Item.Pracownik.DataZawarciaUmowy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string PrzyczynaUrlopu 
+        {
+            get => Item.PrzyczynaUrlopu;
+            set
+            {
+                if(value != Item.PrzyczynaUrlopu)
+                {
+                    Item.PrzyczynaUrlopu = value;
+                    ClearErrors(nameof(PrzyczynaUrlopu));
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string ZastepujacyPracownik
+        {
+            get => Item.ZastepujacyPracownik;
+            set
+            {
+                if (value != Item.ZastepujacyPracownik)
+                {
+                    Item.ZastepujacyPracownik = value;
+                    ClearErrors(nameof(ZastepujacyPracownik));
+                    if (Item.ZastepujacyPracownik.Length < 5)
+                        AddError(nameof(ZastepujacyPracownik),
+                            "Należy podać imię i nazwisko pracownika zastępującego");
+
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string OkresPracy
+        {
+            get => Item.Pracownik.OkresPracy;
+            set
+            {
+                if (value != Item.Pracownik.OkresPracy)
+                {
+                    Item.Pracownik.OkresPracy = value;
+                    OnPropertyChanged(() => OkresPracy);
+                }
+            }
+        }
+        public Stanowisko Stanowisko
+        {
+            get => Item.Pracownik.Stanowisko;
+            set
+            {
+                if (value != Item.Pracownik.Stanowisko)
+                {
+                    Item.Pracownik.Stanowisko = value;
+                    OnPropertyChanged();
+                }
             }
         }
         #endregion
 
-        #region Metody pomocnicze
+        #region Metody
         protected override async Task<bool> SaveAsync()
         {
+            CheckRequiredProperties();
+            if (ValidationMessages.Count > 0)
+                IsValidationVisible = true;
+            if (HasErrors || IsValidationVisible) 
+                return false;
+
             try
             {
-                if (ValidationMessages.Count > 0)
-                {
-                    IsValidationVisible = true;
-                    return false;
-                }
-
                 //Wpis do tabeli urlopów
                 MessageBox.Show("Poprawnie dodano urlop pracownikowa", "Info",
                         MessageBoxButton.OK, MessageBoxImage.Information);
@@ -188,26 +299,37 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        protected override bool SaveAndCloseCanExecute() =>
-            IsEnabled && 
-            string.IsNullOrEmpty(Zastepca) &&
-            !IsValidationVisible;
+        //protected override bool SaveAndCloseCanExecute() =>
+        //    IsEnabled && 
+        //    string.IsNullOrEmpty(Zastepca) &&
+        //    !IsValidationVisible;
 
         protected override void ClearForm()
         {
             ZastepujacyPracownik = null;
-            WybranyPracownik = null;
             IsEnabled = false;
             FlagsViewModel = null;
             PracownikIsVisible = "Collapsed";
-            Zastepca = "";
             Item = new UrlopPracownikaDto { Pracownik = new PracownikDto() };
             base.ClearValidationMessages();
-            base.ClearAllErrors();
-            foreach (var prop in this.GetType().GetProperties())
-                this.OnPropertyChanged(prop.Name);
+            ClearAllErrors();
         }
-            
+
+        private void CheckRequiredProperties()
+        {
+            if (string.IsNullOrEmpty(Pracownik.Imie))
+                AddValidationMessage(nameof(Pracownik),
+                    "Należy wybrać pracownika.");
+
+            base.CheckRequiredProperties(
+                nameof(Pracownik),
+                nameof(PoczatekUrlopu),
+                nameof(KoniecUrlopu),
+                nameof(ZastepujacyPracownik),
+                nameof(PrzyczynaUrlopu)
+                );
+        }
+
         #endregion
     }
 }

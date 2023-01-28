@@ -29,6 +29,10 @@ namespace PlacowkaOswiatowa.Helpers
                     s => s.PracownikUmowa.WynagrodzenieBrutto))
                 .ForMember(d => d.WymiarGodzinowy, o => o.MapFrom(
                     s => s.PracownikUmowa.WymiarGodzinowy))
+                .ForMember(d => d.DataZawarciaUmowy, o => o.MapFrom(
+                    s => s.PracownikUmowa.DataZawarciaUmowy))
+                .ForMember(d => d.OkresPracy, o => o.MapFrom(
+                    s => s.PracownikUmowa.OkresPracy))
                 ;
 
             CreateMap<Pracownik, CreatePracownikDto>()

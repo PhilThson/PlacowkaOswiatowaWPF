@@ -7,7 +7,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
 {
     //Ta klasa jest potrzebna do migracji
     //W razie rezygnacji z niej będzie rzucany wyjątek, że DbContext jako singleton
-    //jest wstrzykiwany do klas będących Transient'ami
+    //jest wstrzykiwany do klas będących Transient'ami (ew. na odwrót)
     public class AplikacjaDbContextFactory : IDesignTimeDbContextFactory<AplikacjaDbContext>
     {
         private readonly string _connectionString;

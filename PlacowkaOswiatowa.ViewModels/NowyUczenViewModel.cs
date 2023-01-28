@@ -26,10 +26,8 @@ namespace PlacowkaOswiatowa.ViewModels
             : base(serviceProvider, mapper, BaseResources.NowyUczen)
         {
             Item = new UczenDto { Adres = new AdresDto() };
-            //Wyłączenie przycisku dopóki formularz nie przejdzie walidacji
-            this.ErrorsChanged += (s, e) =>
-                _SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
+
         #endregion
 
         #region Pola i własności Osoby
@@ -311,7 +309,9 @@ namespace PlacowkaOswiatowa.ViewModels
         protected override void ClearForm()
         {
             Item = new UczenDto { Adres = new AdresDto(), Oddzial = new OddzialDto() };
-            base.ClearForm();
+            ClearAllErrors();
+            //ew.:
+            //base.ClearForm();
         }
 
         private void CheckRequiredProperties() =>

@@ -282,6 +282,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
                 .RuleFor(u => u.PracownikId, f => f.PickRandom(Pracownicy).Id)
                 .RuleFor(u => u.PoczatekUrlopu, f => urlop?.KoniecUrlopu.AddDays(1) ?? DateTime.Parse("2022-01-01"))
                 .RuleFor(u => u.KoniecUrlopu, (f, current) => current.PoczatekUrlopu.AddDays(f.Random.Number(1, 10)))
+                .RuleFor(u => u.ZastepujacyPracownik, f => f.Person.FullName)
+                .RuleFor(u => u.PrzyczynaUrlopu, f => f.PickRandom<PrzyczynaUrlopuEnum>().GetDescription())
                 .RuleFor(u => u.CzyAktywny, f => true)
                 .FinishWith((f, current) => urlop = current);
 

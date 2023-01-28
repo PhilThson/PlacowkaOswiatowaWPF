@@ -42,6 +42,8 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             DisplayName = displayName;
             AddItemName = string.IsNullOrEmpty(addItemName) ?
                BaseResources.AddItem : addItemName;
+
+            ErrorsChanged += OnErrorsChanged;
         }
         #endregion
 
@@ -67,14 +69,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
                 OnRequestClose();
         }
         protected virtual bool SaveAndCloseCanExecute() => !HasErrors;
-        protected virtual void ClearForm()
+        protected virtual void ClearForm() 
         {
-            //Niektóre Item'y muszą tworzyć zagnieżdżone właściwości
-            //będące obiektami np. Pracownik.Adres
-            //Item = new T();
             ClearAllErrors();
-            foreach (var property in Item.GetType().GetProperties())
-                OnPropertyChanged(property.Name);
         }
 
         protected void CheckRequiredProperties(params string[] requiredProperties)
@@ -107,6 +104,15 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
                 var prop = src.GetType().GetProperty(propName);
                 return prop != null ? prop.GetValue(src, null) : null;
             }
+        }
+
+        //Domyślnie w klasie bazowej są obsługiwane zmiany w błędach poszczególnych właściwości
+        //jeżeli jakaś klasa pochodna będzie chciała może nadpisać poniższą metodę
+        //dzięki temu wystarczy wywołać ClearAllErrors i cały formularz zostanie pozbawiony błędów
+        protected virtual void OnErrorsChanged(object sender, DataErrorsChangedEventArgs e)
+        {
+            _SaveAndCloseCommand.RaiseCanExecuteChanged();
+            OnPropertyChanged(e.PropertyName);
         }
 
         #endregion
@@ -142,7 +148,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         public void ClearErrors(string propertyName)
         {
             if (_propertyErrors.Remove(propertyName))
-                OnErrorsChanged(propertyName);
+                RaiseErrorsChanged(propertyName);
         }
 
         public void ClearAllErrors()
@@ -150,11 +156,11 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             foreach (var kvp in _propertyErrors)
             {
                 _propertyErrors.Remove(kvp.Key);
-                OnErrorsChanged(kvp.Key);
+                RaiseErrorsChanged(kvp.Key);
             }
         }
 
-        public void OnErrorsChanged(string propertyName) =>
+        public void RaiseErrorsChanged(string propertyName) =>
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
 
         #endregion

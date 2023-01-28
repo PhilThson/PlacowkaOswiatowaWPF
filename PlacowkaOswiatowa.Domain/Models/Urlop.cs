@@ -1,5 +1,5 @@
-﻿using PlacowkaOswiatowa.Domain.Models.Base;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PlacowkaOswiatowa.Domain.Models
@@ -17,6 +17,12 @@ namespace PlacowkaOswiatowa.Domain.Models
 
         [Column(TypeName = "date")]
         public DateTime KoniecUrlopu { get; set; }
+
+        [StringLength(128)]
+        public string ZastepujacyPracownik { get; set; }
+
+        [StringLength(64)]
+        public string PrzyczynaUrlopu { get; set; }
 
         public bool CzyAktywny { get; set; }
     }

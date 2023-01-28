@@ -111,6 +111,7 @@
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    
                     <Label Grid.Row="0" Grid.Column="1" Content="Dane pracodawcy:"/>
                     <ComboBox Grid.Row="0" Grid.Column="2"
                               IsEnabled="{Binding IsForEdit,UpdateSourceTrigger=PropertyChanged,
@@ -126,6 +127,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                    
                     <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"  Orientation="Horizontal" 
                                         HorizontalAlignment="Center"
                                         Visibility="{Binding Pracodawca, 
@@ -181,9 +183,9 @@
                                                 Mode=TwoWay, Converter={StaticResource DateToString}}"/>
                         <Label Grid.Column="3" Content="Okres pracy:"/>
                         <ComboBox Grid.Column="4"
-                                          ItemsSource="{Binding Source={helpers:EnumBindingSource 
-                                            {x:Type enums:OkresPracyEnum}}}"
-                                          SelectedItem="{Binding OkresPracy}" />
+                                  ItemsSource="{Binding Source={helpers:EnumBindingSource 
+                                    {x:Type enums:OkresPracyEnum}}}"
+                                  SelectedItem="{Binding OkresPracy}" />
 
                         <Label Grid.Row="1" Grid.Column="1" Content="Wynagrodzenie brutto"/>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
@@ -199,22 +201,26 @@
                         <Label Grid.Row="2" Grid.Column="1" Content="Opis wynagrodzenia:"/>
                         <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding OpisWynagrodzenia}"
                                          Grid.ColumnSpan="3"/>
+                        
                         <Label Grid.Row="3" Grid.Column="1" Content="Miejsce wykonywania pracy:"/>
                         <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
                                          Text="{Binding MiejsceWykonywaniaPracy, UpdateSourceTrigger=PropertyChanged}"
                                          />
+                        
                         <Label Grid.Row="4" Grid.Column="1" Content="Wymiar czasu pracy:"/>
                         <ComboBox Grid.Row="4" Grid.Column="2"
                                           ItemsSource="{Binding Source={helpers:EnumBindingSource 
                                             {x:Type enums:WymiarCzasuPracyEnum}}}"
                                           SelectedItem="{Binding WymiarCzasuPracy}"
                                           />
+                        
                         <Label Grid.Row="4" Grid.Column="3" Content="Wymiar godzinowy:"/>
                         <StackPanel Grid.Row="4" Grid.Column="4" Orientation="Horizontal">
                             <TextBox Text="{Binding WymiarGodzinowy, UpdateSourceTrigger=PropertyChanged, 
                                         Mode=TwoWay}" MinWidth="80" />
                             <Label Content="godz." Style="{StaticResource LabelWaski}"/>
                         </StackPanel>
+                        
                         <Label Grid.Row="5" Grid.Column="1" Content="Stanowisko:"/>
                         <ComboBox Grid.Row="5" Grid.Column="2" x:Name="StanowiskoComboBox"
                                   ItemsSource="{Binding Stanowiska, UpdateSourceTrigger=PropertyChanged}"
@@ -231,17 +237,21 @@
                                   DisplayMemberPath="Opis"
                                   Text="{Binding Etat.Opis}"
                                   />
+                        
                         <Label Grid.Row="6" Grid.Column="1" Content="Data rozpoczęcia pracy:" Width="auto"/>
                         <DatePicker Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left"
                                             Text="{Binding DataRozpoczeciaPracy, UpdateSourceTrigger=PropertyChanged,
                                                 Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                        
                         <Label Grid.Row="6" Grid.Column="3" Content="Data zakończenia pracy:" Width="auto"/>
                         <DatePicker Grid.Row="6" Grid.Column="4" HorizontalAlignment="Left"
                                             Text="{Binding DataZakonczeniaPracy, UpdateSourceTrigger=PropertyChanged,
                                                 Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                        
                         <Label Grid.Row="7" Grid.Column="1" Content="Inne warunki zatrudnienia:"/>
                         <TextBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" 
                                          Text="{Binding InneWarunkiZatrudnienia}"/>
+                        
                         <Label Grid.Row="8" Grid.Column="1" Content="Przyczyny zawarcia umowy:"/>
                         <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="3" 
                                          Text="{Binding PrzyczynyZawarciaUmowy}"/>

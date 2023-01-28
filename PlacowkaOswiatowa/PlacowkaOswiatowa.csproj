@@ -44,6 +44,7 @@
     <None Remove="Views\Icons\academic.png" />
     <None Remove="Views\Icons\presentation.png" />
     <None Remove="Views\networking.png" />
+    <None Remove="Views\NowaUmowaView.xaml~RF25f5952.TMP" />
     <None Remove="Views\people.png" />
     <None Remove="Views\presentation.png" />
     <None Remove="Views\student.png" />
