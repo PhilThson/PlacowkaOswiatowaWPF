@@ -9,6 +9,7 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
     {
         Task<List<Urlop>> GetAllAsync();
         List<Urlop> GetAll();
-        bool Exists(int idPracownika, DateTime poczatekUrlopu);
+        bool Exists(int idPracownika, DateTime poczatekUrlopu, DateTime koniecUrlopu);
+        Task AddAsync(Urlop urlop);
     }
 }

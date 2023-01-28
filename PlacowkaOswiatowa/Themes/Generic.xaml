@@ -30,7 +30,7 @@
                                    Text="{Binding DisplayName}"/>
                         <Grid Grid.Row="1" Margin="0 10 0 0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="34"/>
+                                <RowDefinition Height="auto"/>
                                 <RowDefinition Height="35"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
@@ -42,26 +42,43 @@
                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonStandardowy}"/>
                                 <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CustomCheckBox}" />
                                 <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>
+                                <!--ToolBar jest dziedziczony z MainWindow-->
+                                <!--<Style TargetType="{x:Type ToolBar}" BasedOn="{StaticResource CustomToolBar}"/>-->
                             </Grid.Resources>
 
-                            <ToolBar Grid.Row="0" Height="30" Margin="0 2">
-                                <!--Dodanie ikon zamiast nazw!-->
-                                <ToggleButton Content="Dodaj" 
+                            <ToolBar Grid.Row="0">
+                                <ToggleButton Width="32" Height="32" Margin="5 2"
                                               ToolTip="{Binding AddItemName}" 
-                                              Command="{Binding AddItemCommand}"
-                                              Margin="0 2"/>
-                                <ToggleButton Content="Modyfikuj"
+                                              Command="{Binding AddItemCommand}">
+                                    <ToggleButton.Background>
+                                        <ImageBrush ImageSource="../Icons/plus_simple.png"/>
+                                    </ToggleButton.Background>
+                                </ToggleButton>
+                                <ToggleButton Width="32" Height="32" Margin="5 2"
+                                              ToolTip="Modyfikuj"
                                               Command="{Binding EditCommand}"
                                               IsEnabled="{Binding SelectedItem, 
-                                                Converter={StaticResource ObjectToEnable}}"
-                                              Margin="0 2"/>
-                                <ToggleButton Content="Usuń" 
-                                              Command="{Binding DeleteCommand}"
-                                              IsEnabled="{Binding SelectedItem,
-                                                Converter={StaticResource ObjectToEnable}}"
-                                              Margin="0 2"/>
-                                <ToggleButton Content="Odswież" Margin="0 2"
-                                              Command="{Binding UpdateCommand}"/>
+                                                Converter={StaticResource ObjectToEnable}}">
+                                    <ToggleButton.Background>
+                                        <ImageBrush ImageSource="../Icons/edit.png"/>
+                                    </ToggleButton.Background>
+                                </ToggleButton>
+                                <ToggleButton  Width="32" Height="32" Margin="5 2"
+                                               ToolTip="Usuń" 
+                                               Command="{Binding DeleteCommand}"
+                                               IsEnabled="{Binding SelectedItem,
+                                                Converter={StaticResource ObjectToEnable}}">
+                                    <ToggleButton.Background>
+                                        <ImageBrush ImageSource="../Icons/clear.png"/>
+                                    </ToggleButton.Background>
+                                </ToggleButton>
+                                <ToggleButton  Width="32" Height="32" Margin="5 2"
+                                               ToolTip="Odswież"
+                                               Command="{Binding UpdateCommand}">
+                                    <ToggleButton.Background>
+                                        <ImageBrush ImageSource="../Icons/refresh_blue.png"/>
+                                    </ToggleButton.Background>
+                                </ToggleButton>
                             </ToolBar>
                             <Border Grid.Row="1" CornerRadius="5" Height="30"
                                     Background="{StaticResource InvertedTransientBrush}">

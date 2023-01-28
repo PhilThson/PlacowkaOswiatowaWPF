@@ -69,7 +69,8 @@
                         <Label Grid.Row="0" Grid.Column="1" Content="Urlop dotyczy pracownika:"/>
                         <ComboBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
                                   ItemsSource="{Binding Pracownicy}"
-                                  SelectedItem="{Binding Pracownik, UpdateSourceTrigger=PropertyChanged}">
+                                  SelectedItem="{Binding Pracownik, UpdateSourceTrigger=PropertyChanged,
+                                    Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -123,13 +124,21 @@
                             
                             <Label Grid.Row="0" Grid.Column="1" Content="Początek urlopu:"/>
                             <DatePicker Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
-                                        Text="{Binding PoczatekUrlopu, UpdateSourceTrigger=PropertyChanged,
-                                            Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                                        IsEnabled="{Binding PracownikIsVisible, UpdateSourceTrigger=PropertyChanged,
+                                            Converter={StaticResource VisibilityToBool}}"
+                                        SelectedDate="{Binding PoczatekUrlopu}"
+                                        />
+                                        <!--Text="{Binding PoczatekUrlopu, UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay, Converter={StaticResource DateToString}}"-->
 
                             <Label Grid.Row="0" Grid.Column="3" Content="Koniec urlopu:"/>
                             <DatePicker Grid.Row="0" Grid.Column="4" HorizontalAlignment="Left"
-                                        Text="{Binding KoniecUrlopu, UpdateSourceTrigger=PropertyChanged,
-                                            Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                                        IsEnabled="{Binding PracownikIsVisible, UpdateSourceTrigger=PropertyChanged,
+                                            Converter={StaticResource VisibilityToBool}}"
+                                        SelectedDate="{Binding KoniecUrlopu}"
+                                        />
+                                        <!--Text="{Binding KoniecUrlopu, UpdateSourceTrigger=PropertyChanged,
+                                            Mode=TwoWay, Converter={StaticResource DateToString}}"-->
                         </Grid>
 
                         <Expander Header="Umowa o pracę" Grid.Row="1" IsExpanded="True">
@@ -169,7 +178,7 @@
                                 <ComboBox Grid.Row="1" Grid.Column="2" IsEnabled="{Binding UmowaIsEnabled}"
                                           x:Name="OkresPracyComboBox"
                                           >
-                                    <ComboBoxItem Content="{Binding OkresPracy, Mode=TwoWay,
+                                    <ComboBoxItem Content="{Binding OkresPracy, Mode=OneWay,
                                             UpdateSourceTrigger=PropertyChanged}" IsSelected="True"/>
                                 </ComboBox>
     
@@ -177,7 +186,7 @@
                                 <ComboBox Grid.Row="1" Grid.Column="4" IsEnabled="{Binding UmowaIsEnabled}"
                                           x:Name="StanowiskoComboBox"
                                           >
-                                    <ComboBoxItem Content="{Binding Stanowisko.Opis, Mode=TwoWay,
+                                    <ComboBoxItem Content="{Binding Stanowisko.Opis, Mode=OneWay,
                                         UpdateSourceTrigger=PropertyChanged}" IsSelected="True"/>
                                 </ComboBox>
 

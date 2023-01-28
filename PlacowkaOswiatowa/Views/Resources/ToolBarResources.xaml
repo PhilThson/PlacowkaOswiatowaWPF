@@ -1,13 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+
     <Style x:Key="ToolBarButtonBaseStyle"
        TargetType="{x:Type ButtonBase}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Margin" Value="2"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="Width" Value="32"/>
         <Setter Property="Background" Value="{Binding}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -19,9 +18,9 @@
                         <Border.BorderBrush>
                             <LinearGradientBrush EndPoint="0.5,1"
                                  StartPoint="0.5,0">
-                                <GradientStop Color="{DynamicResource BorderLightColor}"
-                            Offset="0" />
                                 <GradientStop Color="{DynamicResource BorderMediumColor}"
+                            Offset="0" />
+                                <GradientStop Color="{DynamicResource BorderDarkColor}"
                             Offset="1" />
                             </LinearGradientBrush>
                         </Border.BorderBrush>
@@ -74,7 +73,7 @@
                                         <DoubleAnimation Duration="0:0:0" 
                                                          Storyboard.TargetName="Border" 
                                                          Storyboard.TargetProperty="(UIElement.Opacity)" 
-                                                         To="0.4"/>
+                                                         To="0.2"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -108,6 +107,7 @@
     <Style x:Key="{x:Static ToolBar.ButtonStyleKey}"
        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
        TargetType="{x:Type Button}" />
+    <!--Tutaj odpięciestylu toggle buttona, bo wygląda słabo-->
     <!--<Style x:Key="{x:Static ToolBar.ToggleButtonStyleKey}"
        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
        TargetType="{x:Type ToggleButton}">
@@ -281,18 +281,22 @@
         </Setter>
     </Style>
 
-    <Style
-       TargetType="{x:Type ToolBar}">
-        <Setter Property="SnapsToDevicePixels"
-          Value="true" />
-        <Setter Property="OverridesDefaultStyle"
-          Value="true" />
+    <!--<Style x:Key="CustomToggleButton"
+        TargetType="{x:Type ToggleButton}">
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="MinWidth" Value="32"/>
+    </Style>-->
+
+    <Style x:Key="CustomToolBar"
+        TargetType="{x:Type ToolBar}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToolBar}">
                     <Border x:Name="Border"
-                CornerRadius="2"
-                BorderThickness="1">
+                        CornerRadius="2"
+                        BorderThickness="1">
                         <Border.BorderBrush>
                             <LinearGradientBrush StartPoint="0,0"
                                  EndPoint="0,1">
@@ -321,9 +325,10 @@
                             </LinearGradientBrush>
                         </Border.Background>
                         <DockPanel>
+                            <!--Podpięcie własnego stylu przycisku-->
                             <ToggleButton DockPanel.Dock="Right"
+                            Style="{StaticResource ToolBarOverflowButtonStyle}"
                           IsEnabled="{TemplateBinding HasOverflowItems}"
-                          Style="{StaticResource ToolBarOverflowButtonStyle}"
                           ClickMode="Press"
                           IsChecked="{Binding IsOverflowOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}">
@@ -336,7 +341,7 @@
                      IsOpen="{Binding IsOverflowOpen, 
                 RelativeSource={RelativeSource TemplatedParent}}">
                                     <Border x:Name="DropDownBorder"
-                        BorderThickness="1">
+                                            BorderThickness="1">
                                         <Border.BorderBrush>
                                             <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                                         </Border.BorderBrush>

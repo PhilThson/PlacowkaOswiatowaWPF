@@ -32,6 +32,10 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
 
+            <Grid.Resources>
+                <Style TargetType="{x:Type ToolBar}" BasedOn="{StaticResource CustomToolBar}"/>
+            </Grid.Resources>
+
             <Menu Grid.Row="0" Grid.Column="0" Margin="3">
                 <Menu.Resources>
                     <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MainMenuItem}"/>
@@ -170,7 +174,7 @@
                               Command="{Binding UrlopPracownikaCommand}"
                               ToolTip="Urlop pracownika">
                     <ToggleButton.Background>
-                        <ImageBrush ImageSource="../Icons/graduation-hat.png"/>
+                        <ImageBrush ImageSource="../Icons/vacation.png"/>
                     </ToggleButton.Background>
                 </ToggleButton>
                 <Separator/>
@@ -178,14 +182,14 @@
                               ToolTip="Nowa umowa"
                               Command="{Binding NowaUmowaCommand}">
                     <ToggleButton.Background>
-                        <ImageBrush ImageSource="../Icons/briefcase.png"/>
+                        <ImageBrush ImageSource="../Icons/handshake.png"/>
                     </ToggleButton.Background>
                 </ToggleButton>
                 <ToggleButton Width="32" Height="32" Margin="2"
                               ToolTip="Wszystkie umowy"
                               Command="{Binding WszystkieUmowyCommand}">
                     <ToggleButton.Background>
-                        <ImageBrush ImageSource="../Icons/networking.png"/>
+                        <ImageBrush ImageSource="../Icons/agreement.png"/>
                     </ToggleButton.Background>
                 </ToggleButton>
                 <Separator/>

@@ -731,5 +731,6 @@
     <converters:ObjectToEnableConverter x:Key="ObjectToEnable"/>
     <converters:PracownikDtoToStringConverter x:Key="PracownikDtoToString"/>
     <converters:BaseEntityToIsEnabledConverter x:Key="BaseEntityToIsEnabled"/>
+    <converters:VisibilityToBoolConverter x:Key="VisibilityToBool"/>
 
 </ResourceDictionary>

@@ -14,12 +14,11 @@ using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class WszystkieUrlopyViewModel : ItemsCollectionViewModel<UrlopPracownikaDto>, ILoadable
+    public class WszystkieUrlopyViewModel : ItemsCollectionViewModel<UrlopDto>, ILoadable
     {
         #region Pola, właściwości, komendy
         protected override Type ItemToCreateType => typeof(UrlopPracownikaViewModel);
         #endregion
-
 
         #region Konstruktor
         public WszystkieUrlopyViewModel(IServiceProvider serviceProvider, IMapper mapper)
@@ -39,12 +38,12 @@ namespace PlacowkaOswiatowa.ViewModels
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
                     urlopy = await repository.Urlopy.GetAllAsync();
                 }
-                AllList = _mapper.Map<List<UrlopPracownikaDto>>(urlopy);
-                List = new ObservableCollection<UrlopPracownikaDto>(AllList);
+                AllList = _mapper.Map<List<UrlopDto>>(urlopy);
+                List = new ObservableCollection<UrlopDto>(AllList);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                MessageBox.Show("Nie udało się pobrać urlopów.", "Błąd",
+                MessageBox.Show($"Nie udało się pobrać urlopów. {e.Message}", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -64,8 +63,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
                 urlopy = repository.Urlopy.GetAll();
             }
-            AllList = _mapper.Map<List<UrlopPracownikaDto>>(urlopy);
-            List = new ObservableCollection<UrlopPracownikaDto>(AllList);
+            AllList = _mapper.Map<List<UrlopDto>>(urlopy);
+            List = new ObservableCollection<UrlopDto>(AllList);
         }
         #endregion
     }

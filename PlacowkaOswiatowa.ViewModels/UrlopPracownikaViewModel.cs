@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -9,22 +10,21 @@ using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class UrlopPracownikaViewModel : SingleItemViewModel<UrlopPracownikaDto>, ILoadable
+    public class UrlopPracownikaViewModel : SingleItemViewModel<UrlopDto>, ILoadable
     {
         #region Konstruktor
         public UrlopPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.UrlopPracownika)
         {
-            Item = new UrlopPracownikaDto 
+            Item = new UrlopDto 
             { 
                 Pracownik = new PracownikDto(),
-                //{ Stanowisko = new StanowiskoDto},
-
                 PoczatekUrlopu = DateTime.Today,
                 KoniecUrlopu = DateTime.Today
             };
@@ -64,13 +64,19 @@ namespace PlacowkaOswiatowa.ViewModels
 
         private ReadOnlyCollection<PracownikDto> _pracownicy;
         public ReadOnlyCollection<PracownikDto> Pracownicy => _pracownicy;
-        //{
-        //    get => _pracownicy;
-        //}
 
         public PracownikDto Pracownik
         {
-            get => Item.Pracownik;
+            get
+            {
+                //Pracownik zawsze jest inicjalizowany, żeby nie wywoływać
+                //ArgumentNullException przy odwołaniach do jego właściwości.
+                //Żeby wyzerować SelectedItem na ComboBoxie, jest poniższe sprawdzenie
+                if (string.IsNullOrEmpty(Item.Pracownik?.Nazwisko))
+                    return null;
+
+                return Item.Pracownik;
+            }
             set
             {
                 if(value != Item.Pracownik)
@@ -169,7 +175,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.PoczatekUrlopu = value;
                     ClearErrors(nameof(PoczatekUrlopu));
-                    if (Item.PoczatekUrlopu < DateTime.Today)
+                    ClearValidationMessages();
+                    if (Item.PoczatekUrlopu < DateTime.Today || 
+                        Item.PoczatekUrlopu > Item.KoniecUrlopu)
                         AddError(nameof(PoczatekUrlopu),
                             "Nieprawidłowa data rozpoczęcia urlopu");
 
@@ -186,11 +194,12 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.KoniecUrlopu = value;
                     ClearErrors(nameof(KoniecUrlopu));
+                    ClearValidationMessages();
                     if (Item.KoniecUrlopu.Date < Item.PoczatekUrlopu.Date)
                         AddError(nameof(KoniecUrlopu),
                             "Nieprawidłowa data zakończenia urlopu");
 
-                    OnPropertyChanged(() => PoczatekUrlopu);
+                    OnPropertyChanged(() => KoniecUrlopu);
                 }
             }
         }
@@ -240,7 +249,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.ZastepujacyPracownik = value;
                     ClearErrors(nameof(ZastepujacyPracownik));
-                    if (Item.ZastepujacyPracownik.Length < 5)
+                    if (Item.ZastepujacyPracownik?.Length < 5)
                         AddError(nameof(ZastepujacyPracownik),
                             "Należy podać imię i nazwisko pracownika zastępującego");
 
@@ -285,11 +294,32 @@ namespace PlacowkaOswiatowa.ViewModels
 
             try
             {
-                //Wpis do tabeli urlopów
+                var urlop = _mapper.Map<Urlop>(Item);
+                var liczbaDniUrlopu = GetWorkingDays(PoczatekUrlopu, KoniecUrlopu);
+
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    if (repository.Urlopy.Exists((int)Item.Pracownik.Id, Item.PoczatekUrlopu, Item.KoniecUrlopu))
+                        throw new DataValidationException("Wybranym okresie pracownik posiada już urlop");
+
+                    var pracownik = await repository.Pracownicy.GetByIdAsync((int)Item.Pracownik.Id, true);
+                    //Tutaj pobrany pracownik jest 'śledzony' przez ChangeTrackera (drugi paramater GetByIdAsync)
+                    pracownik.DniUrlopu -= liczbaDniUrlopu;
+
+                    await repository.Urlopy.AddAsync(urlop);
+                    await repository.SaveAsync();
+                }
+
                 MessageBox.Show("Poprawnie dodano urlop pracownikowa", "Info",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBoxButton.OK, MessageBoxImage.Information);
 
                 return true;
+            }
+            catch(DataValidationException e)
+            {
+                AddValidationMessage(nameof(Pracownik), e.Message);
+                return false;
             }
             catch(Exception e)
             {
@@ -306,13 +336,20 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void ClearForm()
         {
-            ZastepujacyPracownik = null;
+            WybranyZastepujacyPracownik = null;
             IsEnabled = false;
             FlagsViewModel = null;
             PracownikIsVisible = "Collapsed";
-            Item = new UrlopPracownikaDto { Pracownik = new PracownikDto() };
+            Item = new UrlopDto 
+            { 
+                Pracownik = new PracownikDto(),
+                PoczatekUrlopu = DateTime.Today,
+                KoniecUrlopu = DateTime.Today
+            };
             base.ClearValidationMessages();
             ClearAllErrors();
+            foreach (var prop in this.GetType().GetProperties())
+                OnPropertyChanged(prop.Name);
         }
 
         private void CheckRequiredProperties()
@@ -321,6 +358,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 AddValidationMessage(nameof(Pracownik),
                     "Należy wybrać pracownika.");
 
+
             base.CheckRequiredProperties(
                 nameof(Pracownik),
                 nameof(PoczatekUrlopu),
@@ -328,6 +366,26 @@ namespace PlacowkaOswiatowa.ViewModels
                 nameof(ZastepujacyPracownik),
                 nameof(PrzyczynaUrlopu)
                 );
+
+            if(GetWorkingDays(PoczatekUrlopu, KoniecUrlopu) < 1)
+                AddValidationMessage(nameof(Pracownik),
+                    "Wybrany termin nie obejmuje dni pracujących.");
+
+            if (Item.Pracownik.DniUrlopu < GetWorkingDays(PoczatekUrlopu, KoniecUrlopu))
+                AddValidationMessage(nameof(Pracownik),
+                    "Pracownik ma za mało dostępnych dni urlopu.");
+        }
+
+        #endregion
+
+        #region Metody pomocnicze
+        public int GetWorkingDays(DateTime from, DateTime to)
+        {
+            var dayDifference = (int)to.Subtract(from).TotalDays;
+            return Enumerable
+                .Range(1, dayDifference)
+                .Select(x => from.AddDays(x))
+                .Count(x => x.DayOfWeek != DayOfWeek.Saturday && x.DayOfWeek != DayOfWeek.Sunday);
         }
 
         #endregion

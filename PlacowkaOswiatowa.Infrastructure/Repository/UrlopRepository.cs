@@ -18,9 +18,11 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
             _urlopDbSet = dbContext.Set<Urlop>();
         }
 
-        public virtual bool Exists(int idPracownika, DateTime poczatekUrlopu)
+        public bool Exists(int idPracownika, DateTime poczatekUrlopu, DateTime koniecUrlopu)
         {
-            return _urlopDbSet.Any(e => e.PracownikId == idPracownika && e.PoczatekUrlopu == poczatekUrlopu);
+            return _urlopDbSet.Any(u => u.PracownikId == idPracownika &&
+                                    (u.PoczatekUrlopu < koniecUrlopu && 
+                                    poczatekUrlopu < u.KoniecUrlopu));
         }
 
         public List<Urlop> GetAll()
@@ -31,6 +33,11 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public async Task<List<Urlop>> GetAllAsync()
         {
             return await _urlopDbSet.Include(u => u.Pracownik).ToListAsync();
+        }
+
+        public async Task AddAsync(Urlop urlop)
+        {
+            await _urlopDbSet.AddAsync(urlop);
         }
     }
 }

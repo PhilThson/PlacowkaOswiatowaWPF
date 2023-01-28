@@ -57,7 +57,7 @@ namespace PlacowkaOswiatowa.Helpers
 
             CreateMap<Umowa, UmowaDto>();
 
-            //taka konfiguracja, ze względu na wybieranie poniższych właściwości
+            //konfiguracja wynika z wybierania poniższych właściwości
             //z ComboBoxów oraz wymagalności na każdej z nich
             CreateMap<UmowaDto, Umowa>()
                 .ForMember(d => d.PracownikId, o => o.MapFrom(s => s.Pracownik.Id))
@@ -86,6 +86,13 @@ namespace PlacowkaOswiatowa.Helpers
             CreateMap<Ocena, OcenaDto>();
 
             CreateMap<Stanowisko, StanowiskoDto>();
+
+            CreateMap<UrlopDto, Urlop>()
+                .ForMember(d => d.Pracownik, o => o.Ignore())
+                .ForMember(d => d.PracownikId, o => o.MapFrom(s => s.Pracownik.Id))
+                ;
+
+            CreateMap<Urlop, UrlopDto>();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlacowkaOswiatowa.Domain.DTOs
 {
-    public class UrlopPracownikaDto : IBaseEntity<object>
+    public class UrlopDto : IBaseEntity<object>
     {
         public object Id { get; set; }
         public PracownikDto Pracownik { get; set; }

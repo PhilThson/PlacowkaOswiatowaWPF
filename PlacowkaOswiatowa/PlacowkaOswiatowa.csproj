@@ -10,12 +10,78 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\**" />
+    <Compile Remove="Views\Icons\**" />
     <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Views\Icons\**" />
     <None Remove="Migrations\**" />
+    <None Remove="Views\Icons\**" />
     <Page Remove="Migrations\**" />
+    <Page Remove="Views\Icons\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Icons\academic.png" />
+    <None Remove="Icons\agreement.png" />
+    <None Remove="Icons\clear.png" />
+    <None Remove="Icons\currency.png" />
+    <None Remove="Icons\edit.png" />
+    <None Remove="Icons\handshake.png" />
+    <None Remove="Icons\people.png" />
+    <None Remove="Icons\plus_simple.png" />
+    <None Remove="Icons\presentation.png" />
+    <None Remove="Icons\refresh_blue.png" />
+    <None Remove="Icons\student.png" />
+    <None Remove="Icons\students.png" />
+    <None Remove="Icons\university.png" />
+    <None Remove="Icons\vacation.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\academic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\agreement.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\clear.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\currency.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\handshake.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\people.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\plus_simple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\presentation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\refresh_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\student.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\students.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\university.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\vacation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!--<ItemGroup>
     <None Remove="Icons\briefcase.png" />
     <None Remove="Icons\buy.png" />
     <None Remove="Icons\calculate.png" />
@@ -38,17 +104,14 @@
     <None Remove="Icons\university.png" />
     <None Remove="Resources\school.png" />
     <None Remove="Resources\school_v3.png" />
-    <None Remove="Views\briefcase.png" />
-    <None Remove="Views\currency.png" />
-    <None Remove="Views\graduation-hat.png" />
-    <None Remove="Views\Icons\academic.png" />
-    <None Remove="Views\Icons\presentation.png" />
-    <None Remove="Views\networking.png" />
-    <None Remove="Views\NowaUmowaView.xaml~RF25f5952.TMP" />
-    <None Remove="Views\people.png" />
-    <None Remove="Views\presentation.png" />
-    <None Remove="Views\student.png" />
-    <None Remove="Views\students.png" />
+    <None Remove="Icons\academic.png" />
+    <None Remove="Icons\agreement.png" />
+    <None Remove="Icons\delete.png" />
+    <None Remove="Icons\edit.png" />
+    <None Remove="Icons\handshake.png" />
+    <None Remove="Icons\plus.png" />
+    <None Remove="Icons\presentation.png" />
+    <None Remove="Icons\refresh-button.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,9 +140,17 @@
     <Resource Include="Icons\sell.png" />
     <Resource Include="Icons\trading.png" />
     <Resource Include="Icons\trading_2.png" />
-    <Resource Include="Views\Icons\academic.png" />
-    <Resource Include="Views\Icons\presentation.png" />
-  </ItemGroup>
+    <Resource Include="Icons\academic.png" />
+	<EmbeddedResource Include="Icons\agreement.png">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+    <Resource Include="Icons\delete.png" />
+    <Resource Include="Icons\edit.png" />
+    <Resource Include="Icons\handshake.png" />
+    <Resource Include="Icons\plus.png" />
+    <Resource Include="Icons\presentation.png" />
+    <Resource Include="Icons\refresh-button.png" />
+  </ItemGroup>-->
 
   <ItemGroup>
     <Compile Update="Views\NowyUczenView.xaml.cs">
@@ -135,9 +206,6 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Resources\WorkspaceResources.xaml">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Page>
     <Page Update="Views\WszystkieOcenyView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
@@ -166,6 +234,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Controls\" />
+    <Folder Include="Views\Common\" />
   </ItemGroup>
 
 </Project>
