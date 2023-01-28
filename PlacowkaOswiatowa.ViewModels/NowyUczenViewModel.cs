@@ -15,17 +15,23 @@ using PlacowkaOswiatowa.Domain.Models.Base;
 using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using PlacowkaOswiatowa.Domain.Helpers;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, 
         ILoadable, IEditable
     {
+        #region Pola prywatne
+        private readonly ISignalHub<string> _signal;
+        #endregion
+
         #region Konstruktor
         public NowyUczenViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.NowyUczen)
         {
             Item = new UczenDto { Adres = new AdresDto() };
+            _signal = SignalHub<string>.Instance;
         }
 
         #endregion
@@ -236,8 +242,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override async Task<bool> SaveAsync()
         {
-            CheckRequiredProperties();
-            if (HasErrors) return false;
+            //CheckRequiredProperties();
+            //if (HasErrors) return false;
             try
             {
                 var uczen = _mapper.Map<Uczen>(Item);
@@ -314,8 +320,8 @@ namespace PlacowkaOswiatowa.ViewModels
             //base.ClearForm();
         }
 
-        private void CheckRequiredProperties() =>
-            base.CheckRequiredProperties(
+        protected override void CheckRequiredProperties() =>
+            BaseCheckRequiredProperties(
                 nameof(Imie),
                 nameof(Nazwisko),
                 nameof(DataUrodzenia),
@@ -375,6 +381,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 base.DisplayName = BaseResources.EdycjaUcznia;
                 base.AddItemName = BaseResources.SaveItem;
 
+                _signal.SendMessage(this, $"Widok: {DisplayName}");
+
                 Item = _mapper.Map<UczenDto>(uczenFromDb);
                 Item.Adres ??= new AdresDto();
                 foreach (var prop in this.GetType().GetProperties())
@@ -392,10 +400,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Helpers
         public override void Dispose()
         {
-            //potrzebne w razie subskrybowania eventu z innej klasy
-            //której czas życia trwa przez cały okres trwania aplikacji
-            //potencjalne wycieki pamięci
-            //this.PropertyChanged -= NowyUczenViewModel_PropertyChanged;
             base.Dispose();
         }
         #endregion

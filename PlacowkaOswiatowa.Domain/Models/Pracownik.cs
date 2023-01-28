@@ -24,6 +24,15 @@ namespace PlacowkaOswiatowa.Domain.Models
         [MaxLength(50)]
         public string Email { get; set; }
 
+        public decimal? ObliczoneWynagrodzenieNetto { get; set; }
+
+        public decimal? ObliczonaStawkaNaGodzineNetto { get; set; }
+
+        [Column(TypeName = "datetime")]
+        public DateTime? DataOstatnichObliczen { get; set; }
+
+        public string ParametryObliczen { get; set; }
+
         public virtual Umowa PracownikUmowa { get; set; }
         public virtual Oddzial PracownikOddzial { get; set; }
         public virtual ICollection<Urlop> PracownikUrlopy { get; set; }

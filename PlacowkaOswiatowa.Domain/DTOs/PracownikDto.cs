@@ -25,5 +25,6 @@ namespace PlacowkaOswiatowa.Domain.DTOs
         public AdresDto Adres { get; set; }
         public DateTime? DataZawarciaUmowy { get; set; }
         public string OkresPracy { get; set; }
+        public bool CzyZwolnionyOdPodatku { get; set; }
     }
 }

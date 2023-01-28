@@ -361,8 +361,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Obsługa komend
         protected override async Task<bool> SaveAsync()
         {
-            CheckRequiredProperties();
-            if (HasErrors) return false;
             try
             {
                 using (var scope = _serviceProvider.CreateScope())
@@ -414,8 +412,8 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody prywatne
-        private void CheckRequiredProperties() =>
-            base.CheckRequiredProperties(
+        protected override void CheckRequiredProperties() =>
+            BaseCheckRequiredProperties(
                 nameof(Pracownik),
                 nameof(Pracodawca),
                 nameof(WynagrodzenieBrutto),

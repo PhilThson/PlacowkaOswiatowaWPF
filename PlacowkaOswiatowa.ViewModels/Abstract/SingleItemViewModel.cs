@@ -64,17 +64,29 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         protected abstract Task<bool> SaveAsync();
         protected async Task SaveAndClose()
         {
+            CheckRequiredProperties();
+            if (ValidationMessages.Count > 0)
+                IsValidationVisible = true;
+            if (HasErrors || IsValidationVisible)
+                return;
+
             var isClosing = await SaveAsync();
+            //w przypadku błędów formularza, zakładka ma pozostać otwarta
             if(isClosing)
                 OnRequestClose();
         }
+
+        //o aktywności przycisku do zapisu domyślnie decyduje posiadanie błędów
         protected virtual bool SaveAndCloseCanExecute() => !HasErrors;
         protected virtual void ClearForm() 
         {
             ClearAllErrors();
         }
 
-        protected void CheckRequiredProperties(params string[] requiredProperties)
+        protected virtual void CheckRequiredProperties() { }
+
+        //Metoda do walidacji wymaganych właściwości formularza
+        protected void BaseCheckRequiredProperties(params string[] requiredProperties)
         {
             if (requiredProperties.Length < 1) return;
             foreach (var requiredProperty in requiredProperties)
@@ -117,6 +129,8 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         #endregion
 
+        //*******************************************************************************************
+
         #region Implementacja interfejsu INotifyDataErrorInfo
 
         #region Pola prywatne
@@ -136,6 +150,10 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         public IEnumerable GetErrors(string propertyName) =>
             _propertyErrors.GetValueOrDefault(propertyName, null);
+
+
+        public void AddErrorForRequired(string propertyName) =>
+            AddError(propertyName, $"Parametr {propertyName} jest wymagany");
 
         public void AddError(string propertyName, string errorMessage)
         {
@@ -167,7 +185,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         #endregion
 
-        #region Obsługa wiadomości walidacyjnych
+        //*******************************************************************************************
+
+        #region Obsługa ogólnych wiadomości walidacyjnych
 
         #region Prywatne pola
         private ObservableCollection<ValidationMessage> _ValidationMessages

@@ -30,9 +30,6 @@ namespace PlacowkaOswiatowa.ViewModels
             };
             _pracownikIsVisible = "Collapsed";
             _isEnabled = false;
-            //Przycisk zapisu będzie dostępny jeżeli nie będzie błędów
-            //this.PropertyChanged += (_, __) =>
-            //    _SaveAndCloseCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
@@ -286,12 +283,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody
         protected override async Task<bool> SaveAsync()
         {
-            CheckRequiredProperties();
-            if (ValidationMessages.Count > 0)
-                IsValidationVisible = true;
-            if (HasErrors || IsValidationVisible) 
-                return false;
-
             try
             {
                 var urlop = _mapper.Map<Urlop>(Item);
@@ -329,11 +320,6 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        //protected override bool SaveAndCloseCanExecute() =>
-        //    IsEnabled && 
-        //    string.IsNullOrEmpty(Zastepca) &&
-        //    !IsValidationVisible;
-
         protected override void ClearForm()
         {
             WybranyZastepujacyPracownik = null;
@@ -352,14 +338,14 @@ namespace PlacowkaOswiatowa.ViewModels
                 OnPropertyChanged(prop.Name);
         }
 
-        private void CheckRequiredProperties()
+        protected override void CheckRequiredProperties()
         {
             if (string.IsNullOrEmpty(Pracownik.Imie))
                 AddValidationMessage(nameof(Pracownik),
                     "Należy wybrać pracownika.");
 
 
-            base.CheckRequiredProperties(
+            BaseCheckRequiredProperties(
                 nameof(Pracownik),
                 nameof(PoczatekUrlopu),
                 nameof(KoniecUrlopu),

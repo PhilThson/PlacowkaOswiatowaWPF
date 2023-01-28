@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PlacowkaOswiatowa.Domain.BusinessLogic;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Models;
 using System.Linq;
@@ -33,6 +34,8 @@ namespace PlacowkaOswiatowa.Helpers
                     s => s.PracownikUmowa.DataZawarciaUmowy))
                 .ForMember(d => d.OkresPracy, o => o.MapFrom(
                     s => s.PracownikUmowa.OkresPracy))
+                .ForMember(d => d.CzyZwolnionyOdPodatku, o => o.MapFrom(
+                    s => s.PracownikUmowa.CzyZwolnionyOdPodatku))
                 ;
 
             CreateMap<Pracownik, CreatePracownikDto>()
@@ -93,6 +96,8 @@ namespace PlacowkaOswiatowa.Helpers
                 ;
 
             CreateMap<Urlop, UrlopDto>();
+
+            CreateMap<Skladki, SkladkiDto>();
         }
     }
 }

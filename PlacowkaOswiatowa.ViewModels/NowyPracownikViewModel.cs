@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
+using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -19,6 +20,10 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>, IEditable
     {
+        #region Pola prywatne
+        private readonly ISignalHub<string> _signal;
+        #endregion
+
         #region Konstruktor
         public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.NowyPracownik)
@@ -28,6 +33,7 @@ namespace PlacowkaOswiatowa.ViewModels
             Item = new CreatePracownikDto { Adres = new AdresDto() };
             //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
             // - wykonywane np. w przypadku zamkniecia zkladki
+            _signal = SignalHub<string>.Instance;
         }
         #endregion
 
@@ -50,7 +56,7 @@ namespace PlacowkaOswiatowa.ViewModels
         public string DrugieImie
         {
             get => Item.DrugieImie;
-            set 
+            set
             {
                 if (value != Item.DrugieImie)
                 {
@@ -229,8 +235,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Metody komend
         protected override async Task<bool> SaveAsync()
         {
-            CheckRequiredProperties();
-            if (HasErrors) return false;
             try
             {
                 var pracownik = _mapper.Map<Pracownik>(Item);
@@ -238,7 +242,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-
 
                     var pracownikFromDb = await repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
                     if (pracownik.Id == default)
@@ -252,6 +255,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     if (adresFromDb is not null)
                         await repository.AddAsync(
                             new PracownicyAdresy { AdresId = adresFromDb.Id, Pracownik = pracownik });
+                    //tworzenie nowego adresu
                     else
                     {
                         var properties = adres.GetType().GetProperties()
@@ -276,9 +280,9 @@ namespace PlacowkaOswiatowa.ViewModels
                         }
 
                         pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
-                    {
-                        new PracownicyAdresy{ Adres = adres }
-                    };
+                        {
+                            new PracownicyAdresy{ Adres = adres }
+                        };
                     }
 
                     await repository.Pracownicy.AddAsync(pracownik);
@@ -289,7 +293,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     MessageBoxButton.OK, MessageBoxImage.Information);
                 return true;
             }
-            catch(DataValidationException e)
+            catch (DataValidationException e)
             {
                 MessageBox.Show(e.Message, "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -308,8 +312,8 @@ namespace PlacowkaOswiatowa.ViewModels
             base.ClearForm();
         }
 
-        private void CheckRequiredProperties() =>
-            base.CheckRequiredProperties(
+        protected override void CheckRequiredProperties() =>
+            BaseCheckRequiredProperties(
                 nameof(Imie),
                 nameof(Nazwisko),
                 nameof(DataUrodzenia),
@@ -345,14 +349,17 @@ namespace PlacowkaOswiatowa.ViewModels
                 base.DisplayName = BaseResources.EdycjaPracownika;
                 base.AddItemName = BaseResources.SaveItem;
 
+                //Dodatkowo wysłanie wiadomości z nowym statusem
+                _signal.SendMessage(this, $"Widok: {DisplayName}");
+
                 Item = _mapper.Map<CreatePracownikDto>(pracownik);
                 Item.Adres ??= new AdresDto();
                 foreach (var prop in this.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}", 
+                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

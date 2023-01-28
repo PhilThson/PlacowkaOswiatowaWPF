@@ -732,5 +732,7 @@
     <converters:PracownikDtoToStringConverter x:Key="PracownikDtoToString"/>
     <converters:BaseEntityToIsEnabledConverter x:Key="BaseEntityToIsEnabled"/>
     <converters:VisibilityToBoolConverter x:Key="VisibilityToBool"/>
+    <converters:BoolToYesNoConverter x:Key="BoolToYesNo"/>
+    <converters:DecimalToPercentConverter x:Key="DecimalToPercentage"/>
 
 </ResourceDictionary>
