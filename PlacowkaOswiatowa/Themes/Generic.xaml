@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:commonViews="clr-namespace:PlacowkaOswiatowa.Views.Common"
                     >
@@ -15,10 +15,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type commonViews:ItemsCollectionViewBase}">
-                    <!--<Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>-->
+
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -98,7 +95,6 @@
                                           DisplayMemberPath="Value"/>
                                     <CheckBox Content="Czy malejaco" IsChecked="{Binding OrderDescending, 
                                         UpdateSourceTrigger=PropertyChanged}" />
-                                    <!--<Button Content="Sortuj" Command="{Binding OrderByCommand}" />-->
                                 </StackPanel>
                             </Border>
                             <!--Kazdy widok dziedziczacy z Generic.xaml bedzie wyswietlany wlasnie w sekcji ContentPresenter!-->
@@ -146,6 +142,7 @@
                                         FontSize="24"/>
                                 <Button Content="Wyczyść"
                                         Command="{Binding ClearFormCommand}"
+                                        CommandParameter="{Binding .}"
                                         Style="{StaticResource ButtonZaokraglonyCzerwony}" 
                                         FontSize="24" />
                             </StackPanel>
@@ -157,4 +154,73 @@
     </Style>
 
 
+
+    <Style TargetType="{x:Type commonViews:OneToManyViewBase}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type commonViews:OneToManyViewBase}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="10"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="10"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Grid.Row="0" Content="{Binding DisplayName, 
+                                        UpdateSourceTrigger=PropertyChanged}" 
+                                   Style="{StaticResource LabelNagłówek}"/>
+
+                            <ContentPresenter Grid.Row="1" Margin="0 5"/>
+                            
+                            <ToolBar Grid.Row="2" Height="30" Margin="0 2 0 2">
+                                <ToggleButton MinWidth="100" Height="30"
+                                              Content="{Binding AddItemButtonContent}" 
+                                              Command="{Binding AddItemCommand}"/>
+                                <ToggleButton Width="100" Height="30"
+                                              Content="{Binding EditItemButtonContent}"
+                                              Command="{Binding EditItemCommand}"
+                                              CommandParameter="{Binding SelectedItem.Id}"
+                                              IsEnabled="{Binding SelectedItem,
+                                                Converter={StaticResource ObjectToEnable}}"/>
+                            </ToolBar>
+
+                            <GroupBox Header="{Binding AllDisplayName}">
+                                <!--Zamiast bindować cały wybrany rekord, 
+                                    w komendzie do edycji jest przesyłany tylko identyfikator-->
+                                <DataGrid Grid.Row="3" ItemsSource="{Binding AllList}" />
+                            </GroupBox>
+                            
+                            <StackPanel Grid.Row="5" Orientation="Horizontal" 
+                                        HorizontalAlignment="Center">
+                                <Button Content="{Binding AddItemName, 
+                                            UpdateSourceTrigger=PropertyChanged}" 
+                                        Command="{Binding SaveAndCloseCommand}"
+                                        Style="{StaticResource ButtonZaokraglony}" 
+                                        FontSize="24"/>
+                                <Button Content="Wyczyść"
+                                        Command="{Binding ClearFormCommand}"
+                                        CommandParameter="{Binding .}"
+                                        Style="{StaticResource ButtonZaokraglonyCzerwony}" 
+                                        FontSize="24" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

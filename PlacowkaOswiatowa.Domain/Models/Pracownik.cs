@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {
@@ -41,5 +42,20 @@ namespace PlacowkaOswiatowa.Domain.Models
         { get; set; }
         public virtual ICollection<PrzedmiotyPracownicy> PracownikPrzedmiotyPracownicy 
         { get; set; }
+
+        public static bool operator ==(Pracownik p1, Pracownik p2)
+        {
+            if (p1 == null) return false;
+            if (p2 == null) return false;
+
+            if ((Osoba)p1 != (Osoba)p2)
+                return false;
+
+            return SafeToLower(p1.Email) == SafeToLower(p2.Email) &&
+                SafeToLower(p1.NrTelefonu) == SafeToLower(p2.NrTelefonu);
+        }
+
+        public static bool operator !=(Pracownik p1, Pracownik p2) =>
+            !(p1 == p2);
     }
 }

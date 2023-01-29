@@ -126,19 +126,13 @@
                             <DatePicker Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
                                         IsEnabled="{Binding PracownikIsVisible, UpdateSourceTrigger=PropertyChanged,
                                             Converter={StaticResource VisibilityToBool}}"
-                                        SelectedDate="{Binding PoczatekUrlopu}"
-                                        />
-                                        <!--Text="{Binding PoczatekUrlopu, UpdateSourceTrigger=PropertyChanged,
-                                            Mode=TwoWay, Converter={StaticResource DateToString}}"-->
+                                        SelectedDate="{Binding PoczatekUrlopu}" />
 
                             <Label Grid.Row="0" Grid.Column="3" Content="Koniec urlopu:"/>
                             <DatePicker Grid.Row="0" Grid.Column="4" HorizontalAlignment="Left"
                                         IsEnabled="{Binding PracownikIsVisible, UpdateSourceTrigger=PropertyChanged,
                                             Converter={StaticResource VisibilityToBool}}"
-                                        SelectedDate="{Binding KoniecUrlopu}"
-                                        />
-                                        <!--Text="{Binding KoniecUrlopu, UpdateSourceTrigger=PropertyChanged,
-                                            Mode=TwoWay, Converter={StaticResource DateToString}}"-->
+                                        SelectedDate="{Binding KoniecUrlopu}" />
                         </Grid>
 
                         <Expander Header="Umowa o pracę" Grid.Row="1" IsExpanded="True">

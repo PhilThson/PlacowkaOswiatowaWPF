@@ -77,6 +77,7 @@ namespace PlacowkaOswiatowa
                     services.AddSingleton<WszystkieUrlopyViewModel>();
                     services.AddTransient<NowaUmowaViewModel>();
                     services.AddSingleton<WszystkieUmowyViewModel>();
+                    services.AddTransient<NowyAdresViewModel>();
                 });
         }
 

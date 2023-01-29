@@ -7,12 +7,13 @@ namespace PlacowkaOswiatowa.Helpers.Converters
 {
     //Konwerter do zablokowania możliwości zmiany pracownika lub pracodawcy
     //podczas edycji umowy
+    //ew. do wyłączenia przycisku dodawania adresu ucznia, po dodaniu adresu
     public class BaseEntityToIsEnabledConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var baseEntity = value as IBaseEntity<object>;
-            if (baseEntity == null) return false;
+            if (baseEntity == null) return true;
             var id = System.Convert.ToInt32(baseEntity.Id);
             return id == default ? true : false;
         }

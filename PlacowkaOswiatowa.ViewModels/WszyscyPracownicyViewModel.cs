@@ -20,15 +20,13 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
         protected override Type EntityType => typeof(Pracownik);
-
-        private readonly ISignalHub<ViewHandler> _signal;
         #endregion
 
         #region Konstruktor
         public WszyscyPracownicyViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
         {
-            _signal = SignalHub<ViewHandler>.Instance;
+
         }
         #endregion
 

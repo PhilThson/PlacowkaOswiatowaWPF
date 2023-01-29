@@ -38,9 +38,7 @@ namespace PlacowkaOswiatowa.Helpers
                     s => s.PracownikUmowa.CzyZwolnionyOdPodatku))
                 ;
 
-            CreateMap<Pracownik, CreatePracownikDto>()
-                .ForMember(d => d.Adres, o => o.MapFrom(
-                        s => s.PracownikPracownicyAdresy.FirstOrDefault().Adres));
+            CreateMap<Pracownik, CreatePracownikDto>();
 
             CreateMap<Uczen, UczenDto>()
                 .ForMember(d => d.Wychowawca, o => o.MapFrom(s => s.Oddzial.Pracownik))

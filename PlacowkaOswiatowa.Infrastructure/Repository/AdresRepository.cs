@@ -19,6 +19,9 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         {
             return await _adresDbSet.AnyAsync(a => a.Id == id);
         }
+        //w LinqToEntity nie ma zagrożenia że nastąpi odwołanie do właściwości
+        //będącej nullem (zapewnia to EF), a porównanie wielkości liter
+        //zależy od ustawienia bazy danych - w tym przypadku _CI_ (CaseInsensitive)
         public new async Task<bool> Exists(Adres adres) => 
             await _adresDbSet.AnyAsync(a =>
                 a.Panstwo.Nazwa == adres.Panstwo.Nazwa &&

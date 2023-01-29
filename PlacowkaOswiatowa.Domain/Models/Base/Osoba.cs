@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PlacowkaOswiatowa.Domain.Models.Base;
+using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {
@@ -32,7 +33,13 @@ namespace PlacowkaOswiatowa.Domain.Models
             if (o1 is null && o2 is null) return true;
             if (o1 is null) return false;
             if (o2 is null) return false;
-            return o1.GetHashCode() == o2.GetHashCode();
+            //return o1.GetHashCode() == o2.GetHashCode();
+            return o1.Imie.ToLower() == o2.Imie.ToLower() &&
+               SafeToLower(o1.DrugieImie) == SafeToLower(o2.DrugieImie) &&
+               o1.Nazwisko.ToLower() == o2.Nazwisko.ToLower() &&
+               ((o1.DataUrodzenia.HasValue ? o1.DataUrodzenia.Value.Date : DateTime.Today) ==
+               (o2.DataUrodzenia.HasValue ? o2.DataUrodzenia.Value.Date : DateTime.Today)) &&
+               o1.Pesel == o2.Pesel;
         }
         public static bool operator !=(Osoba o1, Osoba o2)
         {

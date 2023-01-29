@@ -70,11 +70,38 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adresy pracownika.
+        /// </summary>
+        public static string AdresyPracownika {
+            get {
+                return ResourceManager.GetString("AdresyPracownika", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wszystkie.
+        /// </summary>
+        public static string AllItems {
+            get {
+                return ResourceManager.GetString("AllItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Witaj w aplikacji Placówka Oświatowa!.
         /// </summary>
         public static string DefaultStatusMessage {
             get {
                 return ResourceManager.GetString("DefaultStatusMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dodaj adres.
+        /// </summary>
+        public static string DodajAdres {
+            get {
+                return ResourceManager.GetString("DodajAdres", resourceCulture);
             }
         }
         
@@ -102,6 +129,24 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         public static string DodajUmowe {
             get {
                 return ResourceManager.GetString("DodajUmowe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edytuj.
+        /// </summary>
+        public static string EditItem {
+            get {
+                return ResourceManager.GetString("EditItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edycja adresu.
+        /// </summary>
+        public static string EdycjaAdresu {
+            get {
+                return ResourceManager.GetString("EdycjaAdresu", resourceCulture);
             }
         }
         
@@ -165,6 +210,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         public static string NowaUmowa {
             get {
                 return ResourceManager.GetString("NowaUmowa", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nowy adres.
+        /// </summary>
+        public static string NowyAdres {
+            get {
+                return ResourceManager.GetString("NowyAdres", resourceCulture);
             }
         }
         

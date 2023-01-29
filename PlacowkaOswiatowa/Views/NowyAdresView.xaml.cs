@@ -1,13 +1,14 @@
 ﻿using PlacowkaOswiatowa.Views.Common;
+using System.Windows.Controls;
 
 namespace PlacowkaOswiatowa.Views
 {
     /// <summary>
-    /// Interaction logic for NowyPracownik.xaml
+    /// Interaction logic for NowyAdresView.xaml
     /// </summary>
-    public partial class NowyPracownikView : OneToManyViewBase
+    public partial class NowyAdresView : UserControl
     {
-        public NowyPracownikView()
+        public NowyAdresView()
         {
             InitializeComponent();
         }

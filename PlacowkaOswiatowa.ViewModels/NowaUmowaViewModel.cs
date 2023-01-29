@@ -375,7 +375,7 @@ namespace PlacowkaOswiatowa.ViewModels
                         //    throw new DataValidationException(
                         //        "Umowa pomiędzy wybranymi podmiotami już istnieje.");
 
-                        await repository.Umowy.AddAsync(umowa);
+                        await repository.AddAsync(umowa);
                     }
                     else
                         repository.Update(umowa);
@@ -404,11 +404,11 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        protected override void ClearForm()
-        {
-            Item = new UmowaDto();
-            base.ClearForm();
-        }
+        //protected override void ClearForm()
+        //{
+        //    Item = new UmowaDto();
+        //    ClearAllErrors();
+        //}
         #endregion
 
         #region Metody prywatne

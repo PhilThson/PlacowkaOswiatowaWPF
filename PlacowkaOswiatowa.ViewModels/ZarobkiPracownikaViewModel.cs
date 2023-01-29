@@ -352,7 +352,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 );
         }
 
-        protected override void ClearForm()
+        protected override void ClearForm(object _)
         {
             Item = new Skladki()
             {

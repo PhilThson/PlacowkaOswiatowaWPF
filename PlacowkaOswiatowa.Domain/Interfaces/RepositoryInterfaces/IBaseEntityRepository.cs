@@ -16,11 +16,11 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
             string? includeProperties = null);
         Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null,
             string? includeProperties = null);
-        void Add(TEntity entity);
-        Task AddAsync(TEntity entity);
-        Task AddRangeAsync(IEnumerable<TEntity> entities);
-        Task RemoveAsync(TKey id);
-        Task RemoveRangeAsync(IEnumerable<TEntity> entity);
+        //void Add(TEntity entity);
+        //Task AddAsync(TEntity entity);
+        //Task AddRangeAsync(IEnumerable<TEntity> entities);
+        //Task RemoveAsync(TKey id);
+        //Task RemoveRangeAsync(IEnumerable<TEntity> entity);
         Task<bool> HasAnyAsync();
         Task<bool> ExistsById(TKey id);
         Task<bool> Exists(TEntity entity);

@@ -120,8 +120,17 @@
   <data name="AddItem" xml:space="preserve">
     <value>Dodaj</value>
   </data>
+  <data name="AdresyPracownika" xml:space="preserve">
+    <value>Adresy pracownika</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Wszystkie</value>
+  </data>
   <data name="DefaultStatusMessage" xml:space="preserve">
     <value>Witaj w aplikacji Placówka Oświatowa!</value>
+  </data>
+  <data name="DodajAdres" xml:space="preserve">
+    <value>Dodaj adres</value>
   </data>
   <data name="DodajPracownika" xml:space="preserve">
     <value>Dodaj pracownika</value>
@@ -131,6 +140,12 @@
   </data>
   <data name="DodajUmowe" xml:space="preserve">
     <value>Dodaj umowę</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="EdycjaAdresu" xml:space="preserve">
+    <value>Edycja adresu</value>
   </data>
   <data name="EdycjaPracownika" xml:space="preserve">
     <value>Edycja pracownika</value>
@@ -152,6 +167,9 @@
   </data>
   <data name="NowaUmowa" xml:space="preserve">
     <value>Nowa umowa</value>
+  </data>
+  <data name="NowyAdres" xml:space="preserve">
+    <value>Nowy adres</value>
   </data>
   <data name="NowyPracownik" xml:space="preserve">
     <value>Nowy Pracownik</value>

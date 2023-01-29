@@ -1,14 +1,14 @@
-﻿using System;
+﻿using PlacowkaOswiatowa.Domain.DTOs;
+using System;
 
 namespace PlacowkaOswiatowa.Domain.Helpers
 {
-    public class SignalHub<T> : ISignalHub<T> 
-        where T : class
+    public class SignalHub : ISignalHub
     {
-        private static SignalHub<T> _Instance;
-        public static SignalHub<T> Instance
+        private static SignalHub _Instance;
+        public static SignalHub Instance
         {
-            get => _Instance ??= new SignalHub<T>();
+            get => _Instance ??= new SignalHub();
         }
 
         private SignalHub()
@@ -22,32 +22,42 @@ namespace PlacowkaOswiatowa.Domain.Helpers
         public event Action HideLogingRequest;
         public void RaiseHideLoginViewRequest() => HideLogingRequest?.Invoke();
 
-        public event EventHandler<T> NewMessage;
-        public void SendMessage(object sender, T message = null) =>
+
+        public event EventHandler<string> NewMessage;
+        public void SendMessage(object sender, string message = null) =>
             RaiseNewMessage(sender, message);
             
-        private void RaiseNewMessage(object sender, T message) =>
+        private void RaiseNewMessage(object sender, string message) =>
             NewMessage?.Invoke(sender, message);
 
-        public event EventHandler<T> NewViewRequested;
 
-        public void RaiseCreateView(object sender, T obj = null) =>
+        public event EventHandler<ViewHandler> NewViewRequested;
+        public void RaiseCreateView(object sender, ViewHandler obj = null) =>
             NewViewRequested?.Invoke(sender, obj);
+
+
+        public event EventHandler<AdresDto> AddressCreated;
+        public void RaiseAddressCreated(object sender, AdresDto address) =>
+            AddressCreated?.Invoke(sender, address);
     }
 
-    public interface ISignalHub<T> where T : class
+    public interface ISignalHub
     {
         event Action LoggedInChanged;
         event Action HideLogingRequest;
-        /// <summary>
-        /// Zdarzenie do obsługi rozgłaszania wiadomości
-        /// </summary>
-        event EventHandler<T> NewMessage;
-        void SendMessage(object sender, T message = null);
         void RaiseLoggedInChanged();
         void RaiseHideLoginViewRequest();
 
-        public event EventHandler<T> NewViewRequested;
-        public void RaiseCreateView(object sender, T obj = null);
+        /// <summary>
+        /// Zdarzenie do obsługi rozgłaszania wiadomości
+        /// </summary>
+        event EventHandler<string> NewMessage;
+        void SendMessage(object sender, string message = null);
+
+        public event EventHandler<ViewHandler> NewViewRequested;
+        public void RaiseCreateView(object sender, ViewHandler viewHandler = null);
+
+        public event EventHandler<AdresDto> AddressCreated;
+        public void RaiseAddressCreated(object sender, AdresDto address);
     }
 }

@@ -20,8 +20,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola, właściwości, komendy
         protected override Type ItemToCreateType => typeof(NowyUczenViewModel);
         protected override Type EntityType => typeof(Uczen);
-
-        private readonly ISignalHub<ViewHandler> _signal;
         //public ICollectionView StudentsCollectionView { get; set; }
         #endregion
 
@@ -29,7 +27,6 @@ namespace PlacowkaOswiatowa.ViewModels
         public WszyscyUczniowieViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszyscyUczniowie, BaseResources.DodajUcznia)
         {
-            _signal = SignalHub<ViewHandler>.Instance;
             //StudentsCollectionView = CollectionViewSource.GetDefaultView(List);
         }
         #endregion

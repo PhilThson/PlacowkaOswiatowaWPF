@@ -21,7 +21,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
     {
         #region Pola prywatne i właściwości
         protected readonly IMapper _mapper;
-        protected readonly ISignalHub<ViewHandler> _signalView;
+        private readonly ISignalHub _signal;
 
         public string AddItemName { get; set; }
 
@@ -30,10 +30,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         private ICommand _UpdateCommand;
         private ICommand _EditCommand;
         private ICommand _DeleteCommand;
-        //private ICommand _OrderByCommand;
-        //private ICommand _FilterCommand;
-        //kolekcja wszystkich elementów
+        //aktualna kolekcja wszystkich elementów
         private ObservableCollection<T> _List;
+        //kolekcja wszystkich elementów pobranych z bazy
         protected IEnumerable<T> AllList { get; set; }
         public List<KeyValuePair<string, string>> ListOfItemsOrderBy { get; private set; }
         public List<KeyValuePair<string, string>> ListOfItemsFilter { get; private set; }
@@ -45,7 +44,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             : base(serviceProvider)
         {
             _mapper = mapper;
-            _signalView = SignalHub<ViewHandler>.Instance;
+            _signal = SignalHub.Instance;
             DisplayName = displayName;
             AddItemName = string.IsNullOrEmpty(addItemName) ?
                 BaseResources.AddItem : addItemName;
@@ -56,11 +55,10 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         #endregion
 
         #region Komendy
-        public ICommand AddItemCommand => _AddItemCommand ??=
-            new BaseCommand(() => OnRequestCreateView(ItemToCreateType));
+        public ICommand AddItemCommand => _AddItemCommand ??= new BaseCommand(RequestCreateView);
         public ICommand LoadCommand => _LoadCommand ??= new BaseCommand(Load);
         public ICommand UpdateCommand => _UpdateCommand ??= new BaseCommand(Update);
-        public ICommand EditCommand => _EditCommand ??= new BaseCommand(Edit);
+        public ICommand EditCommand => _EditCommand ??= new BaseCommand(RequestCreateView);
         public ICommand DeleteCommand => _DeleteCommand ??= new BaseCommand(Delete);
 
         //Rezygnacja z komend na rzecz wprowadzania filtrowania i sortowania
@@ -147,6 +145,20 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         #endregion
 
         #region Metody
+        //Wywoływanie innych widoków
+        private void RequestCreateView()
+        {
+            var viewHandler = new ViewHandler
+            {
+                //jeżeli jest to widok do edycji, to dodatkowo zostanie
+                //przesłany identyfikator obiektu
+                ItemId = SelectedItem?.Id,
+                //ViewModel wszystkich elementów określa jaki typ zakładki może tworzyć
+                ViewType = ItemToCreateType
+            };
+            _signal.RaiseCreateView(this, viewHandler);
+        }
+
         private void OrderBy() 
         {
             if (string.IsNullOrEmpty(SelectedOrderBy))
@@ -175,15 +187,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
             OrderBy();
         }
-        private void Edit()
-        {
-            var viewHandler = new ViewHandler
-            {
-                Value = SelectedItem?.Id,
-                ViewType = ItemToCreateType
-            };
-            _signalView.RaiseCreateView(this, viewHandler);
-        }
+
         private void Delete()
         {
             try

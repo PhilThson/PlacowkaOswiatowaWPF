@@ -11,11 +11,10 @@ using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
-using PlacowkaOswiatowa.Domain.Models.Base;
-using System.Reflection;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Helpers;
+using System.Windows.Input;
+using PlacowkaOswiatowa.Domain.Commands;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -23,15 +22,16 @@ namespace PlacowkaOswiatowa.ViewModels
         ILoadable, IEditable
     {
         #region Pola prywatne
-        private readonly ISignalHub<string> _signal;
+        private readonly ISignalHub _signal;
         #endregion
 
         #region Konstruktor
         public NowyUczenViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.NowyUczen)
         {
-            Item = new UczenDto { Adres = new AdresDto() };
-            _signal = SignalHub<string>.Instance;
+            Item = new UczenDto();
+            _signal = SignalHub.Instance;
+            _signal.AddressCreated += OnAddressCreated;
         }
 
         #endregion
@@ -145,105 +145,131 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
+        public AdresDto Adres
+        {
+            get => Item.Adres;
+        }
+
         #endregion
 
         #region Pola i własności Adresu
-        public string Panstwo
-        {
-            get => Item.Adres.Panstwo;
-            set 
-            { 
-                if(value != Item.Adres.Panstwo)
-                {
-                    Item.Adres.Panstwo = value;
+        //public string Panstwo
+        //{
+        //    get => Item.Adres.Panstwo;
+        //    set 
+        //    { 
+        //        if(value != Item.Adres.Panstwo)
+        //        {
+        //            Item.Adres.Panstwo = value;
 
-                    ClearErrors(nameof(Panstwo));
-                    if (Item.Adres.Panstwo.Length < 1)
-                        AddError(nameof(Panstwo), "Należy podać Państwo");
+        //            ClearErrors(nameof(Panstwo));
+        //            if (Item.Adres.Panstwo.Length < 1)
+        //                AddError(nameof(Panstwo), "Należy podać Państwo");
 
-                    OnPropertyChanged(() => Panstwo);
-                }
-            }
-        }
-        public string Miejscowosc
-        {
-            get => Item.Adres.Miejscowosc;
-            set 
-            { 
-                if(value != Item.Adres.Miejscowosc)
-                {
-                    Item.Adres.Miejscowosc = value;
+        //            OnPropertyChanged(() => Panstwo);
+        //        }
+        //    }
+        //}
+        //public string Miejscowosc
+        //{
+        //    get => Item.Adres.Miejscowosc;
+        //    set 
+        //    { 
+        //        if(value != Item.Adres.Miejscowosc)
+        //        {
+        //            Item.Adres.Miejscowosc = value;
 
-                    ClearErrors(nameof(Miejscowosc));
-                    if (Item.Adres.Miejscowosc.Length < 1)
-                        AddError(nameof(Miejscowosc), "Należy podać miejscowość");
+        //            ClearErrors(nameof(Miejscowosc));
+        //            if (Item.Adres.Miejscowosc.Length < 1)
+        //                AddError(nameof(Miejscowosc), "Należy podać miejscowość");
 
-                    OnPropertyChanged(() => Miejscowosc);
-                }
-            }
-        }
-        public string Ulica
+        //            OnPropertyChanged(() => Miejscowosc);
+        //        }
+        //    }
+        //}
+        //public string Ulica
+        //{
+        //    get => Item.Adres.Ulica;
+        //    set
+        //    {
+        //        if (value != Item.Adres.Ulica)
+        //        {
+        //            Item.Adres.Ulica = value;
+        //            OnPropertyChanged(() => Ulica);
+        //        }
+        //    }
+        //}
+        //public string NumerDomu
+        //{
+        //    get => Item.Adres.NumerDomu;
+        //    set
+        //    {
+        //        if (value != Item.Adres.NumerDomu)
+        //        {
+        //            Item.Adres.NumerDomu = value;
+        //            ClearErrors(nameof(NumerDomu));
+        //            if (Item.Adres.NumerDomu.Length < 1)
+        //                AddError(nameof(NumerDomu), "Należy podać numer domu");
+        //            OnPropertyChanged(() => NumerDomu);
+        //        }
+        //    }
+        //}
+        //public string NumerMieszkania
+        //{
+        //    get => Item.Adres.NumerMieszkania;
+        //    set
+        //    {
+        //        if (value != Item.Adres.NumerMieszkania)
+        //        {
+        //            Item.Adres.NumerMieszkania = value;
+        //            OnPropertyChanged(() => NumerMieszkania);
+        //        }
+        //    }
+        //}
+        //public string KodPocztowy
+        //{
+        //    get => Item.Adres.KodPocztowy;
+        //    set
+        //    {
+        //        if (value != Item.Adres.KodPocztowy)
+        //        {
+        //            Item.Adres.KodPocztowy = value;
+        //            ClearErrors(nameof(KodPocztowy));
+        //            if (Item.Adres.KodPocztowy.Length < 1)
+        //                AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
+        //            OnPropertyChanged(() => KodPocztowy);
+        //        }
+        //    }
+        //}
+        #endregion
+
+        #region Komendy
+
+        private ICommand _AddAddressCommand;
+        public ICommand AddAddressCommand => _AddAddressCommand ??=
+            new BaseCommand(AddAddress);
+
+        private void AddAddress()
         {
-            get => Item.Adres.Ulica;
-            set
+            var viewHandler = new ViewHandler
             {
-                if (value != Item.Adres.Ulica)
-                {
-                    Item.Adres.Ulica = value;
-                    OnPropertyChanged(() => Ulica);
-                }
-            }
+                ViewType = typeof(NowyAdresViewModel)
+            };
+            _signal.RaiseCreateView(this, viewHandler);
         }
-        public string NumerDomu
-        {
-            get => Item.Adres.NumerDomu;
-            set
-            {
-                if (value != Item.Adres.NumerDomu)
-                {
-                    Item.Adres.NumerDomu = value;
-                    ClearErrors(nameof(NumerDomu));
-                    if (Item.Adres.NumerDomu.Length < 1)
-                        AddError(nameof(NumerDomu), "Należy podać numer domu");
-                    OnPropertyChanged(() => NumerDomu);
-                }
-            }
-        }
-        public string NumerMieszkania
-        {
-            get => Item.Adres.NumerMieszkania;
-            set
-            {
-                if (value != Item.Adres.NumerMieszkania)
-                {
-                    Item.Adres.NumerMieszkania = value;
-                    OnPropertyChanged(() => NumerMieszkania);
-                }
-            }
-        }
-        public string KodPocztowy
-        {
-            get => Item.Adres.KodPocztowy;
-            set
-            {
-                if (value != Item.Adres.KodPocztowy)
-                {
-                    Item.Adres.KodPocztowy = value;
-                    ClearErrors(nameof(KodPocztowy));
-                    if (Item.Adres.KodPocztowy.Length < 1)
-                        AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
-                    OnPropertyChanged(() => KodPocztowy);
-                }
-            }
-        }
+
         #endregion
 
         #region Metody
+        //Obsługa utworzenia adresu
+        private void OnAddressCreated(object sender, AdresDto createdAddress)
+        {
+            Item.Adres = createdAddress;
+            OnPropertyChanged(nameof(Adres));
+        }
 
         protected override async Task<bool> SaveAsync()
         {
-            //CheckRequiredProperties();
-            //if (HasErrors) return false;
             try
             {
                 var uczen = _mapper.Map<Uczen>(Item);
@@ -254,47 +280,35 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    var uczenFromDb = await repository.Uczniowie.GetUczenByPesel(uczen.Pesel);
-                    if (uczenFromDb != null)
-                        throw new DataValidationException("Uczeń o podanym nr PESEL już istnieje");
-
-                    var adres = _mapper.Map<Adres>(Item.Adres);
-
-                    var adresFromDb = await repository.Adresy.GetAdresAsync(adres);
-                    if (adresFromDb is not null)
-                        uczen.AdresId = adresFromDb.Id;
-                    else
+                    if(uczen.Id != default)
                     {
-                        uczen.Adres = adres;
-                        //Dla powiązanych encji sprawdź czy istnieje rekord o zadanej nazwie,
-                        //jeżeli tak, to pobierz istniejący, jeżeli nie, to utwórz nowy
-                        var properties = uczen.Adres.GetType().GetProperties()
-                            .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
-                            .ToList();
-
-                        foreach (var prop in properties)
-                        {
-                            var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
-                            MethodInfo method = repository.GetType().GetMethod("GetByName",
-                                BindingFlags.Public | BindingFlags.Instance);
-                            MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
-                            var result = genericMethod.Invoke(repository, new object[] { toSearch });
-                            var entity = result as BaseDictionaryEntity<int>;
-                            if (entity != null)
-                            {
-                                prop.SetValue(uczen.Adres, null);
-                                var propId = $"{prop.Name}Id";
-                                var propIdInfo = uczen.Adres.GetType().GetProperty(propId);
-                                propIdInfo.SetValue(uczen.Adres, entity.Id);
-                            }
-                        }
+                        var uczenById = await repository.Uczniowie.GetByIdAsync(uczen.Id);
+                        if (uczenById == uczen)
+                            throw new DataValidationException("Nie dokonano zmian");
                     }
 
-                    await repository.Uczniowie.AddAsync(uczen);
+                    var uczenFromDb = await repository.Uczniowie.GetUczenByPesel(uczen.Pesel);
+
+                    if (uczenFromDb is not null)
+                        if(uczenFromDb.Id != uczen.Id)
+                            throw new DataValidationException("Uczeń o podanym nr PESEL już istnieje");
+                    
+                    if (Item.Adres?.Id != null)
+                    {
+                        var adresId = Convert.ToInt32(Item.Adres?.Id);
+                        if (adresId != default)
+                            uczen.AdresId = adresId;
+                    }
+
+                    if (uczen.Id == default)
+                        await repository.AddAsync(uczen);
+                    else
+                        repository.Update(uczen);
+
                     await repository.SaveAsync();
                 }
 
-                MessageBox.Show("Dodano ucznia!", "Sukces",
+                MessageBox.Show("Zapisano ucznia!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
                 return true;
@@ -306,18 +320,10 @@ namespace PlacowkaOswiatowa.ViewModels
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Nie udało się dodać ucznia. {e.Message}", 
+                MessageBox.Show($"Nie udało się zapisać ucznia. {e.Message}", 
                     "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return false;
-        }
-
-        protected override void ClearForm()
-        {
-            Item = new UczenDto { Adres = new AdresDto(), Oddzial = new OddzialDto() };
-            ClearAllErrors();
-            //ew.:
-            //base.ClearForm();
         }
 
         protected override void CheckRequiredProperties() =>
@@ -326,11 +332,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 nameof(Nazwisko),
                 nameof(DataUrodzenia),
                 nameof(Pesel),
-                nameof(Oddzial),
-                "Adres.Panstwo",
-                "Adres.Miejscowosc",
-                "Adres.NumerDomu",
-                "Adres.KodPocztowy");
+                nameof(Oddzial));
 
         #endregion
 
@@ -349,9 +351,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
                 
                 var listaOddzialow = _mapper.Map<List<OddzialDto>>(oddzialyFromDb);
-
                 Oddzialy = new ObservableCollection<OddzialDto>(listaOddzialow);
-                //OnPropertyChanged(() => Oddzialy);
             }
             catch (Exception e)
             {
@@ -384,7 +384,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.SendMessage(this, $"Widok: {DisplayName}");
 
                 Item = _mapper.Map<UczenDto>(uczenFromDb);
-                Item.Adres ??= new AdresDto();
+                //Item.Adres ??= new AdresDto();
                 foreach (var prop in this.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);
             }
@@ -400,6 +400,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Helpers
         public override void Dispose()
         {
+            _signal.AddressCreated -= OnAddressCreated;
             base.Dispose();
         }
         #endregion

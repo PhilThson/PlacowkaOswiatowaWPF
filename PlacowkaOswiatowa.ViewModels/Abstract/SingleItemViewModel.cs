@@ -18,7 +18,7 @@ using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
     public abstract class SingleItemViewModel<T> : WorkspaceViewModel, INotifyDataErrorInfo
-        //where T : new()
+        where T : new()
     {
         #region Pola i właściwości
         public T Item { get; set; }
@@ -55,7 +55,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         protected ICommand _ClearFormCommand;
         public ICommand ClearFormCommand => _ClearFormCommand ??=
-            new BaseCommand(ClearForm);
+            new BaseCommand((o) => ClearForm(o));
 
         #endregion
 
@@ -78,9 +78,17 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         //o aktywności przycisku do zapisu domyślnie decyduje posiadanie błędów
         protected virtual bool SaveAndCloseCanExecute() => !HasErrors;
-        protected virtual void ClearForm() 
+        //domyślne zachowanie przycisku 'Wyczyść'
+        protected virtual void ClearForm(object obj) 
         {
+            Item = new T();
             ClearAllErrors();
+            ClearValidationMessages();
+            if (obj == null) return;
+            var viewModel = obj as WorkspaceViewModel;
+            if (viewModel != null)
+                foreach (var prop in viewModel.GetType().GetProperties())
+                    OnPropertyChanged(prop.Name);
         }
 
         protected virtual void CheckRequiredProperties() { }

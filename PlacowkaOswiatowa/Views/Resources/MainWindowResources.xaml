@@ -58,6 +58,10 @@
     <DataTemplate DataType="{x:Type viewmodels:WszystkieUmowyViewModel}">
         <views:WszystkieUmowyView />
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodels:NowyAdresViewModel}">
+        <views:NowyAdresView/>
+    </DataTemplate>
     <!--tu jest koniec łączenia View z ViewModel zakładek-->
 
     <LinearGradientBrush x:Key="ScreenGradient"

@@ -2,9 +2,10 @@
 
 namespace PlacowkaOswiatowa.Domain.Helpers
 {
-    public class ViewHandler
+    public class ViewHandler : EventArgs
     {
         public Type ViewType { get; set; }
-        public object Value { get; set; }
+        public object ItemId { get; set; }
+        public bool IsSingleton { get; set; } = false;
     }
 }

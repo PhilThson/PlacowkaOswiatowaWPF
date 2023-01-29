@@ -20,7 +20,7 @@ namespace PlacowkaOswiatowa.ViewModels
         public LoginViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.LoginPage)
         {
-            _signal = SignalHub<string>.Instance;
+            _signal = SignalHub.Instance;
             //DisplayStatusMessage("Logowanie do aplikacji");
             this.PropertyChanged += (s, e) => 
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
@@ -31,7 +31,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Pola i Właściwości
 
-        private readonly ISignalHub<string> _signal;
+        private readonly ISignalHub _signal;
 
         private string _login;
         public string Login
@@ -136,7 +136,7 @@ namespace PlacowkaOswiatowa.ViewModels
             !string.IsNullOrEmpty(Login) && Login.Length >= 3 &&
             !string.IsNullOrEmpty(Password) && Password.Length >= 3;
 
-        protected override void ClearForm() => Close();
+        protected override void ClearForm(object _) => Close();
         
         #endregion
     }

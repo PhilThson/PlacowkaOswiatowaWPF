@@ -20,15 +20,13 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowaUmowaViewModel);
         protected override Type EntityType => typeof(Umowa);
-
-        private readonly ISignalHub<ViewHandler> _signal;
         #endregion
 
         #region Konstruktor
         public WszystkieUmowyViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszystkieUmowy, BaseResources.DodajUmowe)
         {
-            _signal = SignalHub<ViewHandler>.Instance;
+
         }
         #endregion
 

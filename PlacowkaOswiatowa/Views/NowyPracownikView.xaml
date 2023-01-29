@@ -1,4 +1,4 @@
-﻿<common:SingleItemViewBase x:Class="PlacowkaOswiatowa.Views.NowyPracownikView"
+﻿<common:OneToManyViewBase x:Class="PlacowkaOswiatowa.Views.NowyPracownikView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -54,8 +54,9 @@
                                  Text="{Binding Nazwisko, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Grid.Row="1" Grid.Column="3" Content="Data urodzenia:" />
                 <DatePicker Grid.Row="1" Grid.Column="4" 
-                                    Text="{Binding DataUrodzenia, UpdateSourceTrigger=PropertyChanged,
-                                    Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                            Text="{Binding DataUrodzenia, UpdateSourceTrigger=LostFocus,
+                                Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                <!--SelectedDate="{Binding DataUrodzenia, UpdateSourceTrigger=LostFocus, Mode=TwoWay}"/>-->
                 <Label Grid.Row="2" Grid.Column="1" Content="Pesel:"/>
                 <custom:NumericTextBox Grid.Row="2" Grid.Column="2" MaxLength="11" 
                                  Text="{Binding Pesel, UpdateSourceTrigger=PropertyChanged}"/>
@@ -71,51 +72,7 @@
 
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="1" Header="Adres pracownika">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition SharedSizeGroup="SecondColumn"/>
-                    <ColumnDefinition SharedSizeGroup="ThirdColumn"/>
-                    <ColumnDefinition SharedSizeGroup="FourthColumn"/>
-                    <ColumnDefinition SharedSizeGroup="FifthColumn" />
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Label Grid.Row="0" Grid.Column="1" Content="Kraj:"/>
-                <TextBox Grid.Row="0" Grid.Column="2"
-                                 Text="{Binding Panstwo, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Row="0" Grid.Column="3" Content="Miejscowość:"/>
-                <TextBox Grid.Row="0" Grid.Column="4" MinWidth="210" MaxLength="24"
-                                 Text="{Binding Miejscowosc, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Row="1" Grid.Column="1" Content="Ulica:"/>
-                <TextBox Grid.Row="1" Grid.Column="2"
-                                 Text="{Binding Ulica, UpdateSourceTrigger=PropertyChanged}"/>
-                <Label Grid.Row="1" Grid.Column="3" Content="Nr domu:"/>
-                <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal"
-                                    HorizontalAlignment="Left">
-                    <TextBox MinWidth="35" MaxLength="3" Text="{Binding NumerDomu,
-                                UpdateSourceTrigger=PropertyChanged}"/>
-                    <!--<custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NrDomu,
-                                UpdateSourceTrigger=PropertyChanged}"/>-->
-                    <Label Content="Nr Mieszkania:" Padding="1 5"/>
-                    <TextBox MinWidth="35" MaxLength="3" Text="{Binding NumerMieszkania,
-                                UpdateSourceTrigger=PropertyChanged}"/>
-                    <!--<custom:NumericTextBox MinWidth="35" MaxLength="3" Text="{Binding NrMieszkania,
-                                UpdateSourceTrigger=PropertyChanged}"/>-->
-                </StackPanel>
-                <Label Grid.Row="2" Grid.Column="1" Content="Kod pocztowy:"/>
-                <TextBox Grid.Row="2" Grid.Column="2" MaxLength="6"
-                                 Text="{Binding KodPocztowy, UpdateSourceTrigger=PropertyChanged}"/>
-
-            </Grid>
-        </GroupBox>
+        
     </Grid>
 
-</common:SingleItemViewBase>
+</common:OneToManyViewBase>

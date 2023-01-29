@@ -6,34 +6,34 @@ using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
-using PlacowkaOswiatowa.Domain.Models.Base;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyPracownikViewModel : SingleItemViewModel<CreatePracownikDto>, IEditable
+    public class NowyPracownikViewModel : OneToManyViewModel<CreatePracownikDto, AdresDto>, 
+        IEditable
     {
         #region Pola prywatne
-        private readonly ISignalHub<string> _signal;
+        private readonly ISignalHub _signal;
         #endregion
 
         #region Konstruktor
         public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper)
-            : base(serviceProvider, mapper, BaseResources.NowyPracownik)
+            : base(serviceProvider, mapper, BaseResources.AdresyPracownika, 
+                  BaseResources.DodajAdres, BaseResources.NowyPracownik)
         {
             this.PropertyChanged += (_, __) =>
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
-            Item = new CreatePracownikDto { Adres = new AdresDto() };
-            //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
-            // - wykonywane np. w przypadku zamkniecia zkladki
-            _signal = SignalHub<string>.Instance;
+            Item = new CreatePracownikDto();
+            _signal = SignalHub.Instance;
+            _signal.AddressCreated += OnAddressCreated;
         }
         #endregion
 
@@ -144,95 +144,8 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #endregion
 
-        #region Pola i własności Adresu
-        //public int? AdresId { get; set; }
-        public string Panstwo
-        {
-            get => Item.Adres?.Panstwo;
-            set
-            {
-                if (value != Item.Adres?.Panstwo)
-                {
-                    Item.Adres.Panstwo = value;
-                    ClearErrors(nameof(Panstwo));
-                    if (Item.Adres.Panstwo.Length < 1)
-                        AddError(nameof(Panstwo), "Należy podać Państwo");
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string Miejscowosc
-        {
-            get => Item.Adres?.Miejscowosc;
-            set
-            {
-                if (value != Item.Adres?.Miejscowosc)
-                {
-                    Item.Adres.Miejscowosc = value;
-                    ClearErrors(nameof(Miejscowosc));
-                    if (Item.Adres.Miejscowosc.Length < 1)
-                        AddError(nameof(Miejscowosc), "Należy podać miejscowość");
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string Ulica
-        {
-            get => Item.Adres?.Ulica;
-            set
-            {
-                if (value != Item.Adres?.Ulica)
-                {
-                    Item.Adres.Ulica = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string NumerDomu
-        {
-            get => Item.Adres.NumerDomu;
-            set
-            {
-                if (value != Item.Adres.NumerDomu)
-                {
-                    Item.Adres.NumerDomu = value;
-                    ClearErrors(nameof(NumerDomu));
-                    if (Item.Adres.NumerDomu.Length < 1)
-                        AddError(nameof(NumerDomu), "Należy podać numer domu");
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string NumerMieszkania
-        {
-            get => Item.Adres.NumerMieszkania;
-            set
-            {
-                if (value != Item.Adres.NumerMieszkania)
-                {
-                    Item.Adres.NumerMieszkania = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        public string KodPocztowy
-        {
-            get => Item.Adres.KodPocztowy;
-            set
-            {
-                if (value != Item.Adres.KodPocztowy)
-                {
-                    Item.Adres.KodPocztowy = value;
-                    ClearErrors(nameof(KodPocztowy));
-                    if (Item.Adres.KodPocztowy.Length < 1)
-                        AddError(nameof(KodPocztowy), "Należy podać kod pocztowy");
-                    OnPropertyChanged();
-                }
-            }
-        }
-        #endregion
+        #region Metody
 
-        #region Metody komend
         protected override async Task<bool> SaveAsync()
         {
             try
@@ -243,49 +156,37 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    var pracownikFromDb = await repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
-                    if (pracownik.Id == default)
+                    if(pracownik.Id != default)
                     {
-                        if (pracownikFromDb != null)
-                            throw new DataValidationException("Pracownik o podanym numerze PESEL już istnieje");
+                        var pracownikById = await repository.Pracownicy.GetByIdAsync(pracownik.Id);
+                        if (pracownikById == pracownik)
+                            throw new DataValidationException("Nie dokonano zmian");
                     }
 
-                    var adres = _mapper.Map<Adres>(Item.Adres);
-                    var adresFromDb = await repository.Adresy.GetAdresAsync(adres);
-                    if (adresFromDb is not null)
-                        await repository.AddAsync(
-                            new PracownicyAdresy { AdresId = adresFromDb.Id, Pracownik = pracownik });
-                    //tworzenie nowego adresu
-                    else
+                    var pracownikByPesel = await repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
+                    
+                    if (pracownikByPesel is not null)
+                        if (pracownikByPesel.Id != pracownik.Id)
+                            throw new DataValidationException("Pracownik o podanym numerze PESEL już istnieje");
+                    
+                    if(AllList?.Count > 0)
                     {
-                        var properties = adres.GetType().GetProperties()
-                            .Where(p => p.PropertyType.BaseType == typeof(BaseDictionaryEntity<int>))
-                            .ToList();
-
-                        foreach (var prop in properties)
+                        foreach(var adresId in AllList.Select(a => a.Id))
                         {
-                            var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
-                            MethodInfo method = repository.GetType().GetMethod("GetByName",
-                                BindingFlags.Public | BindingFlags.Instance);
-                            MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
-                            var result = genericMethod.Invoke(repository, new object[] { toSearch });
-                            var entity = result as BaseDictionaryEntity<int>;
-                            if (entity != null)
+                            if(!pracownik.PracownikPracownicyAdresy.Any(pa => pa.AdresId == (int)adresId))
                             {
-                                prop.SetValue(adres, null);
-                                var propId = $"{prop.Name}Id";
-                                var propIdInfo = adres.GetType().GetProperty(propId);
-                                propIdInfo.SetValue(adres, entity.Id);
+                                pracownik.PracownikPracownicyAdresy
+                                    .Add(new PracownicyAdresy { AdresId = (int)adresId });
                             }
                         }
-
-                        pracownik.PracownikPracownicyAdresy = new List<PracownicyAdresy>
-                        {
-                            new PracownicyAdresy{ Adres = adres }
-                        };
                     }
 
-                    await repository.Pracownicy.AddAsync(pracownik);
+                    if (pracownik.Id == default)
+                        await repository.AddAsync(pracownik);
+                    else
+                        repository.Update(pracownik);
+
+                    await repository.AddAsync(pracownik);
                     await repository.SaveAsync();
                 }
 
@@ -306,26 +207,54 @@ namespace PlacowkaOswiatowa.ViewModels
             return false;
         }
 
-        protected override void ClearForm()
-        {
-            Item = new CreatePracownikDto() { Adres = new AdresDto() };
-            base.ClearForm();
-        }
-
         protected override void CheckRequiredProperties() =>
             BaseCheckRequiredProperties(
                 nameof(Imie),
                 nameof(Nazwisko),
                 nameof(DataUrodzenia),
-                nameof(Pesel),
-                "Adres.Panstwo",
-                "Adres.Miejscowosc",
-                "Adres.NumerDomu",
-                "Adres.KodPocztowy");
+                nameof(Pesel));
 
         #endregion
 
-        #region Inicjacja
+        #region Komendy powiązanej listy wszystkich elementów
+        protected override void ShowAddView()
+        {
+            var viewHandler = new ViewHandler
+            {
+                ViewType = typeof(NowyAdresViewModel)
+            };
+            _signal.RaiseCreateView(this, viewHandler);
+        }
+
+        protected override void ShowEditView(object itemId)
+        {
+            try
+            {
+                if (itemId == null)
+                    throw new ArgumentNullException(nameof(itemId),
+                        "Nie wybrano rekordu do edycji");
+
+                var selectedAdresId = Convert.ToInt32(itemId);
+                if(selectedAdresId == default)
+                    throw new DataValidationException(
+                        "Błąd odczytu wybranego adresu");
+
+                var viewHandler = new ViewHandler
+                {
+                    ViewType = typeof(NowyAdresViewModel),
+                    ItemId = selectedAdresId
+                };
+                _signal.RaiseCreateView(this, viewHandler);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        #endregion
+
+        #region Inicjacja do edycji
         public async Task LoadItem(object objId)
         {
             try
@@ -339,8 +268,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-
-
                     pracownik = await repository.Pracownicy.GetByIdAsync(pracownikId);
                 }
                 _ = pracownik ?? throw new DataNotFoundException(
@@ -353,7 +280,12 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.SendMessage(this, $"Widok: {DisplayName}");
 
                 Item = _mapper.Map<CreatePracownikDto>(pracownik);
-                Item.Adres ??= new AdresDto();
+                var addresses = _mapper.Map<List<AdresDto>>(pracownik.PracownikPracownicyAdresy.Select(pa => pa.Adres));
+
+                //aby nie wyświetlać listy jeżeli jest pusta
+                if(addresses.Count > 0)
+                    AllList = new ObservableCollection<AdresDto>(addresses);
+
                 foreach (var prop in this.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);
             }
@@ -367,12 +299,21 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Obsługa zdarzeń
 
+        private void OnAddressCreated(object sender, AdresDto createdAddress)
+        {
+            AllList ??= new ObservableCollection<AdresDto>();
+            AllList.Add(createdAddress);
+        }
+
         public override void Dispose()
         {
+            //disposing: anulowanie subskrybcji do eventów pochodzących z globalnego zakresu
+            // - wykonywane np. w przypadku zamkniecia zkladki
             //potrzebne w razie subskrybowania eventu z innej klasy
             //której czas życia trwa przez cały okres trwania aplikacji
             //potencjalne wycieki pamięci
             //this.PropertyChanged -= NowyPracownikViewModel_PropertyChanged;
+            _signal.AddressCreated -= OnAddressCreated;
             base.Dispose();
         }
 

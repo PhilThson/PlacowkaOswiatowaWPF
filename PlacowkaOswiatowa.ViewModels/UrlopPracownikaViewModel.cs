@@ -320,7 +320,7 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        protected override void ClearForm()
+        protected override void ClearForm(object _)
         {
             WybranyZastepujacyPracownik = null;
             IsEnabled = false;
@@ -332,7 +332,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 PoczatekUrlopu = DateTime.Today,
                 KoniecUrlopu = DateTime.Today
             };
-            base.ClearValidationMessages();
+            ClearValidationMessages();
             ClearAllErrors();
             foreach (var prop in this.GetType().GetProperties())
                 OnPropertyChanged(prop.Name);

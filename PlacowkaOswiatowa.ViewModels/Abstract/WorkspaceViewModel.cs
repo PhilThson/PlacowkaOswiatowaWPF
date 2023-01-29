@@ -1,5 +1,4 @@
 ﻿using PlacowkaOswiatowa.Domain.Commands;
-using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using System;
 using System.Windows.Input;
 
@@ -52,15 +51,6 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
-
-        //Event do wywołania nowej zakładki z już otwartej zakładki
-        //można by było też dać Action<WorkspaceViewModel> i bezpośrednio przesyłać utworzony obiekt
-        //konkretnego viewmodelu, a nie przez pomocniczą klasę
-        //Za to w klasie można jeszcze coś dodać...
-        //albo (jak tutaj) odrazu przesłać typ potrzebnej zakładki
-        public event EventHandler<Type> RequestCreateView;
-        protected void OnRequestCreateView(Type type) =>
-            RequestCreateView?.Invoke(this, type);
 
         #endregion
     }
