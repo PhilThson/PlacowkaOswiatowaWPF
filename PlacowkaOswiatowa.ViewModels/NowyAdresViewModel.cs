@@ -13,11 +13,13 @@ using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using System.Windows;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyAdresViewModel : SingleItemViewModel<AdresDto>, 
-        IEditable
+        ILoadable, IEditable
     {
         #region Konstruktor
         public NowyAdresViewModel(IServiceProvider serviceProvider, IMapper mapper)
@@ -125,12 +127,43 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
+        #region Wybór adresu z listy
+        private ObservableCollection<AdresDto> _adresy;
+        public ObservableCollection<AdresDto> Adresy
+        {
+            get => _adresy;
+            set => SetProperty(ref _adresy, value);
+        }
+
+        private AdresDto _WybranyAdres;
+        public AdresDto WybranyAdres
+        {
+            get => _WybranyAdres;
+            set
+            {
+                if (value != _WybranyAdres)
+                {
+                    _WybranyAdres = value;
+                    ClearAllErrors();
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
 
         #region Metody
         protected override async Task<bool> SaveAsync()
         {
             try
             {
+                if(WybranyAdres != null)
+                {
+                    //jeżeli został wskazany adres z listy, to jest on zwracany
+                    //do metody wywołującej okno modalne
+                    Item = WybranyAdres;
+                    return true;
+                }
+
                 var adres = _mapper.Map<Adres>(Item);
 
                 using (var scope = _serviceProvider.CreateScope())
@@ -190,12 +223,17 @@ namespace PlacowkaOswiatowa.ViewModels
             return false;
         }
 
-        protected override void CheckRequiredProperties() =>
+        protected override void CheckRequiredProperties()
+        {
+            if (WybranyAdres != null)
+                return;
+
             BaseCheckRequiredProperties(
                 nameof(Panstwo),
                 nameof(Miejscowosc),
                 nameof(NumerDomu),
                 nameof(KodPocztowy));
+        }
 
         public async Task LoadItem(object objId)
         {
@@ -220,8 +258,39 @@ namespace PlacowkaOswiatowa.ViewModels
 
             Item = _mapper.Map<AdresDto>(adres);
 
-            //tutaj wystarczy odświeżenie tylko właściwości adresu
             foreach (var prop in Item.GetType().GetProperties())
+                OnPropertyChanged(prop.Name);
+        }
+
+        public async Task LoadAsync()
+        {
+            try
+            {
+                var adresy = new List<Adres>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    adresy = await repository.Adresy.GetAllAsync(
+                        includeProperties: "Panstwo,Miejscowosc,Ulica");
+                }
+
+                var listaAdresow = _mapper.Map<List<AdresDto>>(adresy);
+                Adresy = new ObservableCollection<AdresDto>(listaAdresow);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Nie udało się załadować adresów.", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        protected override void ClearForm(object _)
+        {
+            Item = new AdresDto();
+            WybranyAdres = null;
+            ClearValidationMessages();
+            ClearAllErrors();
+            foreach (var prop in this.GetType().GetProperties())
                 OnPropertyChanged(prop.Name);
         }
 

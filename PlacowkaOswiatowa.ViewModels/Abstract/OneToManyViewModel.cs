@@ -19,12 +19,12 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             set => SetProperty(ref _AllList, value);
         }
 
-        //private TMany _SelectedItem;
-        //public TMany SelectedItem
-        //{
-        //    get => _SelectedItem;
-        //    set => SetProperty(ref _SelectedItem, value);
-        //}
+        private TMany _SelectedItem;
+        public TMany SelectedItem
+        {
+            get => _SelectedItem;
+            set => SetProperty(ref _SelectedItem, value);
+        }
 
         public string AllDisplayName { get; set; }
         public string AddItemButtonContent { get; set; }

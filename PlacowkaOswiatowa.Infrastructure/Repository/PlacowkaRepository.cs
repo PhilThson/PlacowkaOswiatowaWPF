@@ -22,6 +22,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         private IOcenaRepository _oceny;
         private IUmowaRepository _umowy;
         private IPracodawcaRepository _pracodawcy;
+        private IRolaRepository _role;
+        private IUzytkownikRepository _uzytkownicy;
 
         public IAdresRepository Adresy => _adresy ??= new AdresRepository(_dbContext);
         public IPracownikRepository Pracownicy => _pracownicy ??= new PracownikRepository(_dbContext);
@@ -34,6 +36,8 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public IOcenaRepository Oceny => _oceny ??= new OcenaRepository(_dbContext);
         public IUmowaRepository Umowy => _umowy ??= new UmowaRepository(_dbContext);
         public IPracodawcaRepository Pracodawcy => _pracodawcy ??= new PracodawcaRepository(_dbContext);
+        public IRolaRepository Role => _role ??= new RolaRepository(_dbContext);
+        public IUzytkownikRepository Uzytkownicy => _uzytkownicy ??= new UzytkownikRepository(_dbContext);
 
         public PlacowkaRepository(AplikacjaDbContext dbContext)
         {

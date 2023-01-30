@@ -78,7 +78,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
         //o aktywności przycisku do zapisu domyślnie decyduje posiadanie błędów
         protected virtual bool SaveAndCloseCanExecute() => !HasErrors;
+
         //domyślne zachowanie przycisku 'Wyczyść'
+        //w parametrze komendy jest przesyłany bieżący ViewModel
         protected virtual void ClearForm(object obj) 
         {
             Item = new T();

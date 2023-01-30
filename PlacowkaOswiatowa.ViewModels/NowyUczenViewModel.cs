@@ -31,7 +31,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             Item = new UczenDto();
             _signal = SignalHub.Instance;
-            _signal.AddressCreated += OnAddressCreated;
+            AddressButtonContent = BaseResources.DodajAdres;
         }
 
         #endregion
@@ -150,6 +150,13 @@ namespace PlacowkaOswiatowa.ViewModels
             get => Item.Adres;
         }
 
+        private string _AddressButtonContent;
+        public string AddressButtonContent 
+        {
+            get => _AddressButtonContent;
+            set => SetProperty(ref _AddressButtonContent, value);
+        }
+
         #endregion
 
         #region Pola i własności Adresu
@@ -251,21 +258,21 @@ namespace PlacowkaOswiatowa.ViewModels
 
         private void AddAddress()
         {
-            var viewHandler = new ViewHandler
-            {
-                ViewType = typeof(NowyAdresViewModel)
-            };
+            var viewHandler = new ViewHandler(typeof(NowyAdresViewModel), 
+                Item.Adres?.Id, isModal: true);
+            SignalHub.AddressCreated = this.OnAddressCreated;
             _signal.RaiseCreateView(this, viewHandler);
         }
 
         #endregion
 
         #region Metody
-        //Obsługa utworzenia adresu
-        private void OnAddressCreated(object sender, AdresDto createdAddress)
+
+        private void OnAddressCreated(AdresDto createdAddress)
         {
             Item.Adres = createdAddress;
             OnPropertyChanged(nameof(Adres));
+            AddressButtonContent = BaseResources.EdycjaAdresu;
         }
 
         protected override async Task<bool> SaveAsync()
@@ -381,6 +388,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 base.DisplayName = BaseResources.EdycjaUcznia;
                 base.AddItemName = BaseResources.SaveItem;
 
+
                 _signal.SendMessage(this, $"Widok: {DisplayName}");
 
                 Item = _mapper.Map<UczenDto>(uczenFromDb);
@@ -400,7 +408,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Helpers
         public override void Dispose()
         {
-            _signal.AddressCreated -= OnAddressCreated;
             base.Dispose();
         }
         #endregion

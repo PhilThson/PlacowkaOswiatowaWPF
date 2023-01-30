@@ -2,11 +2,13 @@
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Abstract;
+using PlacowkaOswiatowa.ViewModels.Helpers;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +18,10 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class LoginViewModel : SingleItemViewModel<UzytkownikDto>
     {
+        #region Pola prywatne
+        private readonly ISignalHub _signal;
+        #endregion
+
         #region Konstruktor
         public LoginViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.LoginPage)
@@ -29,33 +35,28 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Pola i Właściwości
+        #region Właściwości
 
-        private readonly ISignalHub _signal;
-
-        private string _login;
-        public string Login
+        public string Email
         {
-            get => _login;
+            get => Item.Email;
             set
             {
-                if(value != Item.Login)
+                if(value != Item.Email)
                 {
-                    _login = value;
+                    Item.Email = value;
                     OnPropertyChanged();
                 }
             }
         }
-
-        private string _password;
         public string Password
         {
-            get => _password;
+            get => Item.Password;
             set
             {
                 if(value != Item.Password)
                 {
-                    _password = value;
+                    Item.Password = value;
                     OnPropertyChanged();
                 }
             }
@@ -68,54 +69,58 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             get => new BaseCommand(Close);
         }
+
+        private ICommand _RegisterCommand;
+        public ICommand RegisterCommand => _RegisterCommand ??=
+            new BaseCommand(Register);
+
+        private void Register()
+        {
+            var viewHandler = new ViewHandler(typeof(RejestracjaViewModel), isModal: true);
+            _signal.RaiseCreateView(this, viewHandler);
+        }
         #endregion
-       
+
         #region Logowanie
         protected override async Task<bool> SaveAsync()
         {
-            var uzytkownik = new Uzytkownik
-            {
-                Email = _login,
-                HashHasla = _password
-            };
-            if (uzytkownik.Email == "Gość" && uzytkownik.HashHasla == "1234")
+            if (Item.Email == "Gość" && Item.Password == "1234")
             {
                 _signal.RaiseLoggedInChanged();
                 _signal.SendMessage(this, "Witaj Gościu!");
                 Close();
             }
-            else
+            try
             {
-                try
+                Uzytkownik uzytkownik = null;
+                using (var provider = _serviceProvider.CreateScope())
                 {
-                    bool czyJestPracownikiem = false;
-                    using (var provider = _serviceProvider.CreateScope())
-                    {
-                        var repository = provider.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                        czyJestPracownikiem = await repository.Pracownicy.UserExists(uzytkownik);
-                    }
-                    if (czyJestPracownikiem == true)
-                    {
-                        _signal.RaiseLoggedInChanged();
-                        _signal.SendMessage(this, $"Witaj {Login} {Password}!");
-                        Close();
-                    }
-                    else
-                    {
-                        AddValidationMessage("LoginFailed",
-                                        "Niepoprawny login i/lub hasło.");
+                    var repository = provider.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    uzytkownik = await repository.Uzytkownicy.GetAsync(u => u.Email == Item.Email);
+                }
 
-                        _signal.SendMessage(this, "Nie udało się zalogować.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //PublishException(ex);
-                    MessageBox.Show("Błąd połączenia do bazy danych", "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    _signal.SendMessage(this, "Błąd połączenia do bazy danych.");
-                }
+                if (uzytkownik is null)
+                    throw new DataValidationException("Nie znaleziono użytkownika o podanym adesie e-mail");
+
+                if (!SecurePasswordHasher.Verify(Item.Password, uzytkownik.HashHasla))
+                    throw new DataValidationException("Niepoprawne hasło.");
+
+                _signal.RaiseLoggedInChanged();
+                _signal.SendMessage(this, $"Witaj {uzytkownik.Imie} {uzytkownik.Nazwisko}!");
+                Close();
             }
+            catch(DataValidationException e)
+            {
+                AddValidationMessage("Błąd", "Niepoprawny e-mail i/lub hasło.");
+                _signal.SendMessage(this, "Nie udało się zalogować.");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Błąd. {e.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                _signal.SendMessage(this, "Błąd podczas logowania.");
+            }
+
             return false;
         }
         #endregion
@@ -133,7 +138,7 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         protected override bool SaveAndCloseCanExecute() =>
-            !string.IsNullOrEmpty(Login) && Login.Length >= 3 &&
+            !string.IsNullOrEmpty(Email) && Email.Length >= 3 &&
             !string.IsNullOrEmpty(Password) && Password.Length >= 3;
 
         protected override void ClearForm(object _) => Close();

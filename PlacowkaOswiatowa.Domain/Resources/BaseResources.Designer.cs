@@ -88,6 +88,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Placówka Oświatowa.
+        /// </summary>
+        public static string BaseTitle {
+            get {
+                return ResourceManager.GetString("BaseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Witaj w aplikacji Placówka Oświatowa!.
         /// </summary>
         public static string DefaultStatusMessage {
@@ -237,6 +246,15 @@ namespace PlacowkaOswiatowa.Domain.Resources {
         public static string NowyUczen {
             get {
                 return ResourceManager.GetString("NowyUczen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejestracja użytkownika.
+        /// </summary>
+        public static string Rejestracja {
+            get {
+                return ResourceManager.GetString("Rejestracja", resourceCulture);
             }
         }
         

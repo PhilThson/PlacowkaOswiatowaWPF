@@ -26,14 +26,11 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Konstruktor
         public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper)
-            : base(serviceProvider, mapper, BaseResources.AdresyPracownika, 
-                  BaseResources.DodajAdres, BaseResources.NowyPracownik)
+            : base(serviceProvider, mapper, BaseResources.DodajPracownika,
+                  null, BaseResources.DodajAdres, BaseResources.EdycjaAdresu)
         {
-            this.PropertyChanged += (_, __) =>
-                _SaveAndCloseCommand.RaiseCanExecuteChanged();
             Item = new CreatePracownikDto();
             _signal = SignalHub.Instance;
-            _signal.AddressCreated += OnAddressCreated;
         }
         #endregion
 
@@ -219,10 +216,8 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Komendy powiązanej listy wszystkich elementów
         protected override void ShowAddView()
         {
-            var viewHandler = new ViewHandler
-            {
-                ViewType = typeof(NowyAdresViewModel)
-            };
+            var viewHandler = new ViewHandler(typeof(NowyAdresViewModel), isModal: true);
+            SignalHub.AddressCreated = this.OnAddressCreated;
             _signal.RaiseCreateView(this, viewHandler);
         }
 
@@ -239,11 +234,10 @@ namespace PlacowkaOswiatowa.ViewModels
                     throw new DataValidationException(
                         "Błąd odczytu wybranego adresu");
 
-                var viewHandler = new ViewHandler
-                {
-                    ViewType = typeof(NowyAdresViewModel),
-                    ItemId = selectedAdresId
-                };
+                var viewHandler = 
+                    new ViewHandler(typeof(NowyAdresViewModel), selectedAdresId, true);
+
+                SignalHub.AddressCreated = this.OnAddressCreated;
                 _signal.RaiseCreateView(this, viewHandler);
             }
             catch(Exception e)
@@ -251,6 +245,13 @@ namespace PlacowkaOswiatowa.ViewModels
                 MessageBox.Show(e.Message, "Error", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        //obsługa utworzenia adresu
+        private void OnAddressCreated(AdresDto createdAddress)
+        {
+            AllList ??= new ObservableCollection<AdresDto>();
+            AllList.Add(createdAddress);
         }
         #endregion
 
@@ -297,13 +298,7 @@ namespace PlacowkaOswiatowa.ViewModels
         }
         #endregion
 
-        #region Obsługa zdarzeń
-
-        private void OnAddressCreated(object sender, AdresDto createdAddress)
-        {
-            AllList ??= new ObservableCollection<AdresDto>();
-            AllList.Add(createdAddress);
-        }
+        #region Disposing
 
         public override void Dispose()
         {
@@ -313,7 +308,6 @@ namespace PlacowkaOswiatowa.ViewModels
             //której czas życia trwa przez cały okres trwania aplikacji
             //potencjalne wycieki pamięci
             //this.PropertyChanged -= NowyPracownikViewModel_PropertyChanged;
-            _signal.AddressCreated -= OnAddressCreated;
             base.Dispose();
         }
 

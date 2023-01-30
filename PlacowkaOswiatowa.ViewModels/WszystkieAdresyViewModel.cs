@@ -54,12 +54,8 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        protected override void Update()
-        {
-            Load();
-        }
+        protected override void Update() => Load();
 
-        //Ta metoda zostanie prawdopodobnie podpięta pod przycisk 'Odswież'
         protected override void Load()
         {
             var adresy = new List<Adres>();
@@ -72,6 +68,54 @@ namespace PlacowkaOswiatowa.ViewModels
             AllList = _mapper.Map<List<AdresDto>>(adresy);
             List = new ObservableCollection<AdresDto>(AllList);
         }
+        #endregion
+
+        #region Filtrowanie, sortowanie
+        protected override Func<AdresDto, string> SetOrderBySelector() =>
+           SelectedOrderBy switch
+           {
+               nameof(AdresDto.Panstwo) => p => p.Panstwo,
+               nameof(AdresDto.Miejscowosc) => p => p.Miejscowosc,
+               nameof(AdresDto.Ulica) => p => p.Ulica,
+               nameof(AdresDto.KodPocztowy) => p => p.KodPocztowy,
+               _ => p => string.Empty
+           };
+
+        protected override Func<AdresDto, bool> SetFilterPredicate() =>
+            SelectedFilter switch
+            {
+                nameof(AdresDto.Panstwo) =>
+                    p => p.Panstwo?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(AdresDto.Miejscowosc) =>
+                    p => p.Miejscowosc?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(AdresDto.Ulica) =>
+                    p => p.Ulica?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(AdresDto.KodPocztowy) =>
+                    p => p.KodPocztowy?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                _ => p => true
+            };
+
+        protected override List<KeyValuePair<string, string>> SetListOfItemsFilter() =>
+            new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(nameof(AdresDto.Panstwo), "Państwo"),
+                new KeyValuePair<string, string>(nameof(AdresDto.Miejscowosc), "Miejscowość"),
+                new KeyValuePair<string, string>(nameof(AdresDto.Ulica), "Ulica"),
+                new KeyValuePair<string, string>(nameof(AdresDto.KodPocztowy), "Kod pocztowy"),
+            };
+
+        protected override List<KeyValuePair<string, string>> SetListOfItemsOrderBy() =>
+            new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(nameof(AdresDto.Panstwo), "Państwo"),
+                new KeyValuePair<string, string>(nameof(AdresDto.Miejscowosc), "Miejscowość"),
+                new KeyValuePair<string, string>(nameof(AdresDto.Ulica), "Ulica"),
+                new KeyValuePair<string, string>(nameof(AdresDto.KodPocztowy), "Kod pocztowy"),
+            };
         #endregion
     }
 }

@@ -67,8 +67,8 @@ namespace PlacowkaOswiatowa.Domain.Models
 
         public static bool operator ==(Adres a1, Adres a2)
         {
+            if (a1 is null) return false;
             if (a2 is null) return false;
-
             return
                 SafeToLower(a1.Panstwo?.Nazwa) == SafeToLower(a2.Panstwo?.Nazwa) &&
                 SafeToLower(a1.Miejscowosc?.Nazwa) == SafeToLower(a2.Miejscowosc?.Nazwa) &&

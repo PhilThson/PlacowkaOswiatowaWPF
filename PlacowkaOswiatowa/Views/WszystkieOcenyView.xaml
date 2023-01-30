@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <ListView ItemsSource="{Binding List}">
+    <ListView ItemsSource="{Binding List}" SelectedItem="{Binding SelectedItem}">
         <ListView.Resources>
             <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemWysrodkowany}"/>
         </ListView.Resources>

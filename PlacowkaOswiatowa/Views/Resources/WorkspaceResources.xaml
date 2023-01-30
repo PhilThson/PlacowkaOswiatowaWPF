@@ -717,7 +717,7 @@
         <Setter Property="Padding" Value="5 20"/>
     </Style>
 
-    
+
     <!--Konwertery-->
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
     <converters:InvertBooleanConverter x:Key="InvertedBool"/>

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
-using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -66,7 +65,9 @@ namespace PlacowkaOswiatowa.ViewModels
             AllList = _mapper.Map<List<PracownikDto>>(pracownicy);
             List = new ObservableCollection<PracownikDto>(AllList);
         }
+        #endregion
 
+        #region Filtrowanie, sortowanie
         protected override Func<PracownikDto, string> SetOrderBySelector() =>
             SelectedOrderBy switch
             {

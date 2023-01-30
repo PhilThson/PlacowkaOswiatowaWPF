@@ -16,6 +16,8 @@ namespace PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces
         IOcenaRepository Oceny { get; }
         IUmowaRepository Umowy { get; }
         IPracodawcaRepository Pracodawcy { get; }
+        IRolaRepository Role { get; }
+        IUzytkownikRepository Uzytkownicy { get; }
         bool CanConnect();
         Task SaveAsync();
         void Save();

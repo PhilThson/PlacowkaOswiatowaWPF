@@ -5,11 +5,11 @@ namespace PlacowkaOswiatowa.Domain.Helpers
 {
     public class SignalHub : ISignalHub
     {
-        private static SignalHub _Instance;
-        public static SignalHub Instance
-        {
-            get => _Instance ??= new SignalHub();
-        }
+        //próba zabezpieczenia przed równoległym dostępem i utworzenia kilku instancji
+        private static readonly Lazy<SignalHub> lazy
+            = new Lazy<SignalHub>(() => new SignalHub());
+
+        public static SignalHub Instance => lazy.Value;
 
         private SignalHub()
         {
@@ -35,10 +35,15 @@ namespace PlacowkaOswiatowa.Domain.Helpers
         public void RaiseCreateView(object sender, ViewHandler obj = null) =>
             NewViewRequested?.Invoke(sender, obj);
 
+        public delegate void AddressCreatedDelegate(AdresDto address);
 
-        public event EventHandler<AdresDto> AddressCreated;
-        public void RaiseAddressCreated(object sender, AdresDto address) =>
-            AddressCreated?.Invoke(sender, address);
+        public static AddressCreatedDelegate AddressCreated;
+
+        public static void RaiseAddressCreatedDelegate(AdresDto address)
+        {
+            AddressCreated?.Invoke(address);
+            AddressCreated = null;
+        }
     }
 
     public interface ISignalHub
@@ -56,8 +61,5 @@ namespace PlacowkaOswiatowa.Domain.Helpers
 
         public event EventHandler<ViewHandler> NewViewRequested;
         public void RaiseCreateView(object sender, ViewHandler viewHandler = null);
-
-        public event EventHandler<AdresDto> AddressCreated;
-        public void RaiseAddressCreated(object sender, AdresDto address);
     }
 }

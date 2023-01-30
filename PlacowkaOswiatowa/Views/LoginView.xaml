@@ -33,6 +33,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -67,12 +68,12 @@
             </Border>
             <Label Grid.Row="1"
              Grid.Column="1"
-             Content="Nazwa użytkownika: " />
+             Content="E-mail: " />
             <TextBox Grid.Row="1"
                Grid.Column="2"
-               ToolTip="Wprowadź login"
+               ToolTip="Wprowadź e-mail"
                FontFamily="Verdana"
-               Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" />
+               Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
             <Label Grid.Row="2"
              Grid.Column="1"
              Content="Hasło: " />
@@ -82,7 +83,6 @@
                    Password="{Binding Password}"/>
             <StackPanel Grid.Row="3"
                   Grid.Column="2"
-                  HorizontalAlignment="Left"
                   Orientation="Horizontal">
                 <Button ToolTip="Zaloguj do aplikacji"
                     Content="Login"
@@ -94,6 +94,12 @@
                     IsCancel="True"
                     Style="{StaticResource CancelButton}"
                     Command="{Binding ClearFormCommand}" />
+                <Button ToolTip="Rejestracja nowego użytkownika"
+                    Content="Zarejestruj"
+                    HorizontalAlignment="Right"
+                    Style="{StaticResource SubmitButton}"
+                    Background="{StaticResource BrushIndianRed}"
+                    Command="{Binding RegisterCommand}" />
             </StackPanel>
             <ListBox Grid.Row="4"
                Grid.Column="2"
@@ -102,6 +108,7 @@
                  Converter={StaticResource BoolToVisibility}}"
                ItemsSource="{Binding ValidationMessages}"
                DisplayMemberPath="Message" />
+
         </Grid>
     </Border>
 </UserControl>

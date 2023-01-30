@@ -35,7 +35,7 @@ namespace PlacowkaOswiatowa.ViewModels
             _workspacesVisibility = "Collapsed";
             _loginViewVisibility = "Collapsed";
             //wyświetlanie panelu logowania
-            _isLoggedIn = true;
+            _isLoggedIn = false;
             _signal.NewMessage += (s, m) => StatusMessage = m;
             _signal.LoggedInChanged += () => IsLoggedIn = true;
             _signal.HideLogingRequest += () => ChangeLoginViewVisibility();
@@ -200,9 +200,9 @@ namespace PlacowkaOswiatowa.ViewModels
                     Task.Run(async () => await (workspace as IEditable).LoadItem(viewHandler.ItemId));
                 }
 
-                if (workspace.GetType().IsAssignableTo(typeof(NowyAdresViewModel)))
+                if (viewHandler.IsModal)
                 {
-                    CreateWindow(workspace, BaseResources.NowyAdres);
+                    CreateWindow(workspace);
                     return;
                 }
 
@@ -283,20 +283,23 @@ namespace PlacowkaOswiatowa.ViewModels
         private void CreateWindow(WorkspaceViewModel viewModel, string title = null)
         {
             Window window = new Window();
-            window.Title = string.IsNullOrEmpty(title) ? "Nowe okno" : title;
-            window.Height = 400;
+            window.Title = string.IsNullOrEmpty(title) ? BaseResources.BaseTitle : title;
+            window.Height = 500;
             window.Width = 900;
             window.Content = viewModel;
-            viewModel.RequestClose += (s, e) => window.Close();
-            viewModel.RequestClose += OnWindowRequestClose;
+            viewModel.RequestClose += (s, e) =>
+            {
+                window.Close();
+                OnWindowRequestClose(s, e);
+            };
             window.Show();
         }
 
         private void OnWindowRequestClose(object sender, EventArgs e)
         {
             var viewModel = sender as NowyAdresViewModel;
-            if(viewModel != null)
-                _signal.RaiseAddressCreated(sender, viewModel.Item);
+            if (viewModel != null)
+                SignalHub.RaiseAddressCreatedDelegate(viewModel.Item);
         }
 
         private void Zamknij()

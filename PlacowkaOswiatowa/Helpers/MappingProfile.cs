@@ -96,6 +96,11 @@ namespace PlacowkaOswiatowa.Helpers
             CreateMap<Urlop, UrlopDto>();
 
             CreateMap<Skladki, SkladkiDto>();
+
+            CreateMap<CreateUzytkownikDto, Uzytkownik>()
+                .ForMember(d => d.RolaId, o => o.MapFrom(s => s.Rola.Id))
+                .ForMember(d => d.Rola, o => o.Ignore())
+                ;
         }
     }
 }

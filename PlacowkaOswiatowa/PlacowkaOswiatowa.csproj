@@ -35,6 +35,8 @@
     <None Remove="Icons\university.png" />
     <None Remove="Icons\vacation.png" />
     <None Remove="Themes\Generic.xaml~RF1d9e041.TMP" />
+    <None Remove="Views\LoginView.xaml~RF9139fa.TMP" />
+    <None Remove="Views\NowyAdresView.xaml~RF61f9aa.TMP" />
   </ItemGroup>
 
   <ItemGroup>

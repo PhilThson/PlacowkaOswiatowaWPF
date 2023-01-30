@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="PlacowkaOswiatowa.Views.RejestracjaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PlacowkaOswiatowa.Views"
+             xmlns:helpers="clr-namespace:PlacowkaOswiatowa.Domain.Helpers;assembly=PlacowkaOswiatowa.Domain"
+             xmlns:enums="clr-namespace:PlacowkaOswiatowa.Domain.Enums;assembly=PlacowkaOswiatowa.Domain" 
+             xmlns:components="clr-namespace:PlacowkaOswiatowa.Helpers.CustomUI.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Border Background="{StaticResource ScreenGradient}">
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelStandardowy}"/>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxZaokraglony}"/>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxZaokraglony}"/>
+                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>
+                <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource PasswordBoxZaokraglony}"/>
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Margin="20"
+                   Content="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" 
+                   Style="{StaticResource LabelNagłówek}"/>
+
+            <Label Grid.Row="1" Grid.Column="1" Content="Imię:"/>
+            <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding Imie}"/>
+            <Label Grid.Row="1" Grid.Column="3" Content="Nazwisko:"/>
+            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Nazwisko}" />
+
+            <Label Grid.Row="2" Grid.Column="1" Content="E-mail:"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Email}" MaxLength="50"/>
+            <Label Grid.Row="2" Grid.Column="3" Content="Rola:"/>
+            <ComboBox Grid.Row="2" Grid.Column="4" 
+                      ItemsSource="{Binding Role, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Rola, Mode=TwoWay}"
+                      DisplayMemberPath="Nazwa"
+                      Text="{Binding Rola.Nazwa}"/>
+
+            <Label Grid.Row="3" Grid.Column="1" Content="Hasło:"/>
+            <components:BindablePasswordBox Grid.Row="3" Grid.Column="2" 
+                                            Password="{Binding Haslo}"/>
+            <Label Grid.Row="3" Grid.Column="3" Content="Powtórz hasło:"/>
+            <components:BindablePasswordBox Grid.Row="3" Grid.Column="4" 
+                                            Password="{Binding PowtorzHaslo}"/>
+
+            <ListBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="20"
+               Style="{StaticResource ValidationArea}"
+               Visibility="{Binding IsValidationVisible, 
+                 Converter={StaticResource BoolToVisibility}}"
+               ItemsSource="{Binding ValidationMessages}"
+               DisplayMemberPath="Message" />
+            
+            <StackPanel Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="4" Margin="20"
+                        Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Zapisz" 
+                            Command="{Binding SaveAndCloseCommand}"
+                            Style="{StaticResource ButtonZaokraglony}" 
+                            FontSize="24"/>
+                <Button Content="Wyczyść"
+                            Command="{Binding ClearFormCommand}"
+                            CommandParameter="{Binding .}"
+                            Style="{StaticResource ButtonZaokraglonyCzerwony}" 
+                            FontSize="24" />
+            </StackPanel>
+
+        </Grid>
+    </Border>
+
+</UserControl>

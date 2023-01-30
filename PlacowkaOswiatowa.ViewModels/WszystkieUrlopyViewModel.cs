@@ -50,10 +50,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        protected override void Update()
-        {
-            Load();
-        }
+        protected override void Update() => Load();
 
         protected override void Load()
         {
@@ -66,6 +63,54 @@ namespace PlacowkaOswiatowa.ViewModels
             AllList = _mapper.Map<List<UrlopDto>>(urlopy);
             List = new ObservableCollection<UrlopDto>(AllList);
         }
+        #endregion
+
+        #region Filtrowanie, sortowanie
+        protected override Func<UrlopDto, string> SetOrderBySelector() =>
+           SelectedOrderBy switch
+           {
+               nameof(UrlopDto.Pracownik.Nazwisko) => p => p.Pracownik.Nazwisko,
+               nameof(UrlopDto.ZastepujacyPracownik) => p => p.ZastepujacyPracownik,
+               nameof(UrlopDto.PrzyczynaUrlopu) => p => p.PrzyczynaUrlopu,
+               nameof(UrlopDto.PoczatekUrlopu) => p => p.PoczatekUrlopu.ToShortDateString(),
+               _ => p => string.Empty
+           };
+
+        protected override Func<UrlopDto, bool> SetFilterPredicate() =>
+            SelectedFilter switch
+            {
+                nameof(UrlopDto.Pracownik.Nazwisko) =>
+                    p => p.Pracownik?.Nazwisko?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(UrlopDto.ZastepujacyPracownik) =>
+                    p => p.ZastepujacyPracownik?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(UrlopDto.PrzyczynaUrlopu) =>
+                    p => p.PrzyczynaUrlopu?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                nameof(UrlopDto.PoczatekUrlopu) =>
+                    p => p.PoczatekUrlopu.ToShortDateString()?.Contains(SearchPhrase,
+                        StringComparison.InvariantCultureIgnoreCase) ?? false,
+                _ => p => true
+            };
+
+        protected override List<KeyValuePair<string, string>> SetListOfItemsFilter() =>
+            new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(nameof(UrlopDto.Pracownik.Nazwisko), "Nazwisko pracownika"),
+                new KeyValuePair<string, string>(nameof(UrlopDto.ZastepujacyPracownik), "Zastępujący pracownik"),
+                new KeyValuePair<string, string>(nameof(UrlopDto.PrzyczynaUrlopu), "Przyczyna urlopu"),
+                new KeyValuePair<string, string>(nameof(UrlopDto.PoczatekUrlopu), "Początek urlopu"),
+            };
+
+        protected override List<KeyValuePair<string, string>> SetListOfItemsOrderBy() =>
+            new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>(nameof(UrlopDto.Pracownik.Nazwisko), "Nazwisko pracownika"),
+                new KeyValuePair<string, string>(nameof(UrlopDto.ZastepujacyPracownik), "Zastępujący pracownik"),
+                new KeyValuePair<string, string>(nameof(UrlopDto.PrzyczynaUrlopu), "Przyczyna urlopu"),
+                new KeyValuePair<string, string>(nameof(UrlopDto.PoczatekUrlopu), "Początek urlopu"),
+            };
         #endregion
     }
 }

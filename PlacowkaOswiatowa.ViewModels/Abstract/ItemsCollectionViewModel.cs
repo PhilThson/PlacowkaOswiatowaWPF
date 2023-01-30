@@ -148,14 +148,10 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         //Wywoływanie innych widoków
         private void RequestCreateView()
         {
-            var viewHandler = new ViewHandler
-            {
-                //jeżeli jest to widok do edycji, to dodatkowo zostanie
-                //przesłany identyfikator obiektu
-                ItemId = SelectedItem?.Id,
-                //ViewModel wszystkich elementów określa jaki typ zakładki może tworzyć
-                ViewType = ItemToCreateType
-            };
+            //jeżeli jest to widok do edycji, to dodatkowo zostanie
+            //przesłany identyfikator obiektu
+            //ViewModel wszystkich elementów określa jaki typ zakładki może tworzyć
+            var viewHandler = new ViewHandler(ItemToCreateType, SelectedItem?.Id);
             _signal.RaiseCreateView(this, viewHandler);
         }
 

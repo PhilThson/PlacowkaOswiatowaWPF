@@ -142,13 +142,12 @@
         </GroupBox>
 
         <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"
-                IsEnabled="{Binding Adres, Converter={StaticResource BaseEntityToIsEnabled}}"
-                        HorizontalAlignment="Stretch"
-                        ToolTip="Dodaj adres ucznia"
-                        Content="Dodaj adres"
-                        IsDefault="True"
-                        Style="{StaticResource ButtonStandardowy}"
-                        Command="{Binding AddAddressCommand}" />
+                HorizontalAlignment="Stretch"
+                Content="{Binding AddressButtonContent}"
+                IsDefault="True"
+                Style="{StaticResource ButtonStandardowy}"
+                Command="{Binding AddAddressCommand}" />
+                <!--IsEnabled="{Binding Adres, Converter={StaticResource BaseEntityToIsEnabled}}"-->
 
     </Grid>
 

@@ -113,11 +113,11 @@
        TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="{Binding}"/>
     </Style>-->
-    <Style x:Key="ToggleButtonStyle"
+    <!--<Style x:Key="ToggleButtonStyle"
        BasedOn="{StaticResource ToolBarButtonBaseStyle}"
        TargetType="{x:Type ToggleButton}">
-        <!--<Setter Property="Background" Value="{Binding}"/>-->
-    </Style>
+        --><!--<Setter Property="Background" Value="{Binding}"/>--><!--
+    </Style>-->
 
     <Style x:Key="{x:Static ToolBar.CheckBoxStyleKey}"
        BasedOn="{StaticResource ToolBarButtonBaseStyle}"

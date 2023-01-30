@@ -200,10 +200,10 @@
 
                         <Label Grid.Row="2" Grid.Column="1" Content="Opis wynagrodzenia:"/>
                         <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding OpisWynagrodzenia}"
-                                         Grid.ColumnSpan="3"/>
+                                         Grid.ColumnSpan="3" MaxLength="50"/>
                         
                         <Label Grid.Row="3" Grid.Column="1" Content="Miejsce wykonywania pracy:"/>
-                        <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3"
+                        <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" MaxLength="50"
                                          Text="{Binding MiejsceWykonywaniaPracy, UpdateSourceTrigger=PropertyChanged}"
                                          />
                         
@@ -249,11 +249,11 @@
                                                 Mode=TwoWay, Converter={StaticResource DateToString}}"/>
                         
                         <Label Grid.Row="7" Grid.Column="1" Content="Inne warunki zatrudnienia:"/>
-                        <TextBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" 
+                        <TextBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" MaxLength="50"
                                          Text="{Binding InneWarunkiZatrudnienia}"/>
                         
                         <Label Grid.Row="8" Grid.Column="1" Content="Przyczyny zawarcia umowy:"/>
-                        <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="3" 
+                        <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="3" MaxLength="50"
                                          Text="{Binding PrzyczynyZawarciaUmowy}"/>
                     </Grid>
                 </Grid>
