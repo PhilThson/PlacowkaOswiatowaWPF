@@ -92,7 +92,8 @@ namespace PlacowkaOswiatowa.ViewModels
                     Item.Pracownik.WynagrodzenieBrutto = value;
                     ClearErrors(nameof(WynagrodzenieBrutto));
                     if (Item.Pracownik.WynagrodzenieBrutto == default)
-                        AddErrorForRequired(nameof(WynagrodzenieBrutto));
+                        AddError(nameof(WynagrodzenieBrutto),
+                            "Wynagrodzenie brutto jest wymagane");
 
                     OnPropertyChanged(() => WynagrodzenieBrutto);
                 }
@@ -109,7 +110,8 @@ namespace PlacowkaOswiatowa.ViewModels
                     ClearErrors(nameof(WymiarGodzinowy));
                     if (Item.Pracownik.WymiarGodzinowy == null ||
                         Item.Pracownik.WymiarGodzinowy == default(double))
-                        AddErrorForRequired(nameof(WymiarGodzinowy));
+                        AddError(nameof(WymiarGodzinowy),
+                            "Wymiar godzinowy jest wymagany");
 
                     OnPropertyChanged(() => WymiarGodzinowy);
                 }
@@ -137,8 +139,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.SkladkaEmerytalnaProcent = value;
                     ClearErrors(nameof(SkladkaEmerytalnaProcent));
-                    if (Item.SkladkaEmerytalnaProcent == default)
-                        AddErrorForRequired(nameof(SkladkaEmerytalnaProcent));
+                    if (Item.SkladkaEmerytalnaProcent < 0 ||
+                        Item.SkladkaEmerytalnaProcent > 100)
+                        AddErrorForPercentage(nameof(SkladkaEmerytalnaProcent));
 
                     OnPropertyChanged();
                 }
@@ -153,8 +156,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.SkladkaRentowaProcent = value;
                     ClearErrors(nameof(SkladkaRentowaProcent));
-                    if (Item.SkladkaRentowaProcent == default)
-                        AddErrorForRequired(nameof(SkladkaRentowaProcent));
+                    if (Item.SkladkaRentowaProcent < 0 ||
+                        Item.SkladkaRentowaProcent > 100)
+                        AddErrorForPercentage(nameof(SkladkaRentowaProcent));
 
                     OnPropertyChanged();
                 }
@@ -169,8 +173,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.SkladkaChorobowaProcent = value;
                     ClearErrors(nameof(SkladkaChorobowaProcent));
-                    if (Item.SkladkaChorobowaProcent == default)
-                        AddErrorForRequired(nameof(SkladkaChorobowaProcent));
+                    if (Item.SkladkaChorobowaProcent < 0 ||
+                        Item.SkladkaChorobowaProcent > 100)
+                        AddErrorForPercentage(nameof(SkladkaChorobowaProcent));
 
                     OnPropertyChanged();
                 }
@@ -185,8 +190,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.SkladkaZdrowotnaProcent = value;
                     ClearErrors(nameof(SkladkaZdrowotnaProcent));
-                    if (Item.SkladkaZdrowotna == default)
-                        AddErrorForRequired(nameof(SkladkaZdrowotna));
+                    if (Item.SkladkaZdrowotnaProcent < 0 ||
+                        Item.SkladkaZdrowotnaProcent > 100)
+                        AddErrorForPercentage(nameof(SkladkaZdrowotnaProcent));
 
                     OnPropertyChanged();
                 }
@@ -213,8 +219,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     Item.PodatekProcent = value;
                     ClearErrors(nameof(PodatekProcent));
-                    if (Item.PodatekProcent == default)
-                        AddErrorForRequired(nameof(PodatekProcent));
+                    if (Item.PodatekProcent < 0 ||
+                        Item.PodatekProcent > 100)
+                        AddErrorForPercentage(nameof(PodatekProcent));
 
                     OnPropertyChanged();
                 }
@@ -228,11 +235,19 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (value != Item.KwotaWolnaOdPodatku)
                 {
                     Item.KwotaWolnaOdPodatku = value;
+                    ClearErrors(nameof(KwotaWolnaOdPodatku));
+                    if (Item.KwotaWolnaOdPodatku < 0 ||
+                        Item.KwotaWolnaOdPodatku > 500)
+                        AddError(nameof(KwotaWolnaOdPodatku),
+                            "Kwota musi być z zakresu od 0 do 500 zł");
+
                     OnPropertyChanged();
                 }
             }
         }
+        #endregion
 
+        #region Właściwości do odczytu
         public decimal SkladkaEmerytalna
         {
             get => Item.SkladkaEmerytalna;
@@ -253,7 +268,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             get => Item.ZaliczkaNaPodatekDochodowy;
         }
-
+        #endregion
 
         #region Wartości wyliczone
 
@@ -269,8 +284,6 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #endregion
 
-
-        #endregion
 
         #region Inicjacja
 

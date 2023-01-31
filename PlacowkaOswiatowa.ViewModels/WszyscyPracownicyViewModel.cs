@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -19,13 +20,15 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
         protected override Type EntityType => typeof(Pracownik);
+        private readonly ISignalHub _signal;
         #endregion
 
         #region Konstruktor
         public WszyscyPracownicyViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
         {
-
+            _signal = SignalHub.Instance;
+            _signal.RequestRefreshEmployeesView += Update;
         }
         #endregion
 
@@ -65,6 +68,12 @@ namespace PlacowkaOswiatowa.ViewModels
             AllList = _mapper.Map<List<PracownikDto>>(pracownicy);
             List = new ObservableCollection<PracownikDto>(AllList);
         }
+        public override void Dispose()
+        {
+            _signal.RequestRefreshEmployeesView -= Update;
+            base.Dispose();
+        }
+
         #endregion
 
         #region Filtrowanie, sortowanie

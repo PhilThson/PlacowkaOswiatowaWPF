@@ -183,12 +183,16 @@ namespace PlacowkaOswiatowa.ViewModels
                     else
                         repository.Update(pracownik);
 
+
                     await repository.AddAsync(pracownik);
                     await repository.SaveAsync();
                 }
 
                 MessageBox.Show("Dodano pracownika!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
+
+                _signal.RaiseRequestRefreshEmployeesView();
+
                 return true;
             }
             catch (DataValidationException e)

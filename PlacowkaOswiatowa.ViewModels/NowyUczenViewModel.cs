@@ -318,6 +318,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 MessageBox.Show("Zapisano ucznia!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
+                _signal.RaiseRequestRefreshStudentsView();
+
                 return true;
             }
             catch(DataValidationException e)

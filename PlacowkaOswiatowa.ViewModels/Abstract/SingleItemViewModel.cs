@@ -162,8 +162,8 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             _propertyErrors.GetValueOrDefault(propertyName, null);
 
 
-        public void AddErrorForRequired(string propertyName) =>
-            AddError(propertyName, $"Parametr {propertyName} jest wymagany");
+        public void AddErrorForPercentage(string propertyName) =>
+            AddError(propertyName, $"Wartość musi być z zakresu od 0 do 100%");
 
         public void AddError(string propertyName, string errorMessage)
         {

@@ -22,6 +22,14 @@ namespace PlacowkaOswiatowa.Domain.Helpers
         public event Action HideLogingRequest;
         public void RaiseHideLoginViewRequest() => HideLogingRequest?.Invoke();
 
+        public event Action RequestRefreshEmployeesView;
+        public void RaiseRequestRefreshEmployeesView() =>
+            RequestRefreshEmployeesView?.Invoke();
+
+        public event Action RequestRefreshStudentsView;
+        public void RaiseRequestRefreshStudentsView() =>
+            RequestRefreshStudentsView?.Invoke();
+
 
         public event EventHandler<string> NewMessage;
         public void SendMessage(object sender, string message = null) =>
@@ -50,8 +58,12 @@ namespace PlacowkaOswiatowa.Domain.Helpers
     {
         event Action LoggedInChanged;
         event Action HideLogingRequest;
+        event Action RequestRefreshEmployeesView;
+        event Action RequestRefreshStudentsView;
         void RaiseLoggedInChanged();
         void RaiseHideLoginViewRequest();
+        public void RaiseRequestRefreshEmployeesView();
+        public void RaiseRequestRefreshStudentsView();
 
         /// <summary>
         /// Zdarzenie do obsługi rozgłaszania wiadomości

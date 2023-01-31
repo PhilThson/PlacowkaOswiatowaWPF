@@ -89,6 +89,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.RaiseLoggedInChanged();
                 _signal.SendMessage(this, "Witaj Gościu!");
                 Close();
+                return true;
             }
             try
             {
@@ -108,6 +109,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.RaiseLoggedInChanged();
                 _signal.SendMessage(this, $"Witaj {uzytkownik.Imie} {uzytkownik.Nazwisko}!");
                 Close();
+                return true;
             }
             catch(DataValidationException e)
             {
@@ -131,8 +133,8 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             ClearValidationMessages();
             Item = new UzytkownikDto();
-            foreach (var prop in this.GetType().GetProperties())
-                OnPropertyChanged(prop.Name);
+            OnPropertyChanged(Email);
+            OnPropertyChanged(Password);
 
             _signal.RaiseHideLoginViewRequest();
         }

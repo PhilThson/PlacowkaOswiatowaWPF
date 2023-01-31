@@ -20,6 +20,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola, właściwości, komendy
         protected override Type ItemToCreateType => typeof(NowyUczenViewModel);
         protected override Type EntityType => typeof(Uczen);
+        private readonly ISignalHub _signal;
         //public ICollectionView StudentsCollectionView { get; set; }
         #endregion
 
@@ -28,6 +29,8 @@ namespace PlacowkaOswiatowa.ViewModels
             : base(serviceProvider, mapper, BaseResources.WszyscyUczniowie, BaseResources.DodajUcznia)
         {
             //StudentsCollectionView = CollectionViewSource.GetDefaultView(List);
+            _signal = SignalHub.Instance;
+            _signal.RequestRefreshStudentsView += Update;
         }
         #endregion
 
@@ -69,6 +72,15 @@ namespace PlacowkaOswiatowa.ViewModels
             List = new ObservableCollection<UczenDto>(AllList);
         }
 
+        public override void Dispose()
+        {
+            _signal.RequestRefreshStudentsView -= Update;
+            base.Dispose();
+        }
+
+        #endregion
+
+        #region Filtrowanie, sortowanie
         protected override Func<UczenDto, string> SetOrderBySelector() =>
             SelectedOrderBy switch
             {
@@ -105,7 +117,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 new KeyValuePair<string, string>(nameof(UczenDto.Nazwisko), "Nazwisko"),
                 new KeyValuePair<string, string>(nameof(UczenDto.Oddzial.Nazwa), "Oddział"),
             };
-
         #endregion
     }
 }

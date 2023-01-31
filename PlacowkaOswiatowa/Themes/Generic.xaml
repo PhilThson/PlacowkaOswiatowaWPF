@@ -204,7 +204,7 @@
                                         Converter={StaticResource ObjectToVisibility}}">
                                 <!--Zamiast bindować cały wybrany rekord, 
                                     w komendzie do edycji jest przesyłany tylko identyfikator-->
-                                <DataGrid ItemsSource="{Binding AllList}" 
+                                <ListView ItemsSource="{Binding AllList}" 
                                           SelectedItem="{Binding SelectedItem}"/>
                             </GroupBox>
                             
