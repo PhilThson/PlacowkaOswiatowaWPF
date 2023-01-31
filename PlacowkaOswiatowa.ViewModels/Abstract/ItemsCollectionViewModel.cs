@@ -21,7 +21,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
     {
         #region Pola prywatne i właściwości
         protected readonly IMapper _mapper;
-        private readonly ISignalHub _signal;
+        protected readonly ISignalHub _signal;
 
         public string AddItemName { get; set; }
 
@@ -228,7 +228,10 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         #endregion
 
         #region Virtuals
+        //ViewModel określa jakim jest typem encji, jest to potrzebne do 
+        //generycznej metody usuwania rekordu z listy wszystkich elementów
         protected virtual Type EntityType { get; }
+        //ViewModel określa jaki typ zakładki tworzy
         protected virtual Type ItemToCreateType { get; }
         protected virtual Func<T, string> SetOrderBySelector() =>
             item => string.Empty;

@@ -17,11 +17,6 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class WszystkieOcenyViewModel : ItemsCollectionViewModel<OcenaDto>, ILoadable
     {
-        #region Pola, właściwości, komendy
-        protected override Type ItemToCreateType => typeof(NowyPrzedmiotViewModel);
-        #endregion
-
-
         #region Konstruktor
         public WszystkieOcenyViewModel(IServiceProvider serviceProvide, IMapper mapper)
             : base(serviceProvide, mapper, BaseResources.WszystkieOceny)
@@ -52,10 +47,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        protected override void Update()
-        {
-            Load();
-        }
+        protected override void Update() => Load();
 
         protected override void Load()
         {

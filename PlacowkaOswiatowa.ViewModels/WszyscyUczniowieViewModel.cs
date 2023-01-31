@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.DTOs;
-using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -20,7 +19,6 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pola, właściwości, komendy
         protected override Type ItemToCreateType => typeof(NowyUczenViewModel);
         protected override Type EntityType => typeof(Uczen);
-        private readonly ISignalHub _signal;
         //public ICollectionView StudentsCollectionView { get; set; }
         #endregion
 
@@ -29,7 +27,6 @@ namespace PlacowkaOswiatowa.ViewModels
             : base(serviceProvider, mapper, BaseResources.WszyscyUczniowie, BaseResources.DodajUcznia)
         {
             //StudentsCollectionView = CollectionViewSource.GetDefaultView(List);
-            _signal = SignalHub.Instance;
             _signal.RequestRefreshStudentsView += Update;
         }
         #endregion

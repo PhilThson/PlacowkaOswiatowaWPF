@@ -17,12 +17,6 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class WszystkiePrzedmiotyViewModel : ItemsCollectionViewModel<PrzedmiotDto>, ILoadable
     {
-
-        #region Pola, właściwości, komendy
-        protected override Type ItemToCreateType => typeof(NowyPrzedmiotViewModel);
-        #endregion
-
-
         #region Konstruktor
         public WszystkiePrzedmiotyViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszystkiePrzedmioty)
@@ -53,12 +47,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        protected override void Update()
-        {
-            Load();
-        }
-
-        //Ta metoda zostanie prawdopodobnie podpięta pod przycisk 'Odswież'
+        protected override void Update() => Load();
         protected override void Load()
         {
             var przedmioty = new List<Przedmiot>();

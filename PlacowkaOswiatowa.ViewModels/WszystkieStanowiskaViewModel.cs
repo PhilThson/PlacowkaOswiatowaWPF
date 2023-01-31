@@ -17,11 +17,6 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class WszystkieStanowiskaViewModel : ItemsCollectionViewModel<StanowiskoDto>, ILoadable
     {
-
-        #region Pola i komendy
-        protected override Type ItemToCreateType => typeof(NoweStanowiskoViewModel);
-        #endregion
-
         #region Konstruktor
         public WszystkieStanowiskaViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszystkiePrzedmioty)
@@ -52,10 +47,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Metody
-        protected override void Update()
-        {
-            Load();
-        }
+        protected override void Update() => Load();
 
         protected override void Load()
         {
