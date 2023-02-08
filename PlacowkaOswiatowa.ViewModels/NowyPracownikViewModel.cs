@@ -170,11 +170,11 @@ namespace PlacowkaOswiatowa.ViewModels
                     {
                         foreach(var adresId in AllList.Select(a => a.Id))
                         {
-                            if(!Item.Adresy.Any(a => a.Id == adresId))
-                            {
-                                pracownik.PracownikPracownicyAdresy
-                                    .Add(new PracownicyAdresy { AdresId = (int)adresId });
-                            }
+                            if (Item.Adresy?.Any(a => a.Id == adresId) == true)
+                                continue;
+
+                            pracownik.PracownikPracownicyAdresy
+                                .Add(new PracownicyAdresy { AdresId = (int)adresId });
                         }
                     }
 
