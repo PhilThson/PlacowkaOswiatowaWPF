@@ -27,12 +27,17 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public List<Urlop> GetAll()
         {
-            return _urlopDbSet.Include(u => u.Pracownik).ToList();
+            return _urlopDbSet
+                .AsNoTracking()
+                .Include(u => u.Pracownik)
+                .ToList();
         }
 
         public async Task<List<Urlop>> GetAllAsync()
         {
-            return await _urlopDbSet.Include(u => u.Pracownik).ToListAsync();
+            return await _urlopDbSet
+                .AsNoTracking()
+                .Include(u => u.Pracownik).ToListAsync();
         }
 
         public async Task AddAsync(Urlop urlop)

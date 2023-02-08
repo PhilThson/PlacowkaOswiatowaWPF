@@ -32,7 +32,9 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
                 a.KodPocztowy == adres.KodPocztowy);
 
         public async Task<Adres> GetAdresAsync(Adres adres) =>
-            await _adresDbSet.FirstOrDefaultAsync(a =>
+            await _adresDbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a =>
                 a.Panstwo.Nazwa == adres.Panstwo.Nazwa &&
                 a.Ulica.Nazwa == adres.Ulica.Nazwa &&
                 a.Miejscowosc.Nazwa == adres.Miejscowosc.Nazwa &&

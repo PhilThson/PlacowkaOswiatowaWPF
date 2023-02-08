@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
-using System;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {
@@ -31,8 +29,8 @@ namespace PlacowkaOswiatowa.Domain.Models
 
         public static bool operator ==(Uczen u1, Uczen u2)
         {
-            if (u1 == null) return false;
-            if (u2 == null) return false;
+            if (u1 is null) return false;
+            if (u2 is null) return false;
             if ((Osoba)u1 != (Osoba)u2)
                 return false;
 

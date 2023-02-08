@@ -22,6 +22,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
         public override async Task<List<Ocena>> GetAllAsync(Expression<Func<Ocena, bool>> filter = null, string includeProperties = null)
         {
             return await _ocenaDbSet
+                .AsNoTracking()
                 .Include(o => o.Uczen)
                 .Include(o => o.Pracownik)
                 .Include(o => o.Przedmiot)

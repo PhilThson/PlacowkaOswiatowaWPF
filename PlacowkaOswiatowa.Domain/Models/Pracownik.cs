@@ -45,9 +45,10 @@ namespace PlacowkaOswiatowa.Domain.Models
 
         public static bool operator ==(Pracownik p1, Pracownik p2)
         {
-            if (p1 == null) return false;
-            if (p2 == null) return false;
+            if (p1 is null) return false;
+            if (p2 is null) return false;
 
+            //wykorzystanie przeciążonego operatoro osoby
             if ((Osoba)p1 != (Osoba)p2)
                 return false;
 

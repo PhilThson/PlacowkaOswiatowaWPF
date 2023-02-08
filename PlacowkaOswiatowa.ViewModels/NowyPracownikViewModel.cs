@@ -155,7 +155,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
                     if(pracownik.Id != default)
                     {
-                        var pracownikById = await repository.Pracownicy.GetByIdAsync(pracownik.Id);
+                        var pracownikById = await repository.Pracownicy.GetByIdAsync(pracownik.Id, false);
                         if (pracownikById == pracownik)
                             throw new DataValidationException("Nie dokonano zmian");
                     }
@@ -170,7 +170,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     {
                         foreach(var adresId in AllList.Select(a => a.Id))
                         {
-                            if(!pracownik.PracownikPracownicyAdresy.Any(pa => pa.AdresId == (int)adresId))
+                            if(!Item.Adresy.Any(a => a.Id == adresId))
                             {
                                 pracownik.PracownikPracownicyAdresy
                                     .Add(new PracownicyAdresy { AdresId = (int)adresId });
@@ -182,13 +182,11 @@ namespace PlacowkaOswiatowa.ViewModels
                         await repository.AddAsync(pracownik);
                     else
                         repository.Update(pracownik);
-
-
-                    await repository.AddAsync(pracownik);
+                                        
                     await repository.SaveAsync();
                 }
 
-                MessageBox.Show("Dodano pracownika!", "Sukces",
+                MessageBox.Show("Zapisano pracownika!", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
                 _signal.RaiseRequestRefreshEmployeesView();
@@ -285,11 +283,11 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.SendMessage(this, $"Widok: {DisplayName}");
 
                 Item = _mapper.Map<CreatePracownikDto>(pracownik);
-                var addresses = _mapper.Map<List<AdresDto>>(pracownik.PracownikPracownicyAdresy.Select(pa => pa.Adres));
+                //var addresses = _mapper.Map<List<AdresDto>>(pracownik.PracownikPracownicyAdresy.Select(pa => pa.Adres));
 
                 //aby nie wyświetlać listy jeżeli jest pusta
-                if(addresses.Count > 0)
-                    AllList = new ObservableCollection<AdresDto>(addresses);
+                if(Item.Adresy?.Count > 0)
+                    AllList = new ObservableCollection<AdresDto>(Item.Adresy);
 
                 foreach (var prop in this.GetType().GetProperties())
                     this.OnPropertyChanged(prop.Name);

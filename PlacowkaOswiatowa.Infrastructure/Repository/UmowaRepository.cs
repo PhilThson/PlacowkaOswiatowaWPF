@@ -27,6 +27,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<List<Umowa>> GetAllAsync() =>
             await _umowaDbSet
+            .AsNoTracking()
             .IncludePracodawca(u => u.Pracodawca)
             .Include(u => u.Pracownik)
             .Include(u => u.Etat)
@@ -35,6 +36,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public List<Umowa> GetAll() =>
             _umowaDbSet
+            .AsNoTracking()
             .IncludePracodawca(u => u.Pracodawca)
             .Include(u => u.Pracownik)
             .Include(u => u.Etat)
@@ -43,6 +45,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<Umowa> GetByIdAsync(int id) =>
             await _umowaDbSet
+            .AsNoTracking()
             .Where(u => u.Id == id)
             .IncludePracodawca(u => u.Pracodawca)
             .Include(u => u.Pracownik)

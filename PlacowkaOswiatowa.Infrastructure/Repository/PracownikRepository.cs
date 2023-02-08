@@ -27,21 +27,26 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<List<Pracownik>> GetAllAsync() =>
             await _pracownikDbSet
+                .AsNoTracking()
                 .IncludeUmowa(p => p.PracownikUmowa)
                 .IncludePracownicyAdresy()
                 .ToListAsync();
 
         public List<Pracownik> GetAll() =>
             _pracownikDbSet
+                .AsNoTracking()
                 .IncludeUmowa(p => p.PracownikUmowa)
                 .IncludePracownicyAdresy()
                 .ToList();
 
         public async Task<Pracownik> GetPracownikByPeselAsync(string pesel) =>
-            await _pracownikDbSet.FirstOrDefaultAsync(p => p.Pesel == pesel);
+            await _pracownikDbSet
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Pesel == pesel);
 
         public async Task<Pracownik> GetByIdAsync(int id) =>
             await _pracownikDbSet
+                .AsNoTracking()
                 .Where(p => p.Id == id)
                 .IncludeUmowa(p => p.PracownikUmowa)
                 .IncludePracownicyAdresy()

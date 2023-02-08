@@ -19,6 +19,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<List<Uczen>> GetAllAsync() =>
             await _uczenDbSet
+            .AsNoTracking()
             .IncludeAdres(u => u.Adres)
             .Include(u => u.Oddzial)
                 .ThenInclude(o => o.Pracownik)
@@ -26,16 +27,20 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public List<Uczen> GetAll() =>
             _uczenDbSet
+            .AsNoTracking()
             .IncludeAdres(u => u.Adres)
             .Include(u => u.Oddzial)
                 .ThenInclude(o => o.Pracownik)
             .ToList();
 
         public async Task<Uczen> GetUczenByPesel(string pesel) =>
-            await _uczenDbSet.FirstOrDefaultAsync(u => u.Pesel == pesel);
+            await _uczenDbSet
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Pesel == pesel);
 
         public async Task<Uczen> GetByIdAsync(int id) =>
             await _uczenDbSet
+            .AsNoTracking()
             .Where(u => u.Id == id)
             .IncludeAdres(u => u.Adres)
             .Include(u => u.Oddzial)

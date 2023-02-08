@@ -20,6 +20,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
         public async Task<List<Pracodawca>> GetAllAsync() =>
             await _pracodawcaSet
+                .AsNoTracking()
                 .IncludeAdres(p => p.Adres)
                 .ToListAsync();
     }
