@@ -35,11 +35,11 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         #region Komendy
         private ICommand _AddItemCommand;
         public ICommand AddItemCommand => _AddItemCommand ??=
-            new BaseCommand(ShowAddView);
+            new BaseCommand(ShowAddManyView);
 
         private ICommand _EditItemCommand;
         public ICommand EditItemCommand => _EditItemCommand ??=
-            new BaseCommand((item) => ShowEditView(item));
+            new BaseCommand((item) => ShowEditManyView(item));
         #endregion
 
         #region Konstruktor
@@ -57,8 +57,8 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
 
 
         #region Metody
-        protected abstract void ShowAddView();
-        protected abstract void ShowEditView(object item);
+        protected abstract void ShowAddManyView();
+        protected abstract void ShowEditManyView(object item);
 
         #endregion
     }

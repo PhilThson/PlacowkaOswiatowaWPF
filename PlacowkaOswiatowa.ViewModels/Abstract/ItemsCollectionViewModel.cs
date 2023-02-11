@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Helpers;
+using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models.Base;
 using PlacowkaOswiatowa.Domain.Resources;
@@ -58,13 +59,9 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         public ICommand AddItemCommand => _AddItemCommand ??= new BaseCommand(RequestCreateView);
         public ICommand LoadCommand => _LoadCommand ??= new BaseCommand(Load);
         public ICommand UpdateCommand => _UpdateCommand ??= new BaseCommand(Update);
-        public ICommand EditCommand => _EditCommand ??= new BaseCommand(RequestCreateView);
-        public ICommand DeleteCommand => _DeleteCommand ??= new BaseCommand(Delete);
+        public ICommand EditCommand => _EditCommand ??= new BaseCommand(RequestCreateEditView);
 
-        //Rezygnacja z komend na rzecz wprowadzania filtrowania i sortowania
-        //podczas PropertyChange wybranych ComboBoxów i TextBoxów
-        //public ICommand OrderByCommand => _OrderByCommand ??= new BaseCommand(OrderBy);
-        //public ICommand FilterCommand => _FilterCommand ??= new BaseCommand(Filter);
+        public ICommand DeleteCommand => _DeleteCommand ??= new BaseCommand(Delete);
         #endregion
 
         #region Właściwości
@@ -148,10 +145,18 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         //Wywoływanie innych widoków
         private void RequestCreateView()
         {
-            //jeżeli jest to widok do edycji, to dodatkowo zostanie
-            //przesłany identyfikator obiektu
             //ViewModel wszystkich elementów określa jaki typ zakładki może tworzyć
-            var viewHandler = new ViewHandler(ItemToCreateType, SelectedItem?.Id);
+            var viewHandler = new ViewHandler(ItemToCreateType);
+            _signal.RaiseCreateView(this, viewHandler);
+        }
+
+        private void RequestCreateEditView()
+        {
+            if (SelectedItem is null)
+                return;
+
+            //widok do edycji dodatkowo przesyła identyfikator obiektu
+            var viewHandler = new ViewHandler(ItemToCreateType, SelectedItem.Id);
             _signal.RaiseCreateView(this, viewHandler);
         }
 

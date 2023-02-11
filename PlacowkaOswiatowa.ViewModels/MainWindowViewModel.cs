@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Helpers;
@@ -22,11 +23,16 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        #region Konstruktor
+        #region Prywatne pola
         private IServiceProvider _provider;
         private readonly ISignalHub _signal;
+        private readonly ILogger<MainWindowViewModel> _logger;
+        #endregion
 
-        public MainWindowViewModel(IServiceProvider serviceProvider)
+        #region Konstruktor
+
+        public MainWindowViewModel(IServiceProvider serviceProvider, 
+            ILogger<MainWindowViewModel> logger)
         {
             _provider = serviceProvider;
             _signal = SignalHub.Instance;
@@ -40,6 +46,7 @@ namespace PlacowkaOswiatowa.ViewModels
             _signal.LoggedInChanged += () => IsLoggedIn = true;
             _signal.HideLogingRequest += () => ChangeLoginViewVisibility();
             _signal.NewViewRequested += (s, vh) => OnNewViewRequested(s, vh);
+            _logger = logger;
         }
 
         #endregion
@@ -202,7 +209,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
                 if (viewHandler.IsModal)
                 {
-                    CreateWindow(workspace);
+                    CreateWindow(workspace, sender);
                     return;
                 }
 
@@ -213,6 +220,10 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 MessageBox.Show($"Nie udało się utworzyć widoku. {e.Message}",
                     "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError(
+                    "Błąd podczas tworzenia nowego widoku: {error}",
+                    e.Message);
             }
         }
         #endregion
@@ -230,6 +241,7 @@ namespace PlacowkaOswiatowa.ViewModels
             if (collectionView != null)
                 collectionView.MoveCurrentTo(workspace);
         }
+        //asynchroniczne wywołanie widoku wszystkich elementów
         private void ShowSingletonAsync<T>() 
             where T : WorkspaceViewModel, ILoadable
         {
@@ -280,7 +292,8 @@ namespace PlacowkaOswiatowa.ViewModels
         /// Metoda służąca do otworzenia zadanego ViewModelu o zdefiniowanym wcześniej widoku
         /// (DataTemplate w MainWindowResources) w nowym oknie
         /// </summary>
-        private void CreateWindow(WorkspaceViewModel viewModel, string title = null)
+        private void CreateWindow(WorkspaceViewModel viewModel, object listener, 
+            string title = null)
         {
             Window window = new Window();
             window.Title = string.IsNullOrEmpty(title) ? BaseResources.BaseTitle : title;
@@ -290,16 +303,19 @@ namespace PlacowkaOswiatowa.ViewModels
             viewModel.RequestClose += (s, e) =>
             {
                 window.Close();
-                OnWindowRequestClose(s, e);
+                OnWindowRequestClose(s, listener);
             };
             window.Show();
         }
 
-        private void OnWindowRequestClose(object sender, EventArgs e)
+        private void OnWindowRequestClose(object sender, object listener)
         {
             var viewModel = sender as NowyAdresViewModel;
             if (viewModel != null)
-                SignalHub.RaiseAddressCreatedDelegate(viewModel.Item);
+            {
+                if (Guid.TryParse(listener?.ToString(), out Guid listenerId))
+                    _signal.RaiseAddressCreatedDelegate(listenerId, viewModel.Item);
+            }
         }
 
         private void Zamknij()

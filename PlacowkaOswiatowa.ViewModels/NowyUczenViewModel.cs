@@ -260,15 +260,17 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             var viewHandler = new ViewHandler(typeof(NowyAdresViewModel), 
                 Item.Adres?.Id, isModal: true);
-            SignalHub.AddressCreated = this.OnAddressCreated;
-            _signal.RaiseCreateView(this, viewHandler);
+
+            var listenerId = Guid.NewGuid();
+            _signal.AddAddressCreatedListener(listenerId, this.OnAddressCreated);
+            _signal.RaiseCreateView(listenerId, viewHandler);
         }
 
         #endregion
 
         #region Metody
 
-        private void OnAddressCreated(AdresDto createdAddress)
+        private void OnAddressCreated(AdresDto createdAddress, Guid listenerId)
         {
             Item.Adres = createdAddress;
             OnPropertyChanged(nameof(Adres));

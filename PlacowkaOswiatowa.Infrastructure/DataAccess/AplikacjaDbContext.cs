@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlacowkaOswiatowa.Domain.Models;
 using PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration;
-using System.Linq;
 using System.Reflection;
 
 namespace PlacowkaOswiatowa.Infrastructure.DataAccess

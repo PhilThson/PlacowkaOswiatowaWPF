@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Helpers;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
 using PlacowkaOswiatowa.Infrastructure.Repository;
 using PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration;
 using PlacowkaOswiatowa.ViewModels;
+using Serilog;
 using System;
 using System.Windows;
 
@@ -25,22 +25,24 @@ namespace PlacowkaOswiatowa
 
         public App()
         {
-            _host = CreateHostBuilder().Build();
+            _host = CreateHostBuilder().Build();   
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args = null)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(c =>
+                .ConfigureAppConfiguration(configure =>
                 {
-                    c.AddJsonFile("appsettings.json");
+                    configure.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json",
+                        optional: true)
+                    .AddEnvironmentVariables();
                 })
                 .ConfigureServices((context, services) =>
                 {
+                    //dodanie profilu AutoMapera
                     var mapperConfig = new MapperConfiguration(mc =>
-                    {
-                        mc.AddProfile(new MappingProfile());
-                    });
+                        mc.AddProfile(new MappingProfile()));
                     var mapper = mapperConfig.CreateMapper();
 
                     connectionString = context.Configuration.GetConnectionString("Default");
@@ -52,7 +54,7 @@ namespace PlacowkaOswiatowa
                     {
                         options.UseSqlServer(
                             context.Configuration.GetConnectionString("Default"));
-                        options.LogTo(Console.WriteLine); 
+                        options.LogTo(Console.WriteLine);
                     }, ServiceLifetime.Transient);
 
                     services.AddSingleton(new AplikacjaDbContextFactory(connectionString));
@@ -79,21 +81,36 @@ namespace PlacowkaOswiatowa
                     services.AddSingleton<WszystkieUmowyViewModel>();
                     services.AddTransient<NowyAdresViewModel>();
                     services.AddTransient<RejestracjaViewModel>();
+                })
+                .ConfigureLogging((context, config) =>
+                {
+                    //dodanie konfiguracji logowania Serilog
+                    Log.Logger = new LoggerConfiguration()
+                        .ReadFrom.Configuration(context.Configuration)
+                        .Enrich.FromLogContext()
+                        .WriteTo.Console()
+                        .CreateLogger();
+
+                    config.AddSerilog(Log.Logger);
                 });
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             _host.Start();
+            Log.Logger.Information("Aplikacja jest uruchamiana.");
 
-            var window = new MainWindow();
-            window.DataContext = new MainWindowViewModel(_host.Services);
+            var window = new MainWindow
+            {
+                DataContext = _host.Services.GetRequiredService<MainWindowViewModel>()
+            };
 
             window.Show();
         }
 
         protected override async void OnExit(ExitEventArgs e)
         {
+            Log.Logger.Information("Aplikacja kończy działanie");
             await _host.StopAsync();
             _host.Dispose();
 

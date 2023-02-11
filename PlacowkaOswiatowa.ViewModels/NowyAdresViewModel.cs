@@ -15,17 +15,24 @@ using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
     public class NowyAdresViewModel : SingleItemViewModel<AdresDto>, 
         ILoadable, IEditable
     {
+        #region Pola prywatne
+        private readonly ILogger<NowyAdresViewModel> _logger;
+        #endregion
+
         #region Konstruktor
-        public NowyAdresViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public NowyAdresViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+            ILogger<NowyAdresViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.NowyAdres)
         {
             Item = new AdresDto();
+            _logger = logger;
         }
         #endregion
 
@@ -159,7 +166,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 if(WybranyAdres != null)
                 {
                     //jeżeli został wskazany adres z listy, to jest on zwracany
-                    //do metody wywołującej okno modalne
+                    //do metody wywołującej
                     Item = WybranyAdres;
                     return true;
                 }
@@ -170,14 +177,18 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    var adresById = await repository.Adresy.GetAsync(a => a.Id == adres.Id,
-                    includeProperties: "Panstwo,Miejscowosc,Ulica");
+                    if (adres.Id != default)
+                    {
+                        //edycja
+                        var adresById = await repository.Adresy.GetAsync(a => a.Id == adres.Id,
+                        includeProperties: "Panstwo,Miejscowosc,Ulica");
 
-                    if (adresById == adres)
-                        throw new DataValidationException("Nie dokonano zmian");
+                        if (adresById == adres)
+                            throw new DataValidationException("Nie dokonano zmian");
+                    }
 
-                    var adresFromDb = await repository.Adresy.GetAdresAsync(adres);
-                    if (adresFromDb is not null)
+                    var exists = await repository.Adresy.Exists(adres);
+                    if (exists)
                         throw new DataValidationException(
                             "Adres o wskazanych parametrach już istnieje");
 
@@ -187,22 +198,28 @@ namespace PlacowkaOswiatowa.ViewModels
 
                     foreach (var prop in properties)
                     {
-                        var toSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
+                        var phraseToSearch = this.GetType().GetProperty(prop.Name).GetValue(this);
                         MethodInfo method = repository.GetType().GetMethod("GetByName",
                             BindingFlags.Public | BindingFlags.Instance);
                         MethodInfo genericMethod = method.MakeGenericMethod(prop.PropertyType);
-                        var result = genericMethod.Invoke(repository, new object[] { toSearch });
-                        var entity = result as BaseDictionaryEntity<int>;
-                        if (entity != null)
+                        var result = genericMethod.Invoke(repository, new object[] { phraseToSearch });
+                        if (result is BaseDictionaryEntity<int> entity)
                         {
+                            //już istnieje encja słownikowa o podanej nazwie:
+                            //1.wyczyszczenie zagnieżdżonej właściwości adresu
                             prop.SetValue(adres, null);
                             var propId = $"{prop.Name}Id";
                             var propIdInfo = adres.GetType().GetProperty(propId);
+                            //2.przypisanie istniejącego identyfikatora
                             propIdInfo.SetValue(adres, entity.Id);
                         }
                     }
 
-                    await repository.AddAsync(adres);
+                    if (adres.Id == default)
+                        await repository.AddAsync(adres);
+                    else
+                        repository.Update(adres);
+
                     await repository.SaveAsync();
                 }
                 //Item zostanie odczytany przez zakładkę która wywołała widok adresu
@@ -214,17 +231,22 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 MessageBox.Show(e.Message, "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                _logger.LogWarning("Nieudana próba zapisu adresu: {error}", e.Message);
             }
             catch (Exception e)
             {
                 MessageBox.Show($"Nie udało się zapisać adresu. {e.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError("Błąd podczas zapisu adresu: {error}", e.Message);
             }
             return false;
         }
 
         protected override void CheckRequiredProperties()
         {
+            //jeżeli adres został wybrany z listy
             if (WybranyAdres != null)
                 return;
 
@@ -237,29 +259,39 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public async Task LoadItem(object objId)
         {
-            var adresId = Convert.ToInt32(objId);
-            if (adresId == default)
-                throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
-
-            Adres adres = null;
-
-            using (var scope = _serviceProvider.CreateScope())
+            try
             {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                adres = await repository.Adresy.GetAsync(a => a.Id == adresId,
-                    includeProperties:"Panstwo,Miejscowosc,Ulica");
+                var adresId = Convert.ToInt32(objId);
+                if (adresId == default)
+                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+                Adres adres = null;
+
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    adres = await repository.Adresy.GetAsync(a => a.Id == adresId,
+                        includeProperties: "Panstwo,Miejscowosc,Ulica");
+                }
+
+                _ = adres ?? throw new DataNotFoundException(
+                    $"Nie znaleziono adresu o podanym identyfikatorze {adresId}");
+
+                base.DisplayName = BaseResources.EdycjaAdresu;
+                base.AddItemName = BaseResources.SaveItem;
+
+                Item = _mapper.Map<AdresDto>(adres);
+
+                foreach (var prop in Item.GetType().GetProperties())
+                    OnPropertyChanged(prop.Name);
             }
+            catch (Exception e)
+            {
+                MessageBox.Show("Nie udało się zainicjować adresu do edycji", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
 
-            _ = adres ?? throw new DataNotFoundException(
-                $"Nie znaleziono adresu o podanym identyfikatorze {adresId}");
-
-            base.DisplayName = BaseResources.EdycjaAdresu;
-            base.AddItemName = BaseResources.SaveItem;
-
-            Item = _mapper.Map<AdresDto>(adres);
-
-            foreach (var prop in Item.GetType().GetProperties())
-                OnPropertyChanged(prop.Name);
+                _logger.LogError("Błąd podczas inicjalizacji widoku: {error}", e.Message);
+            }
         }
 
         public async Task LoadAsync()
@@ -281,6 +313,8 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 MessageBox.Show("Nie udało się załadować adresów.", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError("Błąd podczas inicjalizacji widoku: {error}", e.Message);
             }
         }
 

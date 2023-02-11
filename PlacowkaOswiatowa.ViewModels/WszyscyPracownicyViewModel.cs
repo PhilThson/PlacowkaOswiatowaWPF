@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.DTOs;
-using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
@@ -18,15 +18,18 @@ namespace PlacowkaOswiatowa.ViewModels
     public class WszyscyPracownicyViewModel : ItemsCollectionViewModel<PracownikDto>, ILoadable
     {
         #region Pola i komendy
+        ILogger<WszyscyPracownicyViewModel> _logger;
         protected override Type ItemToCreateType => typeof(NowyPracownikViewModel);
         protected override Type EntityType => typeof(Pracownik);
         #endregion
 
         #region Konstruktor
-        public WszyscyPracownicyViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public WszyscyPracownicyViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+            ILogger<WszyscyPracownicyViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.WszyscyPracownicy, BaseResources.DodajPracownika)
         {
             _signal.RequestRefreshEmployeesView += Update;
+            _logger = logger;
         }
         #endregion
 
@@ -43,11 +46,13 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
                 AllList = _mapper.Map<IEnumerable<PracownikDto>>(pracownicy);
                 List = new ObservableCollection<PracownikDto>(AllList);
+                _logger.LogInformation("Pobrano wszystkich pracowników");
             }
             catch(Exception e)
             {
                 MessageBox.Show($"Nie udało się pobrać pracowników. {e.Message}", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+                _logger.LogError("Błąd podczas pobierania pracowników: {error}", e.Message);
             }
         }
         #endregion
@@ -57,14 +62,21 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            var pracownicy = new List<Pracownik>();
-            using (var scope = _serviceProvider.CreateScope())
+            try
             {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                pracownicy = repository.Pracownicy.GetAll();
+                var pracownicy = new List<Pracownik>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    pracownicy = repository.Pracownicy.GetAll();
+                }
+                AllList = _mapper.Map<List<PracownikDto>>(pracownicy);
+                List = new ObservableCollection<PracownikDto>(AllList);
             }
-            AllList = _mapper.Map<List<PracownikDto>>(pracownicy);
-            List = new ObservableCollection<PracownikDto>(AllList);
+            catch(Exception e)
+            {
+                _logger.LogError("Błąd podczas odświeżania listy pracowników: {error}", e.Message);
+            }
         }
         public override void Dispose()
         {

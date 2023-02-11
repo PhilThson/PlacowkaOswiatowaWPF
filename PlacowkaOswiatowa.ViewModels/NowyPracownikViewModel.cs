@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Helpers;
@@ -21,16 +22,21 @@ namespace PlacowkaOswiatowa.ViewModels
         IEditable
     {
         #region Pola prywatne
+        private readonly ILogger<NowyPracownikViewModel> _logger;
         private readonly ISignalHub _signal;
+        private readonly Dictionary<Guid, int> _selectedItemsToEdit;
         #endregion
 
         #region Konstruktor
-        public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+            ILogger<NowyPracownikViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.DodajPracownika,
                   null, BaseResources.DodajAdres, BaseResources.EdycjaAdresu)
         {
             Item = new CreatePracownikDto();
             _signal = SignalHub.Instance;
+            _logger = logger;
+            _selectedItemsToEdit = new Dictionary<Guid, int>();
         }
         #endregion
 
@@ -197,11 +203,19 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 MessageBox.Show(e.Message, "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                _logger.LogWarning(
+                    "Wystąpił błąd podczas tworzenia/edycji pracownika: {error}",
+                    e.Message);
             }
             catch (Exception e)
             {
                 MessageBox.Show($"Nie udało się dodać pracownika. {e.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError(
+                    "Wystąpił błąd podczas tworzenia/edycji pracownika: {error}",
+                    e.Message);
             }
             return false;
         }
@@ -216,44 +230,58 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Komendy powiązanej listy wszystkich elementów
-        protected override void ShowAddView()
+        protected override void ShowAddManyView()
         {
             var viewHandler = new ViewHandler(typeof(NowyAdresViewModel), isModal: true);
-            SignalHub.AddressCreated = this.OnAddressCreated;
-            _signal.RaiseCreateView(this, viewHandler);
+            var listenerId = Guid.NewGuid();
+            _signal.AddAddressCreatedListener(listenerId, this.OnAddressCreated);
+            _signal.RaiseCreateView(listenerId, viewHandler);
         }
 
-        protected override void ShowEditView(object itemId)
+        protected override void ShowEditManyView(object itemId)
         {
             try
             {
-                if (itemId == null)
+                if (itemId is null)
                     throw new ArgumentNullException(nameof(itemId),
                         "Nie wybrano rekordu do edycji");
 
                 var selectedAdresId = Convert.ToInt32(itemId);
                 if(selectedAdresId == default)
-                    throw new DataValidationException(
-                        "Błąd odczytu wybranego adresu");
+                    throw new DataValidationException("Błąd odczytu wybranego adresu");
 
                 var viewHandler = 
                     new ViewHandler(typeof(NowyAdresViewModel), selectedAdresId, true);
 
-                SignalHub.AddressCreated = this.OnAddressCreated;
-                _signal.RaiseCreateView(this, viewHandler);
+                var selectedItemIndex = AllList.IndexOf(SelectedItem);
+                if (_selectedItemsToEdit.ContainsValue(selectedItemIndex))
+                    throw new DataValidationException("Wybrany element jest już edytowany");
+
+                var listenerId = Guid.NewGuid();
+                _selectedItemsToEdit.Add(listenerId, selectedItemIndex);
+                _signal.AddAddressCreatedListener(listenerId, this.OnAddressCreated);
+                _signal.RaiseCreateView(listenerId, viewHandler);
             }
             catch(Exception e)
             {
                 MessageBox.Show(e.Message, "Error", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogWarning(
+                    "Wystąpił błąd podczas tworzenia widoku: {error}",
+                    e.Message);
             }
         }
 
-        //obsługa utworzenia adresu
-        private void OnAddressCreated(AdresDto createdAddress)
+        //obsługa zdarzenia utworzenia adresu
+        private void OnAddressCreated(AdresDto createdAddress, Guid listnerId)
         {
             AllList ??= new ObservableCollection<AdresDto>();
-            AllList.Add(createdAddress);
+
+            if (_selectedItemsToEdit.ContainsKey(listnerId))
+                AllList[_selectedItemsToEdit[listnerId]] = createdAddress;
+            else
+                AllList.Add(createdAddress);
         }
         #endregion
 
@@ -283,8 +311,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.SendMessage(this, $"Widok: {DisplayName}");
 
                 Item = _mapper.Map<CreatePracownikDto>(pracownik);
-                //var addresses = _mapper.Map<List<AdresDto>>(pracownik.PracownikPracownicyAdresy.Select(pa => pa.Adres));
-
                 //aby nie wyświetlać listy jeżeli jest pusta
                 if(Item.Adresy?.Count > 0)
                     AllList = new ObservableCollection<AdresDto>(Item.Adresy);
@@ -296,6 +322,10 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError(
+                    "Błąd podczas inicjalizacji obiektu do edycji: {error}",
+                    e.Message);
             }
         }
         #endregion

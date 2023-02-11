@@ -1,77 +1,84 @@
 ﻿using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using System;
+using System.Collections.Generic;
 
 namespace PlacowkaOswiatowa.Domain.Helpers
 {
     public class SignalHub : ISignalHub
     {
-        //próba zabezpieczenia przed równoległym dostępem i utworzenia kilku instancji
+        #region Pola prywatne
+        //zabezpieczenie przed równoległym dostępem i utworzeniem kilku instancji
         private static readonly Lazy<SignalHub> lazy
             = new Lazy<SignalHub>(() => new SignalHub());
 
-        public static SignalHub Instance => lazy.Value;
+        private Dictionary<Guid, AddressCreatedDelegate> _addressCreatedListeners =
+            new Dictionary<Guid, AddressCreatedDelegate>();
+        #endregion
 
+        #region Konstruktor
         private SignalHub()
         {
 
         }
+        #endregion
+
+        #region Właściwości
+        public static SignalHub Instance => lazy.Value;
+        #endregion
+
+        #region Zdarzenia
 
         public event Action LoggedInChanged;
-        public void RaiseLoggedInChanged() => LoggedInChanged?.Invoke();
-
         public event Action HideLogingRequest;
-        public void RaiseHideLoginViewRequest() => HideLogingRequest?.Invoke();
-
         public event Action RequestRefreshEmployeesView;
+        public event Action RequestRefreshStudentsView;
+        public event EventHandler<string> NewMessage;
+        public event EventHandler<ViewHandler> NewViewRequested;
+
+        public delegate void AddressCreatedDelegate(AdresDto address, Guid listenerId);
+
+        #endregion
+
+        #region Metody
+
+        public void RaiseLoggedInChanged() => LoggedInChanged?.Invoke();
+                
+        public void RaiseHideLoginViewRequest() => HideLogingRequest?.Invoke();
+        
         public void RaiseRequestRefreshEmployeesView() =>
             RequestRefreshEmployeesView?.Invoke();
-
-        public event Action RequestRefreshStudentsView;
+        
         public void RaiseRequestRefreshStudentsView() =>
             RequestRefreshStudentsView?.Invoke();
-
-
-        public event EventHandler<string> NewMessage;
+        
         public void SendMessage(object sender, string message = null) =>
             RaiseNewMessage(sender, message);
             
         private void RaiseNewMessage(object sender, string message) =>
             NewMessage?.Invoke(sender, message);
-
-
-        public event EventHandler<ViewHandler> NewViewRequested;
+                
         public void RaiseCreateView(object sender, ViewHandler obj = null) =>
             NewViewRequested?.Invoke(sender, obj);
 
-        public delegate void AddressCreatedDelegate(AdresDto address);
 
-        public static AddressCreatedDelegate AddressCreated;
-
-        public static void RaiseAddressCreatedDelegate(AdresDto address)
+        public void AddAddressCreatedListener(Guid listenerId, AddressCreatedDelegate listener)
         {
-            AddressCreated?.Invoke(address);
-            AddressCreated = null;
+            if (_addressCreatedListeners.ContainsKey(listenerId))
+                return;
+
+            _addressCreatedListeners.Add(listenerId, listener);
         }
-    }
 
-    public interface ISignalHub
-    {
-        event Action LoggedInChanged;
-        event Action HideLogingRequest;
-        event Action RequestRefreshEmployeesView;
-        event Action RequestRefreshStudentsView;
-        void RaiseLoggedInChanged();
-        void RaiseHideLoginViewRequest();
-        public void RaiseRequestRefreshEmployeesView();
-        public void RaiseRequestRefreshStudentsView();
+        public void RaiseAddressCreatedDelegate(Guid listenerId, AdresDto address)
+        {
+            if (!_addressCreatedListeners.TryGetValue(listenerId, out AddressCreatedDelegate listener))
+                return;
 
-        /// <summary>
-        /// Zdarzenie do obsługi rozgłaszania wiadomości
-        /// </summary>
-        event EventHandler<string> NewMessage;
-        void SendMessage(object sender, string message = null);
+            listener?.Invoke(address, listenerId);
+            _addressCreatedListeners.Remove(listenerId);
+        }
 
-        public event EventHandler<ViewHandler> NewViewRequested;
-        public void RaiseCreateView(object sender, ViewHandler viewHandler = null);
+        #endregion
     }
 }

@@ -19,7 +19,6 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowyAdresViewModel);
-
         #endregion
 
 
