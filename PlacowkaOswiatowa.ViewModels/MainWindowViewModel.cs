@@ -51,63 +51,80 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #endregion
 
-        #region Komendy Menu i Paska narzędzi
-        //TODO: dodać prywatne pola ICommand dla każdej komendy, żeby niepotrzebnie nie
-        //inicjować komendy jeżeli jest wywoływana ponownie
-        public ICommand UrlopPracownikaCommand =>
+        #region Komendy Menu i Paska narzędzi        
+
+        private ICommand _UrlopPracownikaCommand;
+        public ICommand UrlopPracownikaCommand => _UrlopPracownikaCommand ??=
             new BaseCommand(CreateViewAsync<UrlopPracownikaViewModel>);
         
-        public ICommand NowyPracownikCommand => 
-            new BaseCommand(CreateView<NowyPracownikViewModel>);
+        private ICommand _NowyPracownikCommand;
+        public ICommand NowyPracownikCommand => _NowyPracownikCommand ??=
+            new BaseCommand(() => OnNewViewRequested(null, 
+                new ViewHandler(typeof(NowyPracownikViewModel))));
         
-        public ICommand WszyscyPracownicyCommand => 
+        private ICommand _WszyscyPracownicyCommand;
+        public ICommand WszyscyPracownicyCommand => _WszyscyPracownicyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszyscyPracownicyViewModel>);
 
-        public ICommand ZarobkiPracownikaCommand =>
+        private ICommand _ZarobkiPracownikaCommand;
+        public ICommand ZarobkiPracownikaCommand => _ZarobkiPracownikaCommand ??=
             new BaseCommand(CreateViewAsync<ZarobkiPracownikaViewModel>);
 
-        public ICommand NowyUczenCommand => 
+        private ICommand _NowyUczenCommand;
+        public ICommand NowyUczenCommand => _NowyUczenCommand ??=
             new BaseCommand(CreateViewAsync<NowyUczenViewModel>);
         
-        public ICommand WszyscyUczniowieCommand => 
+        private ICommand _WszyscyUczniowieCommand;
+        public ICommand WszyscyUczniowieCommand => _WszyscyUczniowieCommand ??=
             new BaseCommand(ShowSingletonAsync<WszyscyUczniowieViewModel>);
 
-        public ICommand WszystkieAdresyCommand =>
+        private ICommand _WszystkieAdresyCommand;
+        public ICommand WszystkieAdresyCommand => _WszystkieAdresyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszystkieAdresyViewModel>);
 
-        public ICommand WszystkiePrzedmiotyCommand =>
+        private ICommand _WszystkiePrzedmiotyCommand;
+        public ICommand WszystkiePrzedmiotyCommand => _WszystkiePrzedmiotyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszystkiePrzedmiotyViewModel>);
 
-        public ICommand WszystkieOcenyCommand =>
+        private ICommand _WszystkieOcenyCommand;
+        public ICommand WszystkieOcenyCommand => _WszystkieOcenyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszystkieOcenyViewModel>);
 
-        public ICommand WszystkieUrlopyCommand =>
+        private ICommand _WszystkieUrlopyCommand;
+        public ICommand WszystkieUrlopyCommand => _WszystkieUrlopyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszystkieUrlopyViewModel>);
 
-        public ICommand NowaUmowaCommand =>
+        private ICommand _NowaUmowaCommand;
+        public ICommand NowaUmowaCommand => _NowaUmowaCommand ??=
             new BaseCommand(CreateViewAsync<NowaUmowaViewModel>);
 
-        public ICommand WszystkieUmowyCommand =>
+        private ICommand _WszystkieUmowyCommand;
+        public ICommand WszystkieUmowyCommand => _WszystkieUmowyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszystkieUmowyViewModel>);
 
-        public ICommand ChangeSideMenuVisibilityCommand => 
+        private ICommand _ChangeSideMenuVisibilityCommand;
+        public ICommand ChangeSideMenuVisibilityCommand => _ChangeSideMenuVisibilityCommand ??=
             new BaseCommand(() => ChangeSideMenuVisibility());
-        
-        public ICommand ChangeSideMenuLocationCommand => 
+
+        private ICommand _ChangeSideMenuLocationCommand;
+        public ICommand ChangeSideMenuLocationCommand => _ChangeSideMenuLocationCommand ??=
             new BaseCommand(() => ChangeSideMenuLocation());
-        
-        public ICommand ZamknijCommand => 
+
+        private ICommand _ZamknijCommand;
+        public ICommand ZamknijCommand => _ZamknijCommand ??=
             new BaseCommand(() => Zamknij());
-        
-        public ICommand OProgramieCommand => 
+
+        private ICommand _OProgramieCommand;
+        public ICommand OProgramieCommand => _OProgramieCommand ??=
             new BaseCommand(() => OProgramie());
         
-        public ICommand WidokZalogujCommand => 
+        private ICommand _WidokZalogujCommand;
+        public ICommand WidokZalogujCommand => _WidokZalogujCommand ??=
             new BaseCommand(() => ChangeLoginViewVisibility());
 
         #endregion
 
-        #region Przyciski w menu z lewej strony
+        #region Przyciski w menu bocznym
         private ReadOnlyCollection<CommandViewModel> _Commands;
         public ReadOnlyCollection<CommandViewModel> Commands
         {
@@ -125,14 +142,14 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             return new List<CommandViewModel>
             {
-                new CommandViewModel(BaseResources.NowyPracownik, 
-                    new BaseCommand(() => CreateView<NowyPracownikViewModel>())),
-                new CommandViewModel(BaseResources.WszyscyPracownicy, 
-                    new BaseCommand(ShowSingletonAsync<WszyscyPracownicyViewModel>)),
-                new CommandViewModel(BaseResources.NowyUczen, 
-                    new BaseCommand(CreateViewAsync<NowyUczenViewModel>)),
-                new CommandViewModel(BaseResources.WszyscyUczniowie,
-                    new BaseCommand(ShowSingletonAsync<WszyscyUczniowieViewModel>))
+                new CommandViewModel(BaseResources.NowyPracownik, new BaseCommand(() => 
+                    OnNewViewRequested(null, new ViewHandler(typeof(NowyPracownikViewModel))))),
+                new CommandViewModel(BaseResources.WszyscyPracownicy, new BaseCommand(() => 
+                    OnNewViewRequested(null, new ViewHandler(typeof(WszyscyPracownicyViewModel), isSingleton: true)))),
+                new CommandViewModel(BaseResources.NowyUczen, new BaseCommand(() => 
+                    OnNewViewRequested(null, new ViewHandler(typeof(NowyUczenViewModel))))),
+                new CommandViewModel(BaseResources.WszyscyUczniowie, new BaseCommand(() => 
+                    OnNewViewRequested(null, new ViewHandler(typeof(WszyscyUczniowieViewModel), isSingleton: true))))
             };
         }
         #endregion
@@ -188,7 +205,20 @@ namespace PlacowkaOswiatowa.ViewModels
                 _ = viewHandler ?? throw new ArgumentNullException("Nie podano wymaganego argumentu");
                 _ = viewHandler.ViewType ?? throw new ArgumentNullException("Nie podano typu zakładki do utworzenia");
 
-                var workspace = _provider.GetRequiredService(viewHandler.ViewType) as WorkspaceViewModel;
+                WorkspaceViewModel workspace;
+
+                if (viewHandler.IsSingleton)
+                {
+                    workspace = this.Workspaces.FirstOrDefault(vm => vm.GetType() == viewHandler.ViewType);
+
+                    if (workspace is not null)
+                    {
+                        SetActiveWorkspace(workspace);
+                        return;
+                    }
+                }
+
+                workspace = _provider.GetRequiredService(viewHandler.ViewType) as WorkspaceViewModel;
                 if (workspace == null)
                     throw new ArgumentException("Zadany typ nie jest zakładką");
 
@@ -272,7 +302,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         /// <summary>
         /// Metoda tworząca ViewModel, który to model wymaga pobrania danych z bazy
-        /// Pobiaranie następuje asynchronicznie
+        /// Pobieranie następuje asynchronicznie
         /// </summary>
         /// <typeparam name="T"></typeparam>
         private void CreateViewAsync<T>()
