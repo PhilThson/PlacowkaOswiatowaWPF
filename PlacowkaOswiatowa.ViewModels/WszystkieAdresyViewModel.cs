@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Models;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -19,36 +20,31 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola i komendy
         protected override Type ItemToCreateType => typeof(NowyAdresViewModel);
+        private readonly ILogger<WszystkieAdresyViewModel> _logger;
         #endregion
 
 
         #region Konstruktor
-        public WszystkieAdresyViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public WszystkieAdresyViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+            ILogger<WszystkieAdresyViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.WszystkieAdresy)
         {
+            _logger = logger;
         }
         #endregion
 
         #region Incjacja
         public async Task LoadAsync()
         {
-            try
+            var adresy = new List<Adres>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var adresy = new List<Adres>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    adresy = await repository.Adresy.GetAllAsync(
-                        includeProperties: "Panstwo,Miejscowosc,Ulica");
-                }
-                AllList = _mapper.Map<List<AdresDto>>(adresy);
-                List = new ObservableCollection<AdresDto>(AllList);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                adresy = await repository.Adresy.GetAllAsync(
+                    includeProperties: "Panstwo,Miejscowosc,Ulica");
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Nie udało się pobrać adresów.", "Błąd",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            AllList = _mapper.Map<List<AdresDto>>(adresy);
+            List = new ObservableCollection<AdresDto>(AllList);
         }
         #endregion
 
@@ -57,15 +53,25 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            var adresy = new List<Adres>();
-            using (var scope = _serviceProvider.CreateScope())
+            try
             {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                adresy = repository.Adresy.GetAll(
-                    includeProperties: "Panstwo,Miejscowosc,Ulica").ToList();
+                var adresy = new List<Adres>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    adresy = repository.Adresy.GetAll(
+                        includeProperties: "Panstwo,Miejscowosc,Ulica").ToList();
+                }
+                AllList = _mapper.Map<List<AdresDto>>(adresy);
+                List = new ObservableCollection<AdresDto>(AllList);
             }
-            AllList = _mapper.Map<List<AdresDto>>(adresy);
-            List = new ObservableCollection<AdresDto>(AllList);
+            catch (Exception e)
+            {
+                _logger.LogError("Błąd odświeżania listy adresów: {error}", e.Message);
+
+                MessageBox.Show("Nie udało się pobrać ocen.", "Błąd",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 

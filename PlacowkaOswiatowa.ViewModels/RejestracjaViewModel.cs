@@ -13,17 +13,24 @@ using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.ViewModels.Helpers;
 using AutoMapper;
 using PlacowkaOswiatowa.Domain.Resources;
+using Microsoft.Extensions.Logging;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
     public class RejestracjaViewModel : SingleItemViewModel<CreateUzytkownikDto>,
         ILoadable
     {
+        #region Pola prywatne
+        private readonly ILogger<RejestracjaViewModel> _logger;
+        #endregion
+
         #region Konstruktor
-        public RejestracjaViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public RejestracjaViewModel(IServiceProvider serviceProvider, IMapper mapper,
+            ILogger<RejestracjaViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.Rejestracja)
         {
             Item = new CreateUzytkownikDto();
+            _logger = logger;
         }
         #endregion
 
@@ -147,10 +154,10 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    var uzytkownikFromDb = 
+                    var uzytkownikFromDb =
                         await repository.Uzytkownicy.GetAsync(u => u.Email == uzytkownik.Email);
 
-                    if(uzytkownikFromDb != null)
+                    if (uzytkownikFromDb != null)
                         throw new DataValidationException(
                             "Wybrany adres e-mail jest już zajęty");
 
@@ -161,38 +168,38 @@ namespace PlacowkaOswiatowa.ViewModels
                 MessageBox.Show("Poprawnie utworzono użytkownika", "Sukces",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
+                _logger.LogInformation(
+                    "Utworzono nowego użytkownika: {imie} {nazwisko}, {email}",
+                    uzytkownik.Imie, uzytkownik.Nazwisko, uzytkownik.Email);
+
                 return true;
             }
             catch (DataValidationException e)
             {
                 MessageBox.Show(e.Message, "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                _logger.LogWarning("Nieudana próba utworzenia użytkownika: {error}", e.Message);
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Nie udało się zapisać użytkownika. {e.Message}", 
+                MessageBox.Show($"Nie udało się zapisać użytkownika. {e.Message}",
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError("Błąd podczas tworzenia nowego użytkownika: {error}", e.Message);
             }
             return false;
         }
 
         public async Task LoadAsync()
         {
-            try
+            var role = new List<Rola>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var role = new List<Rola>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    role = await repository.Role.GetAllAsync();
-                }
-                Role = new ObservableCollection<Rola>(role);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                role = await repository.Role.GetAllAsync();
             }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Nie udało się pobrać ról. {e.Message}", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            Role = new ObservableCollection<Rola>(role);
         }
 
         protected override void CheckRequiredProperties()

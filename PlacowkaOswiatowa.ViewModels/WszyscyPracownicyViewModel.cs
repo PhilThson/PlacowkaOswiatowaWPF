@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -36,24 +35,15 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Incjacja
         public async Task LoadAsync()
         {
-            try
+            var pracownicy = new List<Pracownik>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var pracownicy = new List<Pracownik>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    pracownicy = await repository.Pracownicy.GetAllAsync();
-                }
-                AllList = _mapper.Map<IEnumerable<PracownikDto>>(pracownicy);
-                List = new ObservableCollection<PracownikDto>(AllList);
-                _logger.LogInformation("Pobrano wszystkich pracowników");
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                pracownicy = await repository.Pracownicy.GetAllAsync();
             }
-            catch(Exception e)
-            {
-                MessageBox.Show($"Nie udało się pobrać pracowników. {e.Message}", "Błąd",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-                _logger.LogError("Błąd podczas pobierania pracowników: {error}", e.Message);
-            }
+            AllList = _mapper.Map<IEnumerable<PracownikDto>>(pracownicy);
+            List = new ObservableCollection<PracownikDto>(AllList);
+            _logger.LogInformation("Pobrano wszystkich pracowników");
         }
         #endregion
 

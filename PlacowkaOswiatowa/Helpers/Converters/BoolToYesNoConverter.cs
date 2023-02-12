@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
+using static PlacowkaOswiatowa.Domain.Extensions.CommonExtensions;
 
 namespace PlacowkaOswiatowa.Helpers.Converters
 {

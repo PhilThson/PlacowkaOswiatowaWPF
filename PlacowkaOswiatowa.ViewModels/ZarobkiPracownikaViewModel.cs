@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PlacowkaOswiatowa.Domain.BusinessLogic;
 using PlacowkaOswiatowa.Domain.DTOs;
@@ -18,9 +19,13 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class ZarobkiPracownikaViewModel : SingleItemViewModel<Skladki>, ILoadable
     {
+        #region Pola prywatne
+        private readonly ILogger<ZarobkiPracownikaViewModel> _logger;
+        #endregion
 
         #region Konstruktor
-        public ZarobkiPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public ZarobkiPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper,
+            ILogger<ZarobkiPracownikaViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.ZarobkiPracownika)
         {
             _pracownikIsVisible = "Collapsed";
@@ -28,6 +33,7 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 Pracownik = new PracownikDto()
             };
+            _logger = logger;
         }
         #endregion
 
@@ -65,12 +71,12 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         private string _pracownikIsVisible;
-        public string PracownikIsVisible 
+        public string PracownikIsVisible
         {
             get => _pracownikIsVisible;
             set
             {
-                if(value != _pracownikIsVisible)
+                if (value != _pracownikIsVisible)
                 {
                     _pracownikIsVisible = value;
                     OnPropertyChanged(() => PracownikIsVisible);
@@ -135,7 +141,7 @@ namespace PlacowkaOswiatowa.ViewModels
             get => Item.SkladkaEmerytalnaProcent;
             set
             {
-                if(value != Item.SkladkaEmerytalnaProcent)
+                if (value != Item.SkladkaEmerytalnaProcent)
                 {
                     Item.SkladkaEmerytalnaProcent = value;
                     ClearErrors(nameof(SkladkaEmerytalnaProcent));
@@ -272,7 +278,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Wartości wyliczone
 
-        public decimal WynagrodzenieNetto 
+        public decimal WynagrodzenieNetto
         {
             get => Item.WynagrodzenieNetto;
         }
@@ -284,28 +290,19 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #endregion
 
-
         #region Inicjacja
 
         public async Task LoadAsync()
         {
-            try
+            var pracownicy = new List<Pracownik>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var pracownicy = new List<Pracownik>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    pracownicy = await repository.Pracownicy.GetAllAsync();
-                }
-                var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicy);
-                _pracownicy = new ReadOnlyCollection<PracownikDto>(listaPracownikow);
-                OnPropertyChanged(() => Pracownicy);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                pracownicy = await repository.Pracownicy.GetAllAsync();
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się załadować danych.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicy);
+            _pracownicy = new ReadOnlyCollection<PracownikDto>(listaPracownikow);
+            OnPropertyChanged(() => Pracownicy);
         }
         #endregion
 
@@ -333,16 +330,24 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
 
                 foreach (var prop in this.GetType().GetProperties())
-                OnPropertyChanged(prop.Name);
+                    OnPropertyChanged(prop.Name);
 
                 MessageBox.Show($"Obliczono wynagrodzenie pracownika " +
                     $"{Item.Pracownik.Imie} {Item.Pracownik.Nazwisko}", "Info",
                     MessageBoxButton.OK, MessageBoxImage.Information);
+
+                _logger.LogInformation(
+                    "Obliczono wynagrodzenie pracownika: {imie} {nazwisko}, pensja: {pensja}",
+                    Item.Pracownik.Imie, Item.Pracownik.Nazwisko, Item.WynagrodzenieNetto);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show($"Nie udało się obliczyć wynagrodzenia pracownika. {e.Message}",
                     "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError(
+                    "Błąd podczas obliczania wynagrodzenia pracownika: {error}",
+                    e.Message);
             }
             //Ten formularz nie zamyka się automatycznie
             return await Task.FromResult(false);

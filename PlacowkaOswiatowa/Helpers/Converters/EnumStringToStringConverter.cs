@@ -1,5 +1,5 @@
 ﻿using PlacowkaOswiatowa.Domain.Enums;
-using PlacowkaOswiatowa.Domain.Helpers;
+using PlacowkaOswiatowa.Domain.Extensions;
 using System;
 using System.Globalization;
 using System.Windows.Data;

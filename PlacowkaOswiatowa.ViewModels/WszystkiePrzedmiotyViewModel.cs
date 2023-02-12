@@ -20,29 +20,21 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Konstruktor
         public WszystkiePrzedmiotyViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszystkiePrzedmioty)
-        { 
+        {
         }
         #endregion
 
         #region Incjacja
         public async Task LoadAsync()
         {
-            try
+            var przedmioty = new List<Przedmiot>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var przedmioty = new List<Przedmiot>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    przedmioty = await repository.Przedmioty.GetAllAsync();
-                }
-                AllList = _mapper.Map<List<PrzedmiotDto>>(przedmioty);
-                List = new ObservableCollection<PrzedmiotDto>(AllList);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                przedmioty = await repository.Przedmioty.GetAllAsync();
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Nie udało się pobrać przedmiotów.", "Błąd",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            AllList = _mapper.Map<List<PrzedmiotDto>>(przedmioty);
+            List = new ObservableCollection<PrzedmiotDto>(AllList);
         }
         #endregion
 
@@ -50,14 +42,22 @@ namespace PlacowkaOswiatowa.ViewModels
         protected override void Update() => Load();
         protected override void Load()
         {
-            var przedmioty = new List<Przedmiot>();
-            using (var scope = _serviceProvider.CreateScope())
+            try
             {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                przedmioty = repository.Przedmioty.GetAll().ToList();
+                var przedmioty = new List<Przedmiot>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    przedmioty = repository.Przedmioty.GetAll().ToList();
+                }
+                AllList = _mapper.Map<List<PrzedmiotDto>>(przedmioty);
+                List = new ObservableCollection<PrzedmiotDto>(AllList);
             }
-            AllList = _mapper.Map<List<PrzedmiotDto>>(przedmioty);
-            List = new ObservableCollection<PrzedmiotDto>(AllList);
+            catch (Exception e)
+            {
+                MessageBox.Show($"Nie udało się pobrać przedmiotów. '{e.Message}'", "Błąd",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
     }

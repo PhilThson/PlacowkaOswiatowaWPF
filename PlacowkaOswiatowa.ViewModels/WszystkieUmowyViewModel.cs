@@ -32,22 +32,14 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Incjacja
         public async Task LoadAsync()
         {
-            try
+            List<Umowa> umowy = new List<Umowa>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                List<Umowa> umowy = new List<Umowa>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    umowy = await repository.Umowy.GetAllAsync();
-                }
-                AllList = _mapper.Map<List<UmowaDto>>(umowy);
-                List = new ObservableCollection<UmowaDto>(AllList);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                umowy = await repository.Umowy.GetAllAsync();
             }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Nie udało się pobrać umów. {e.Message}", "Błąd",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            AllList = _mapper.Map<List<UmowaDto>>(umowy);
+            List = new ObservableCollection<UmowaDto>(AllList);
         }
         #endregion
 
@@ -56,14 +48,22 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            List<Umowa> umowy = new List<Umowa>();
-            using (var scope = _serviceProvider.CreateScope())
+            try
             {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                umowy = repository.Umowy.GetAll();
+                List<Umowa> umowy = new List<Umowa>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    umowy = repository.Umowy.GetAll();
+                }
+                AllList = _mapper.Map<IEnumerable<UmowaDto>>(umowy);
+                List = new ObservableCollection<UmowaDto>(AllList);
             }
-            AllList = _mapper.Map<IEnumerable<UmowaDto>>(umowy);
-            List = new ObservableCollection<UmowaDto>(AllList);
+            catch (Exception e)
+            {
+                MessageBox.Show($"Nie udało się pobrać umów. {e.Message}", "Błąd",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         protected override Func<UmowaDto, string> SetOrderBySelector() =>

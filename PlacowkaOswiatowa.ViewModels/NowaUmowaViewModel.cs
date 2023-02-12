@@ -15,7 +15,7 @@ using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowaUmowaViewModel : SingleItemViewModel<UmowaDto>, 
+    public class NowaUmowaViewModel : SingleItemViewModel<UmowaDto>,
         ILoadable, IEditable
     {
         #region Konstruktor
@@ -28,7 +28,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         #region Właściwości umowy
         private bool _IsForEdit;
-        public bool IsForEdit 
+        public bool IsForEdit
         {
             get => _IsForEdit;
             set => SetProperty(ref _IsForEdit, value);
@@ -50,7 +50,7 @@ namespace PlacowkaOswiatowa.ViewModels
             get => Item.Pracownik;
             set
             {
-                if (value != Item.Pracownik && value != null) 
+                if (value != Item.Pracownik && value != null)
                 {
                     Item.Pracownik = value;
                     ClearErrors(nameof(Pracownik));
@@ -156,7 +156,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     Item.MiejsceWykonywaniaPracy = value;
                     ClearErrors(nameof(MiejsceWykonywaniaPracy));
                     if (Item.MiejsceWykonywaniaPracy.Length < 1)
-                        AddError(nameof(MiejsceWykonywaniaPracy), 
+                        AddError(nameof(MiejsceWykonywaniaPracy),
                             "Należy podać miejsce wykonywanej pracy");
 
                     OnPropertyChanged(() => MiejsceWykonywaniaPracy);
@@ -292,69 +292,53 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Pobranie zasobów z bazy danych
         public async Task LoadAsync()
         {
-            try
+            var pracownicy = new List<Pracownik>();
+            var pracodawcy = new List<Pracodawca>();
+            var etaty = new List<Etat>();
+            var stanowiska = new List<Stanowisko>();
+            using (var scoper = _serviceProvider.CreateScope())
             {
-                var pracownicy = new List<Pracownik>();
-                var pracodawcy = new List<Pracodawca>();
-                var etaty = new List<Etat>();
-                var stanowiska = new List<Stanowisko>();
-                using (var scoper = _serviceProvider.CreateScope())
-                {
-                    var repository = scoper.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                var repository = scoper.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    pracownicy = await repository.Pracownicy.GetAllAsync(
-                        p => p.PracownikUmowa == null, "PracownikUmowa");
-                    pracodawcy = await repository.Pracodawcy.GetAllAsync();
-                    etaty = await repository.Etaty.GetAllAsync();
-                    stanowiska = await repository.Stanowiska.GetAllAsync();
-                }
-                var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicy);
-                Pracownicy = new ObservableCollection<PracownikDto>(listaPracownikow);
-
-                var listaPracodawcow = _mapper.Map<List<PracodawcaDto>>(pracodawcy);
-                Pracodawcy = new ReadOnlyCollection<PracodawcaDto>(listaPracodawcow);
-
-                Etaty = new ObservableCollection<Etat>(etaty);
-                Stanowiska = new ObservableCollection<Stanowisko>(stanowiska);
+                pracownicy = await repository.Pracownicy.GetAllAsync(
+                    p => p.PracownikUmowa == null, "PracownikUmowa");
+                pracodawcy = await repository.Pracodawcy.GetAllAsync();
+                etaty = await repository.Etaty.GetAllAsync();
+                stanowiska = await repository.Stanowiska.GetAllAsync();
             }
-            catch (Exception)
-            {
-                MessageBox.Show("Nie udało się załadować danych.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            var listaPracownikow = _mapper.Map<List<PracownikDto>>(pracownicy);
+            Pracownicy = new ObservableCollection<PracownikDto>(listaPracownikow);
+
+            var listaPracodawcow = _mapper.Map<List<PracodawcaDto>>(pracodawcy);
+            Pracodawcy = new ReadOnlyCollection<PracodawcaDto>(listaPracodawcow);
+
+            Etaty = new ObservableCollection<Etat>(etaty);
+            Stanowiska = new ObservableCollection<Stanowisko>(stanowiska);
         }
 
         public async Task LoadItem(object objId)
         {
-            try
+            Umowa umowa = null;
+            var umowaId = Convert.ToInt32(objId);
+            if (umowaId == default)
+                throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+            using (var scope = _serviceProvider.CreateScope())
             {
-                Umowa umowa = null;
-                var umowaId = Convert.ToInt32(objId);
-                if (umowaId == default)
-                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
-
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    umowa = await repository.Umowy.GetByIdAsync(umowaId) ?? 
-                        throw new DataNotFoundException(
-                            $"Nie znaleziono umowy o podanym identyfikatorze ({umowaId})");
-                }
-
-                Item = _mapper.Map<UmowaDto>(umowa);
-
-                base.DisplayName = BaseResources.EdycjaUmowy;
-                base.AddItemName = BaseResources.SaveItem;
-                IsForEdit = true;
-
-                foreach (var prop in Item.GetType().GetProperties())
-                    this.OnPropertyChanged(prop.Name);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                umowa = await repository.Umowy.GetByIdAsync(umowaId) ??
+                    throw new DataNotFoundException(
+                        $"Nie znaleziono umowy o podanym identyfikatorze ({umowaId})");
             }
-            catch(Exception e)
-            {
-                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            Item = _mapper.Map<UmowaDto>(umowa);
+
+            base.DisplayName = BaseResources.EdycjaUmowy;
+            base.AddItemName = BaseResources.SaveItem;
+            IsForEdit = true;
+
+            foreach (var prop in Item.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
         #endregion
 
@@ -388,7 +372,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
                 return true;
             }
-            catch(DataValidationException e)
+            catch (DataValidationException e)
             {
                 MessageBox.Show(e.Message, "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Warning);

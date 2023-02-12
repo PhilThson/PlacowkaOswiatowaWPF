@@ -23,12 +23,29 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Konstruktor
         public WszystkieUrlopyViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszystkieUrlopy)
-        { 
+        {
         }
         #endregion
 
         #region Incjacja
         public async Task LoadAsync()
+        {
+            var urlopy = new List<Urlop>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                urlopy = await repository.Urlopy.GetAllAsync();
+            }
+            AllList = _mapper.Map<List<UrlopDto>>(urlopy);
+            List = new ObservableCollection<UrlopDto>(AllList);
+
+        }
+        #endregion
+
+        #region Metody
+        protected override void Update() => Load();
+
+        protected override void Load()
         {
             try
             {
@@ -36,7 +53,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    urlopy = await repository.Urlopy.GetAllAsync();
+                    urlopy = repository.Urlopy.GetAll();
                 }
                 AllList = _mapper.Map<List<UrlopDto>>(urlopy);
                 List = new ObservableCollection<UrlopDto>(AllList);
@@ -46,22 +63,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 MessageBox.Show($"Nie udało się pobrać urlopów. {e.Message}", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-        #endregion
-
-        #region Metody
-        protected override void Update() => Load();
-
-        protected override void Load()
-        {
-            var urlopy = new List<Urlop>();
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                urlopy = repository.Urlopy.GetAll();
-            }
-            AllList = _mapper.Map<List<UrlopDto>>(urlopy);
-            List = new ObservableCollection<UrlopDto>(AllList);
         }
         #endregion
 

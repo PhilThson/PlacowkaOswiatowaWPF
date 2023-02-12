@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
@@ -18,18 +19,24 @@ namespace PlacowkaOswiatowa.ViewModels
 {
     public class UrlopPracownikaViewModel : SingleItemViewModel<UrlopDto>, ILoadable
     {
+        #region Pola prywatne
+        private readonly ILogger<UrlopPracownikaViewModel> _logger;
+        #endregion
+
         #region Konstruktor
-        public UrlopPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public UrlopPracownikaViewModel(IServiceProvider serviceProvider, IMapper mapper,
+            ILogger<UrlopPracownikaViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.UrlopPracownika)
         {
-            Item = new UrlopDto 
-            { 
+            Item = new UrlopDto
+            {
                 Pracownik = new PracownikDto(),
                 PoczatekUrlopu = DateTime.Today,
                 KoniecUrlopu = DateTime.Today
             };
             _pracownikIsVisible = "Collapsed";
             _isEnabled = false;
+            _logger = logger;
         }
         #endregion
 
@@ -37,23 +44,15 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public async Task LoadAsync()
         {
-            try
+            var pracownicy = new List<Pracownik>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var pracownicy = new List<Pracownik>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    pracownicy = await repository.Pracownicy.GetAllAsync();
-                }
-                var pracownicyList = _mapper.Map<List<PracownikDto>>(pracownicy);
-                _pracownicy = new ReadOnlyCollection<PracownikDto>(pracownicyList);
-                OnPropertyChanged(() => Pracownicy);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                pracownicy = await repository.Pracownicy.GetAllAsync();
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się załadować danych.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            var pracownicyList = _mapper.Map<List<PracownikDto>>(pracownicy);
+            _pracownicy = new ReadOnlyCollection<PracownikDto>(pracownicyList);
+            OnPropertyChanged(() => Pracownicy);
         }
         #endregion
 
@@ -76,7 +75,7 @@ namespace PlacowkaOswiatowa.ViewModels
             }
             set
             {
-                if(value != Item.Pracownik)
+                if (value != Item.Pracownik)
                 {
                     Item.Pracownik = value;
                     OnPropertyChanged();
@@ -114,12 +113,12 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         private string _pracownikIsVisible;
-        public string PracownikIsVisible 
+        public string PracownikIsVisible
         {
             get => _pracownikIsVisible;
             set
             {
-                if(value != string.Empty)
+                if (value != string.Empty)
                 {
                     _pracownikIsVisible = value;
                     OnPropertyChanged(() => PracownikIsVisible);
@@ -143,7 +142,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
                 return _flagsViewModel;
             }
-            set 
+            set
             {
                 _flagsViewModel = value;
                 OnPropertyChanged(() => FlagsViewModel);
@@ -157,7 +156,7 @@ namespace PlacowkaOswiatowa.ViewModels
             set
             {
                 _isEnabled = value;
-                 OnPropertyChanged(() => IsEnabled);
+                OnPropertyChanged(() => IsEnabled);
             }
         }
 
@@ -173,7 +172,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     Item.PoczatekUrlopu = value;
                     ClearErrors(nameof(PoczatekUrlopu));
                     ClearValidationMessages();
-                    if (Item.PoczatekUrlopu < DateTime.Today || 
+                    if (Item.PoczatekUrlopu < DateTime.Today ||
                         Item.PoczatekUrlopu > Item.KoniecUrlopu)
                         AddError(nameof(PoczatekUrlopu),
                             "Nieprawidłowa data rozpoczęcia urlopu");
@@ -224,12 +223,12 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
             }
         }
-        public string PrzyczynaUrlopu 
+        public string PrzyczynaUrlopu
         {
             get => Item.PrzyczynaUrlopu;
             set
             {
-                if(value != Item.PrzyczynaUrlopu)
+                if (value != Item.PrzyczynaUrlopu)
                 {
                     Item.PrzyczynaUrlopu = value;
                     ClearErrors(nameof(PrzyczynaUrlopu));
@@ -307,15 +306,17 @@ namespace PlacowkaOswiatowa.ViewModels
 
                 return true;
             }
-            catch(DataValidationException e)
+            catch (DataValidationException e)
             {
                 AddValidationMessage(nameof(Pracownik), e.Message);
                 return false;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                MessageBox.Show($"Nie udało się dodać urlopu pracownika. {e.Message}", 
+                MessageBox.Show($"Nie udało się dodać urlopu pracownika. {e.Message}",
                     "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogError("Błąd podczas tworzenia urlopu pracownika: {error}", e.Message);
                 return false;
             }
         }
@@ -326,8 +327,8 @@ namespace PlacowkaOswiatowa.ViewModels
             IsEnabled = false;
             FlagsViewModel = null;
             PracownikIsVisible = "Collapsed";
-            Item = new UrlopDto 
-            { 
+            Item = new UrlopDto
+            {
                 Pracownik = new PracownikDto(),
                 PoczatekUrlopu = DateTime.Today,
                 KoniecUrlopu = DateTime.Today
@@ -353,7 +354,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 nameof(PrzyczynaUrlopu)
                 );
 
-            if(GetWorkingDays(PoczatekUrlopu, KoniecUrlopu) < 1)
+            if (GetWorkingDays(PoczatekUrlopu, KoniecUrlopu) < 1)
                 AddValidationMessage(nameof(Pracownik),
                     "Wybrany termin nie obejmuje dni pracujących.");
 

@@ -26,14 +26,31 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Incjacja
         public async Task LoadAsync()
         {
+            var oceny = new List<Ocena>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                oceny = await repository.Oceny.GetAllAsync(
+                    includeProperties: "Uczen,Pracownik,Przedmiot");
+            }
+            AllList = _mapper.Map<List<OcenaDto>>(oceny);
+            List = new ObservableCollection<OcenaDto>(AllList);
+        }
+        #endregion
+
+        #region Metody
+        protected override void Update() => Load();
+
+        protected override void Load()
+        {
             try
             {
                 var oceny = new List<Ocena>();
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    oceny = await repository.Oceny.GetAllAsync(
-                        includeProperties: "Uczen,Pracownik,Przedmiot");
+                    oceny = repository.Oceny.GetAll(
+                        includeProperties: "Uczen,Pracownik,Przedmiot").ToList();
                 }
                 AllList = _mapper.Map<List<OcenaDto>>(oceny);
                 List = new ObservableCollection<OcenaDto>(AllList);
@@ -43,23 +60,6 @@ namespace PlacowkaOswiatowa.ViewModels
                 MessageBox.Show("Nie udało się pobrać ocen.", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-        #endregion
-
-        #region Metody
-        protected override void Update() => Load();
-
-        protected override void Load()
-        {
-            var oceny = new List<Ocena>();
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                oceny = repository.Oceny.GetAll(
-                    includeProperties: "Uczen,Pracownik,Przedmiot").ToList();
-            }
-            AllList = _mapper.Map<List<OcenaDto>>(oceny);
-            List = new ObservableCollection<OcenaDto>(AllList);
         }
         #endregion
     }

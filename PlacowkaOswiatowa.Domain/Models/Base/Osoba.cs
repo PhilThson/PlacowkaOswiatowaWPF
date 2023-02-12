@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PlacowkaOswiatowa.Domain.Models.Base;
-using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
+using static PlacowkaOswiatowa.Domain.Extensions.CommonExtensions;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {

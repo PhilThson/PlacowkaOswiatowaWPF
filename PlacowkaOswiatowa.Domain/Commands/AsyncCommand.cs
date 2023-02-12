@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using PlacowkaOswiatowa.Domain.Helpers;
+using PlacowkaOswiatowa.Domain.Extensions;
 
 namespace PlacowkaOswiatowa.ViewModels.Commands
 {

@@ -13,7 +13,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
+using static PlacowkaOswiatowa.Domain.Extensions.CommonExtensions;
 
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {

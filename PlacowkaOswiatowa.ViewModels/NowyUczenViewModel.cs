@@ -15,23 +15,27 @@ using Microsoft.Extensions.DependencyInjection;
 using PlacowkaOswiatowa.Domain.Helpers;
 using System.Windows.Input;
 using PlacowkaOswiatowa.Domain.Commands;
+using Microsoft.Extensions.Logging;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>, 
+    public class NowyUczenViewModel : SingleItemViewModel<UczenDto>,
         ILoadable, IEditable
     {
         #region Pola prywatne
         private readonly ISignalHub _signal;
+        private readonly ILogger<NowyUczenViewModel> _logger;
         #endregion
 
         #region Konstruktor
-        public NowyUczenViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public NowyUczenViewModel(IServiceProvider serviceProvider, IMapper mapper,
+            ILogger<NowyUczenViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.NowyUczen)
         {
             Item = new UczenDto();
             _signal = SignalHub.Instance;
             AddressButtonContent = BaseResources.DodajAdres;
+            _logger = logger;
         }
 
         #endregion
@@ -57,7 +61,7 @@ namespace PlacowkaOswiatowa.ViewModels
         public string DrugieImie
         {
             get => Item.DrugieImie;
-            set 
+            set
             {
                 if (value != Item.DrugieImie)
                 {
@@ -136,7 +140,7 @@ namespace PlacowkaOswiatowa.ViewModels
             get => Item.Oddzial;
             set
             {
-                if(value != Item.Oddzial)
+                if (value != Item.Oddzial)
                 {
                     Item.Oddzial = value;
                     ClearErrors(nameof(Oddzial));
@@ -151,7 +155,7 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         private string _AddressButtonContent;
-        public string AddressButtonContent 
+        public string AddressButtonContent
         {
             get => _AddressButtonContent;
             set => SetProperty(ref _AddressButtonContent, value);
@@ -258,7 +262,7 @@ namespace PlacowkaOswiatowa.ViewModels
 
         private void AddAddress()
         {
-            var viewHandler = new ViewHandler(typeof(NowyAdresViewModel), 
+            var viewHandler = new ViewHandler(typeof(NowyAdresViewModel),
                 Item.Adres?.Id, isModal: true);
 
             var listenerId = Guid.NewGuid();
@@ -289,7 +293,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    if(uczen.Id != default)
+                    if (uczen.Id != default)
                     {
                         var uczenById = await repository.Uczniowie.GetByIdAsync(uczen.Id);
                         if (uczenById == uczen)
@@ -299,9 +303,9 @@ namespace PlacowkaOswiatowa.ViewModels
                     var uczenFromDb = await repository.Uczniowie.GetUczenByPesel(uczen.Pesel);
 
                     if (uczenFromDb is not null)
-                        if(uczenFromDb.Id != uczen.Id)
+                        if (uczenFromDb.Id != uczen.Id)
                             throw new DataValidationException("Uczeń o podanym nr PESEL już istnieje");
-                    
+
                     if (Item.Adres?.Id != null)
                     {
                         var adresId = Convert.ToInt32(Item.Adres?.Id);
@@ -324,15 +328,19 @@ namespace PlacowkaOswiatowa.ViewModels
 
                 return true;
             }
-            catch(DataValidationException e)
+            catch (DataValidationException e)
             {
-                MessageBox.Show(e.Message, "Uwaga", 
+                MessageBox.Show(e.Message, "Uwaga",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                _logger.LogWarning("Nieudana próba zapisu ucznia: {error}", e.Message);
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Nie udało się zapisać ucznia. {e.Message}", 
+                MessageBox.Show($"Nie udało się zapisać ucznia. {e.Message}",
                     "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                _logger.LogWarning("Błąd podczas zapisu ucznia: {error}", e.Message);
             }
             return false;
         }
@@ -351,60 +359,43 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public async Task LoadAsync()
         {
-            try
+            var oddzialyFromDb = new List<Oddzial>();
+            //Zabezpieczenie przed próbą dostępu do db kontekstu, który jest w użyciu
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var oddzialyFromDb = new List<Oddzial>();
-                //Zabezpieczenie przed próbą dostępu do db kontekstu, który jest w użyciu
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    oddzialyFromDb = await repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
-                }
-                
-                var listaOddzialow = _mapper.Map<List<OddzialDto>>(oddzialyFromDb);
-                Oddzialy = new ObservableCollection<OddzialDto>(listaOddzialow);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                oddzialyFromDb = await repository.Oddzialy.GetAllAsync(includeProperties: "Pracownik");
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się załadować oddziałów.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            var listaOddzialow = _mapper.Map<List<OddzialDto>>(oddzialyFromDb);
+            Oddzialy = new ObservableCollection<OddzialDto>(listaOddzialow);
         }
 
         public async Task LoadItem(object objId)
         {
-            try
+            Uczen uczenFromDb = null;
+            var uczenId = Convert.ToInt32(objId);
+            if (uczenId == default)
+                throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+            using (var scope = _serviceProvider.CreateScope())
             {
-                Uczen uczenFromDb = null;
-                var uczenId = Convert.ToInt32(objId);
-                if (uczenId == default)
-                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
-
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    uczenFromDb = await repository.Uczniowie.GetByIdAsync(uczenId);
-                }
-                _ = uczenFromDb ??
-                    throw new DataNotFoundException(
-                        $"Nie znaleziono ucznia o podanym identyfikatorze ({objId})");
-
-                base.DisplayName = BaseResources.EdycjaUcznia;
-                base.AddItemName = BaseResources.SaveItem;
-
-
-                _signal.SendMessage(this, $"Widok: {DisplayName}");
-
-                Item = _mapper.Map<UczenDto>(uczenFromDb);
-                //Item.Adres ??= new AdresDto();
-                foreach (var prop in this.GetType().GetProperties())
-                    this.OnPropertyChanged(prop.Name);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                uczenFromDb = await repository.Uczniowie.GetByIdAsync(uczenId);
             }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            _ = uczenFromDb ??
+                throw new DataNotFoundException(
+                    $"Nie znaleziono ucznia o podanym identyfikatorze ({objId})");
+
+            base.DisplayName = BaseResources.EdycjaUcznia;
+            base.AddItemName = BaseResources.SaveItem;
+
+            _signal.SendMessage(this, $"Widok: {DisplayName}");
+
+            Item = _mapper.Map<UczenDto>(uczenFromDb);
+            //Item.Adres ??= new AdresDto();
+            foreach (var prop in this.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
 
         #endregion

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System;
 
-namespace PlacowkaOswiatowa.Domain.Helpers
+namespace PlacowkaOswiatowa.Domain.Extensions
 {
     public static class CommonExtensions
     {

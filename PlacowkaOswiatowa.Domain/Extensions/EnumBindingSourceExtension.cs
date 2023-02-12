@@ -3,7 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Markup;
 
-namespace PlacowkaOswiatowa.Domain.Helpers
+namespace PlacowkaOswiatowa.Domain.Extensions
 {
     public class EnumBindingSourceExtension : MarkupExtension
     {

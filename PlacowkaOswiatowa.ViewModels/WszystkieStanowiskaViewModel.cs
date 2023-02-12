@@ -20,12 +20,28 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Konstruktor
         public WszystkieStanowiskaViewModel(IServiceProvider serviceProvider, IMapper mapper)
             : base(serviceProvider, mapper, BaseResources.WszystkiePrzedmioty)
-        { 
+        {
         }
         #endregion
 
         #region Incjacja
         public async Task LoadAsync()
+        {
+            var stanowiska = new List<Stanowisko>();
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                stanowiska = await repository.Stanowiska.GetAllAsync();
+            }
+            AllList = _mapper.Map<List<StanowiskoDto>>(stanowiska);
+            List = new ObservableCollection<StanowiskoDto>(AllList);
+        }
+        #endregion
+
+        #region Metody
+        protected override void Update() => Load();
+
+        protected override void Load()
         {
             try
             {
@@ -33,7 +49,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    stanowiska = await repository.Stanowiska.GetAllAsync();
+                    stanowiska = repository.Stanowiska.GetAll().ToList();
                 }
                 AllList = _mapper.Map<List<StanowiskoDto>>(stanowiska);
                 List = new ObservableCollection<StanowiskoDto>(AllList);
@@ -44,22 +60,7 @@ namespace PlacowkaOswiatowa.ViewModels
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        #endregion
 
-        #region Metody
-        protected override void Update() => Load();
-
-        protected override void Load()
-        {
-            var stanowiska = new List<Stanowisko>();
-            using (var scope = _serviceProvider.CreateScope())
-            {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                stanowiska = repository.Stanowiska.GetAll().ToList();
-            }
-            AllList = _mapper.Map<List<StanowiskoDto>>(stanowiska);
-            List = new ObservableCollection<StanowiskoDto>(AllList);
-        }
         #endregion
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
+using PlacowkaOswiatowa.Domain.Extensions;
 using PlacowkaOswiatowa.Domain.Helpers;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
@@ -225,7 +226,8 @@ namespace PlacowkaOswiatowa.ViewModels
                 if (viewHandler.ViewType.IsAssignableTo(typeof(ILoadable)))
                 {
                     //* (komentarz na dole)
-                    Task.Run(async () => await (workspace as ILoadable).LoadAsync());
+                    Task.Run(() => (workspace as ILoadable).LoadAsync()
+                        .SafeFireAndForget((e) => OnTaskException(workspace.GetType().Name, e)));
                 }
 
                 if (viewHandler.ItemId != null)
@@ -234,7 +236,8 @@ namespace PlacowkaOswiatowa.ViewModels
                         throw new ArgumentException("Żądany widok nie służy do edycji");
 
                     //pobranie rekordu do edycji
-                    Task.Run(async () => await (workspace as IEditable).LoadItem(viewHandler.ItemId));
+                    Task.Run(() => (workspace as IEditable).LoadItem(viewHandler.ItemId)
+                         .SafeFireAndForget((e) => OnTaskException(workspace.GetType().Name, e)));
                 }
 
                 if (viewHandler.IsModal)
@@ -277,9 +280,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             var workspace = this.Workspaces.FirstOrDefault(vm => vm is T) as T;
             if(workspace == null)
-                //workspace = Activator.CreateInstance(typeof(T)) as T;
                 CreateViewAsync<T>();
-            
             else
                 this.SetActiveWorkspace(workspace);
         }
@@ -312,7 +313,8 @@ namespace PlacowkaOswiatowa.ViewModels
             var workspace = _provider.GetRequiredService<T>();
             //Po załadowaniu powiadomi UI że dane są dostępne.
             //W przypadku niepowodzenia metoda LoadAsync wyświetli odpowiedni komunikat
-            Task.Run(async () => await workspace.LoadAsync());
+            Task.Run(() => workspace.LoadAsync()
+                .SafeFireAndForget((e) => OnTaskException(workspace.GetType().Name, e)));
 
             Workspaces.Add(workspace);
             SetActiveWorkspace(workspace);
@@ -351,6 +353,19 @@ namespace PlacowkaOswiatowa.ViewModels
         private void Zamknij()
         {
             Application.Current.Windows[0].Close();
+        }
+
+        private void OnTaskException(string viewModelName, Exception e)
+        {
+            _logger.LogError(
+                "Wystąpił błąd podczas ładowania danych widoku {viewModel}: '{error}'",
+                viewModelName, e.Message);
+
+            MessageBox.Show(
+                $"Nie udało się załadować danych widoku " +
+                $"{viewModelName.Remove(viewModelName.Length - "ViewModel".Length)}. " +
+                $"Błąd: '{e.Message}'", 
+                "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         #endregion
 

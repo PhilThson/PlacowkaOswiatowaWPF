@@ -18,7 +18,7 @@ using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyPracownikViewModel : OneToManyViewModel<CreatePracownikDto, AdresDto>, 
+    public class NowyPracownikViewModel : OneToManyViewModel<CreatePracownikDto, AdresDto>,
         IEditable
     {
         #region Pola prywatne
@@ -28,7 +28,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Konstruktor
-        public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+        public NowyPracownikViewModel(IServiceProvider serviceProvider, IMapper mapper,
             ILogger<NowyPracownikViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.DodajPracownika,
                   null, BaseResources.DodajAdres, BaseResources.EdycjaAdresu)
@@ -159,7 +159,7 @@ namespace PlacowkaOswiatowa.ViewModels
                 {
                     var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
 
-                    if(pracownik.Id != default)
+                    if (pracownik.Id != default)
                     {
                         var pracownikById = await repository.Pracownicy.GetByIdAsync(pracownik.Id, false);
                         if (pracownikById == pracownik)
@@ -167,14 +167,14 @@ namespace PlacowkaOswiatowa.ViewModels
                     }
 
                     var pracownikByPesel = await repository.Pracownicy.GetPracownikByPeselAsync(pracownik.Pesel);
-                    
+
                     if (pracownikByPesel is not null)
                         if (pracownikByPesel.Id != pracownik.Id)
                             throw new DataValidationException("Pracownik o podanym numerze PESEL już istnieje");
-                    
-                    if(AllList?.Count > 0)
+
+                    if (AllList?.Count > 0)
                     {
-                        foreach(var adresId in AllList.Select(a => a.Id))
+                        foreach (var adresId in AllList.Select(a => a.Id))
                         {
                             if (Item.Adresy?.Any(a => a.Id == adresId) == true)
                                 continue;
@@ -188,7 +188,7 @@ namespace PlacowkaOswiatowa.ViewModels
                         await repository.AddAsync(pracownik);
                     else
                         repository.Update(pracownik);
-                                        
+
                     await repository.SaveAsync();
                 }
 
@@ -247,10 +247,10 @@ namespace PlacowkaOswiatowa.ViewModels
                         "Nie wybrano rekordu do edycji");
 
                 var selectedAdresId = Convert.ToInt32(itemId);
-                if(selectedAdresId == default)
+                if (selectedAdresId == default)
                     throw new DataValidationException("Błąd odczytu wybranego adresu");
 
-                var viewHandler = 
+                var viewHandler =
                     new ViewHandler(typeof(NowyAdresViewModel), selectedAdresId, true);
 
                 var selectedItemIndex = AllList.IndexOf(SelectedItem);
@@ -262,9 +262,9 @@ namespace PlacowkaOswiatowa.ViewModels
                 _signal.AddAddressCreatedListener(listenerId, this.OnAddressCreated);
                 _signal.RaiseCreateView(listenerId, viewHandler);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                MessageBox.Show(e.Message, "Error", 
+                MessageBox.Show(e.Message, "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
 
                 _logger.LogWarning(
@@ -288,45 +288,33 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Inicjacja do edycji
         public async Task LoadItem(object objId)
         {
-            try
+            var pracownikId = Convert.ToInt32(objId);
+            if (pracownikId == default)
+                throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+            Pracownik pracownik = null;
+
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var pracownikId = Convert.ToInt32(objId);
-                if (pracownikId == default)
-                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
-
-                Pracownik pracownik = null;
-
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    pracownik = await repository.Pracownicy.GetByIdAsync(pracownikId);
-                }
-                _ = pracownik ?? throw new DataNotFoundException(
-                        $"Nie znaleziono pracownika o podanym identyfikatorze ({pracownikId})");
-
-                base.DisplayName = BaseResources.EdycjaPracownika;
-                base.AddItemName = BaseResources.SaveItem;
-
-                //Dodatkowo wysłanie wiadomości z nowym statusem
-                _signal.SendMessage(this, $"Widok: {DisplayName}");
-
-                Item = _mapper.Map<CreatePracownikDto>(pracownik);
-                //aby nie wyświetlać listy jeżeli jest pusta
-                if(Item.Adresy?.Count > 0)
-                    AllList = new ObservableCollection<AdresDto>(Item.Adresy);
-
-                foreach (var prop in this.GetType().GetProperties())
-                    this.OnPropertyChanged(prop.Name);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                pracownik = await repository.Pracownicy.GetByIdAsync(pracownikId);
             }
-            catch (Exception e)
-            {
-                MessageBox.Show($"Nie udało się zainicjalizować obiektu. {e.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            _ = pracownik ?? throw new DataNotFoundException(
+                    $"Nie znaleziono pracownika o podanym identyfikatorze ({pracownikId})");
 
-                _logger.LogError(
-                    "Błąd podczas inicjalizacji obiektu do edycji: {error}",
-                    e.Message);
-            }
+            base.DisplayName = BaseResources.EdycjaPracownika;
+            base.AddItemName = BaseResources.SaveItem;
+
+            //Dodatkowo wysłanie wiadomości z nowym statusem
+            _signal.SendMessage(this, $"Widok: {DisplayName}");
+
+            Item = _mapper.Map<CreatePracownikDto>(pracownik);
+            //aby nie wyświetlać listy jeżeli jest pusta
+            if (Item.Adresy?.Count > 0)
+                AllList = new ObservableCollection<AdresDto>(Item.Adresy);
+
+            foreach (var prop in this.GetType().GetProperties())
+                this.OnPropertyChanged(prop.Name);
         }
         #endregion
 

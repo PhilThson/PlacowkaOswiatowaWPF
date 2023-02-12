@@ -19,7 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
-    public class NowyAdresViewModel : SingleItemViewModel<AdresDto>, 
+    public class NowyAdresViewModel : SingleItemViewModel<AdresDto>,
         ILoadable, IEditable
     {
         #region Pola prywatne
@@ -27,7 +27,7 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Konstruktor
-        public NowyAdresViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+        public NowyAdresViewModel(IServiceProvider serviceProvider, IMapper mapper,
             ILogger<NowyAdresViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.NowyAdres)
         {
@@ -37,12 +37,12 @@ namespace PlacowkaOswiatowa.ViewModels
         #endregion
 
         #region Własności Adresu
-        public object Id 
+        public object Id
         {
             get => Item.Id;
             set
             {
-                if(value != Item.Id)
+                if (value != Item.Id)
                 {
                     Item.Id = value;
                 }
@@ -163,7 +163,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             try
             {
-                if(WybranyAdres != null)
+                if (WybranyAdres != null)
                 {
                     //jeżeli został wskazany adres z listy, to jest on zwracany
                     //do metody wywołującej
@@ -259,63 +259,43 @@ namespace PlacowkaOswiatowa.ViewModels
 
         public async Task LoadItem(object objId)
         {
-            try
+            var adresId = Convert.ToInt32(objId);
+            if (adresId == default)
+                throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
+
+            Adres adres = null;
+
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var adresId = Convert.ToInt32(objId);
-                if (adresId == default)
-                    throw new ArgumentException("Przesłano nieprawidłowy identyfikator obiektu");
-
-                Adres adres = null;
-
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    adres = await repository.Adresy.GetAsync(a => a.Id == adresId,
-                        includeProperties: "Panstwo,Miejscowosc,Ulica");
-                }
-
-                _ = adres ?? throw new DataNotFoundException(
-                    $"Nie znaleziono adresu o podanym identyfikatorze {adresId}");
-
-                base.DisplayName = BaseResources.EdycjaAdresu;
-                base.AddItemName = BaseResources.SaveItem;
-
-                Item = _mapper.Map<AdresDto>(adres);
-
-                foreach (var prop in Item.GetType().GetProperties())
-                    OnPropertyChanged(prop.Name);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                adres = await repository.Adresy.GetAsync(a => a.Id == adresId,
+                    includeProperties: "Panstwo,Miejscowosc,Ulica");
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się zainicjować adresu do edycji", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
 
-                _logger.LogError("Błąd podczas inicjalizacji widoku: {error}", e.Message);
-            }
+            _ = adres ?? throw new DataNotFoundException(
+                $"Nie znaleziono adresu o podanym identyfikatorze {adresId}");
+
+            base.DisplayName = BaseResources.EdycjaAdresu;
+            base.AddItemName = BaseResources.SaveItem;
+
+            Item = _mapper.Map<AdresDto>(adres);
+
+            foreach (var prop in Item.GetType().GetProperties())
+                OnPropertyChanged(prop.Name);
         }
 
         public async Task LoadAsync()
         {
-            try
+            var adresy = new List<Adres>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var adresy = new List<Adres>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    adresy = await repository.Adresy.GetAllAsync(
-                        includeProperties: "Panstwo,Miejscowosc,Ulica");
-                }
-
-                var listaAdresow = _mapper.Map<List<AdresDto>>(adresy);
-                Adresy = new ObservableCollection<AdresDto>(listaAdresow);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                adresy = await repository.Adresy.GetAllAsync(
+                    includeProperties: "Panstwo,Miejscowosc,Ulica");
             }
-            catch (Exception e)
-            {
-                MessageBox.Show("Nie udało się załadować adresów.", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
 
-                _logger.LogError("Błąd podczas inicjalizacji widoku: {error}", e.Message);
-            }
+            var listaAdresow = _mapper.Map<List<AdresDto>>(adresy);
+            Adresy = new ObservableCollection<AdresDto>(listaAdresow);
         }
 
         protected override void ClearForm(object _)

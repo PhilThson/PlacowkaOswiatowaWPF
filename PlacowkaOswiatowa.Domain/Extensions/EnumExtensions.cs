@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Reflection;
 
-namespace PlacowkaOswiatowa.Domain.Helpers
+namespace PlacowkaOswiatowa.Domain.Extensions
 {
     public static class EnumExtensions
     {

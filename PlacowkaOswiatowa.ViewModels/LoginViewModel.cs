@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Exceptions;
@@ -21,18 +22,21 @@ namespace PlacowkaOswiatowa.ViewModels
     {
         #region Pola prywatne
         private readonly ISignalHub _signal;
+        private readonly ILogger<LoginViewModel> _logger;
         #endregion
 
         #region Konstruktor
-        public LoginViewModel(IServiceProvider serviceProvider, IMapper mapper)
+        public LoginViewModel(IServiceProvider serviceProvider, IMapper mapper, 
+            ILogger<LoginViewModel> logger)
             : base(serviceProvider, mapper, BaseResources.LoginPage)
         {
             _signal = SignalHub.Instance;
             //DisplayStatusMessage("Logowanie do aplikacji");
-            this.PropertyChanged += (s, e) => 
+            this.PropertyChanged += (s, e) =>
                 _SaveAndCloseCommand.RaiseCanExecuteChanged();
             //_login = "Gość";
             Item = new UzytkownikDto();
+            _logger = logger;
         }
         #endregion
 
@@ -102,13 +106,18 @@ namespace PlacowkaOswiatowa.ViewModels
                 }
 
                 if (uzytkownik is null)
-                    throw new DataValidationException("Nie znaleziono użytkownika o podanym adesie e-mail");
+                    throw new DataValidationException("Nie znaleziono użytkownika o podanym adresie e-mail");
 
                 if (!SecurePasswordHasher.Verify(Item.Password, uzytkownik.HashHasla))
                     throw new DataValidationException("Niepoprawne hasło.");
 
                 _signal.RaiseLoggedInChanged();
                 _signal.SendMessage(this, $"Witaj {uzytkownik.Imie} {uzytkownik.Nazwisko}!");
+
+                _logger.LogInformation(
+                    "Zalogowano użytkownika: {imie} {nazwisko}, {email}",
+                    uzytkownik.Imie, uzytkownik.Nazwisko, uzytkownik.Email);
+
                 Close();
                 return true;
             }
@@ -116,12 +125,16 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 AddValidationMessage("Błąd", "Niepoprawny e-mail i/lub hasło.");
                 _signal.SendMessage(this, "Nie udało się zalogować.");
+
+                _logger.LogInformation("Nieudana próba logowania: {error}", e.Message);
             }
             catch (Exception e)
             {
                 MessageBox.Show($"Błąd. {e.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+
                 _signal.SendMessage(this, "Błąd podczas logowania.");
+                _logger.LogError("Błąd podczas logowania: {error}", e.Message);
             }
 
             return false;

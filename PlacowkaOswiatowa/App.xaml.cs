@@ -41,8 +41,7 @@ namespace PlacowkaOswiatowa
                 .ConfigureServices((context, services) =>
                 {
                     //dodanie profilu AutoMapera
-                    var mapperConfig = new MapperConfiguration(mc =>
-                        mc.AddProfile(new MappingProfile()));
+                    var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MappingProfile()));
                     var mapper = mapperConfig.CreateMapper();
 
                     connectionString = context.Configuration.GetConnectionString("Default");
@@ -85,6 +84,8 @@ namespace PlacowkaOswiatowa
                 .ConfigureLogging((context, config) =>
                 {
                     //dodanie konfiguracji logowania Serilog
+                    //logowanie do konsoli ustawione z kodu,
+                    //logowanie do pliku ustawione w appsettings.json
                     Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(context.Configuration)
                         .Enrich.FromLogContext()

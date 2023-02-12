@@ -34,23 +34,14 @@ namespace PlacowkaOswiatowa.ViewModels
         #region Inicjacja
         public async Task LoadAsync()
         {
-            try
+            var uczniowie = new List<Uczen>();
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var uczniowie = new List<Uczen>();
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                    uczniowie = await repository.Uczniowie.GetAllAsync();
-                }
-                AllList = _mapper.Map<List<UczenDto>>(uczniowie);
-                List = new ObservableCollection<UczenDto>(AllList);
+                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                uczniowie = await repository.Uczniowie.GetAllAsync();
             }
-
-            catch(Exception e)
-            {
-                MessageBox.Show($"Nie udało się pobrać listy uczniów. {e.Message}", "Błąd",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            AllList = _mapper.Map<List<UczenDto>>(uczniowie);
+            List = new ObservableCollection<UczenDto>(AllList);
         }
         #endregion
 

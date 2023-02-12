@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using PlacowkaOswiatowa.Domain.DTOs;
 using PlacowkaOswiatowa.Domain.Models.Base;
-using PlacowkaOswiatowa.Domain.Helpers;
-using static PlacowkaOswiatowa.Domain.Helpers.CommonExtensions;
+using static PlacowkaOswiatowa.Domain.Extensions.CommonExtensions;
+using PlacowkaOswiatowa.Domain.Extensions;
 
 namespace PlacowkaOswiatowa.Domain.Models
 {
