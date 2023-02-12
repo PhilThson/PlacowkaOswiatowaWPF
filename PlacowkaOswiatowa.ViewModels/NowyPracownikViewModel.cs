@@ -274,12 +274,15 @@ namespace PlacowkaOswiatowa.ViewModels
         }
 
         //obsługa zdarzenia utworzenia adresu
-        private void OnAddressCreated(AdresDto createdAddress, Guid listnerId)
+        private void OnAddressCreated(AdresDto createdAddress, Guid listenerId)
         {
             AllList ??= new ObservableCollection<AdresDto>();
 
-            if (_selectedItemsToEdit.ContainsKey(listnerId))
-                AllList[_selectedItemsToEdit[listnerId]] = createdAddress;
+            if (_selectedItemsToEdit.ContainsKey(listenerId))
+            {
+                AllList[_selectedItemsToEdit[listenerId]] = createdAddress;
+                _selectedItemsToEdit.Remove(listenerId);
+            }
             else
                 AllList.Add(createdAddress);
         }
