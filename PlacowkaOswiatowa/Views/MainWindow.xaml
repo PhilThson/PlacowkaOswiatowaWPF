@@ -1,0 +1,253 @@
+﻿<Window x:Class="PlacowkaOswiatowa.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlacowkaOswiatowa"
+        mc:Ignorable="d"
+        Icon="/Icons/university.png"
+        Title="Placówka Oświatowa" Height="800" Width="1200"
+        >
+
+    <Window.Resources>
+        <ResourceDictionary Source="/Views/Resources/MainWindowResources.xaml"/>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding ZamknijCommand}"/>
+        <KeyBinding Key="D" Modifiers="Ctrl" Command="{Binding NowyPracownikCommand}"/>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding WszyscyPracownicyCommand}"/>
+        <KeyBinding Key="Z" Modifiers="Ctrl" Command="{Binding ZarobkiPracownikaCommand}"/>
+        <KeyBinding Key="U" Modifiers="Ctrl" Command="{Binding WszyscyUczniowieCommand}"/>
+        <KeyBinding Key="Q" Modifiers="Ctrl" Command="{Binding NowyUczenCommand}"/>
+        <KeyBinding Key="A" Modifiers="Ctrl" Command="{Binding WszystkieAdresyCommand}"/>
+        <KeyBinding Key="I" Modifiers="Ctrl" Command="{Binding OProgramieCommand}"/>
+    </Window.InputBindings>
+
+    <Border Background="{StaticResource ScreenGradient}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+
+            <Grid.Resources>
+                <Style TargetType="{x:Type ToolBar}" BasedOn="{StaticResource CustomToolBar}"/>
+            </Grid.Resources>
+
+            <Menu Grid.Row="0" Grid.Column="0" Margin="3">
+                <Menu.Resources>
+                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MainMenuItem}"/>
+                </Menu.Resources>
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel HorizontalAlignment="Stretch"></DockPanel>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+
+                <MenuItem Header="_Plik" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="_Wyjscie"
+                              InputGestureText="Ctrl+W"
+                              Tag="Zamknij aplikację"
+                              Command="{Binding ZamknijCommand}" />
+                </MenuItem>
+                <MenuItem Header="P_racownicy" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="Nowy pracownik" 
+                              Command="{Binding NowyPracownikCommand}"
+                              InputGestureText="Ctrl+D"/>
+                    <MenuItem Header="Wszyscy pracownicy"
+                              ToolTip="Wyświetl wszystkich pracowników"
+                              InputGestureText="Ctrl+P"
+                              Command="{Binding WszyscyPracownicyCommand}"/>
+                    <MenuItem Header="Urlop pracownika" 
+                              ToolTip="Dodaj urlop pracownika"
+                              Command="{Binding UrlopPracownikaCommand}"/>
+                    <MenuItem Header="Wszystkie urlopy" 
+                              ToolTip="Wyświetl wszystkie urlopy pracowników"
+                              Command="{Binding WszystkieUrlopyCommand}"/>
+                    <MenuItem Header="Zarobki pracownika" 
+                              ToolTip="Oblicz zarobki pracownika"
+                              InputGestureText="Ctrl+Z"
+                              Command="{Binding ZarobkiPracownikaCommand}"/>
+                </MenuItem>
+                <MenuItem Header="_Uczniowie" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="Wszyscy uczniowie" 
+                              ToolTip="_Wyświetl wszystkich uczniów"
+                              InputGestureText="Ctrl+U"
+                              Command="{Binding WszyscyUczniowieCommand}"/>
+                    <MenuItem Header="_Nowy uczeń" 
+                              ToolTip="_Dodaj nowego ucznia"
+                              InputGestureText="Ctrl+Q"
+                              Command="{Binding NowyUczenCommand}"/>
+                    <MenuItem Header="Wszystkie _oceny" 
+                              ToolTip="Wyświetl wszystkie oceny"
+                              Command="{Binding WszystkieOcenyCommand}"/>
+                </MenuItem>
+                <MenuItem Header="_Adresy" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="Wszystkie adresy" 
+                              ToolTip="_Wyświetl wszystkie adresy"
+                              InputGestureText="Ctrl+A"
+                              Command="{Binding WszystkieAdresyCommand}"/>
+                </MenuItem>
+                <MenuItem Header="Przedmioty" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="Wszystkie przedmioty" 
+                              ToolTip="Wyświetl wszystkie przedmioty"
+                              Command="{Binding WszystkiePrzedmiotyCommand}"/>
+                </MenuItem>
+                <MenuItem Header="_Księgowość" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="Faktury">
+                        <MenuItem Header="Wszystkie" 
+                                  IsEnabled="False"/>
+                        <MenuItem Header="Dodawanie" 
+                                  IsEnabled="False"/>
+                        <MenuItem Header="Zarobki pracownika" 
+                                  ToolTip="Oblicz zarobki pracownika"
+                                  Command="{Binding ZarobkiPracownikaCommand}"/>
+                    </MenuItem>
+                    <MenuItem Header="Umowy">
+                        <MenuItem Header="Wszystkie" Command="{Binding WszystkieUmowyCommand}"/>
+                        <MenuItem Header="Nowa" Command="{Binding NowaUmowaCommand}"/>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Menu boczne" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="_Pokaż/Ukryj"
+                              ToolTip="Wyświetlanie menu bocznego"
+                              Command="{Binding ChangeSideMenuVisibilityCommand}"/>
+                    <MenuItem Header="Zmień położenie menu bocznego"
+                              ToolTip="Po prawej lub lewej stronie"
+                              Command="{Binding ChangeSideMenuLocationCommand}"/>
+                </MenuItem>
+                <MenuItem Header="Program" ToolTip="Informacje" 
+                          InputGestureText="Ctrl+I"
+                          Command="{Binding OProgramieCommand}"/>
+                <MenuItem 
+                    Header="Za_loguj"
+                    Tag="Logowanie"
+                    HorizontalAlignment="Right"
+                    Command="{Binding WidokZalogujCommand}" 
+                    IsEnabled="{Binding IsLoggedIn, 
+                        Converter={StaticResource InvertedBool}}"
+                    />
+            </Menu>
+
+            <ToolBar Grid.Row="1" Grid.Column="0" 
+                     IsEnabled="{Binding IsLoggedIn}">
+                <ToggleButton Width="32" Height="32" Margin="2" 
+                              Command="{Binding NowyPracownikCommand}"
+                              ToolTip="Dodaj nowego pracownika">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/presentation.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <ToggleButton Width="32" Height="32" Margin="2" 
+                              Command="{Binding NowyUczenCommand}"
+                              ToolTip="Dodaj nowego ucznia">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/student.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton Width="32" Height="32" Margin="2"
+                          Command="{Binding WszyscyPracownicyCommand}"
+                              ToolTip="Wszyscy pracownicy">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/people.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <ToggleButton Width="32" Height="32" Margin="2"
+                          Command="{Binding WszyscyUczniowieCommand}"
+                              ToolTip="Wszyscy uczniowie">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/students.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton Width="32" Height="32" Margin="2"
+                              Command="{Binding ZarobkiPracownikaCommand}"
+                              ToolTip="Zarobki pracownika">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/currency.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <ToggleButton Width="32" Height="32" Margin="2" 
+                              Command="{Binding UrlopPracownikaCommand}"
+                              ToolTip="Urlop pracownika">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/vacation.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton Width="32" Height="32" Margin="2" 
+                              ToolTip="Nowa umowa"
+                              Command="{Binding NowaUmowaCommand}">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/handshake.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <ToggleButton Width="32" Height="32" Margin="2"
+                              ToolTip="Wszystkie umowy"
+                              Command="{Binding WszystkieUmowyCommand}">
+                    <ToggleButton.Background>
+                        <ImageBrush ImageSource="../Icons/agreement.png"/>
+                    </ToggleButton.Background>
+                </ToggleButton>
+                <Separator/>
+            </ToolBar>
+
+            <DockPanel Grid.Row="2" Grid.Column="0" Margin="3">
+
+                <ContentControl DockPanel.Dock="Top" 
+                    Visibility="{Binding LoginViewVisibility, UpdateSourceTrigger=PropertyChanged}"
+                    Content="{Binding LoginViewModel, UpdateSourceTrigger=PropertyChanged}"
+                />
+                <Expander 
+                    Style="{StaticResource CustomVerticalExpander}"
+                    IsExpanded="True"
+                    DockPanel.Dock="{Binding SideMenuLocation}"
+                    ExpandDirection="{Binding SideMenuLocation}"
+                    Header="Menu boczne"
+                    Visibility="{Binding SideMenuVisibility}">
+                    <HeaderedContentControl
+                        Header="Operacje"
+                        Content="{Binding Path=Commands}"
+                        ContentTemplate="{StaticResource CommandsTemplate}"
+                        Style="{StaticResource MainHCCStyle}"/>
+                </Expander>
+                <Border Grid.Row="0" Grid.Column="1" Visibility="{Binding WorkspacesVisibility}">
+                    <HeaderedContentControl
+                        Header="Przestrzeń robocza"
+                        Content="{Binding Path=Workspaces}"
+                        ContentTemplate="{StaticResource WorkspacesTemplate}"
+                        Style="{StaticResource MainHCCStyle}"/>
+                </Border>
+            </DockPanel>
+
+            <StatusBar Grid.Row="3" Grid.Column="0">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="130" />
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem Grid.Column="0" HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding StatusMessage, UpdateSourceTrigger=PropertyChanged}"/>
+                </StatusBarItem>
+                <StatusBarItem Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Timer, UpdateSourceTrigger=PropertyChanged}" />
+                </StatusBarItem>
+                <Separator Grid.Column="3" />
+                <StatusBarItem Grid.Column="4" HorizontalAlignment="Right">
+                    <TextBlock>Autor: Filip Rzeźniczak</TextBlock>
+                </StatusBarItem>
+            </StatusBar>
+        </Grid>
+    </Border>
+</Window>

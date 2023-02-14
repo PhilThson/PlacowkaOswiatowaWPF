@@ -1,0 +1,154 @@
+﻿<common:SingleItemViewBase x:Class="PlacowkaOswiatowa.Views.NowyUczenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:common="clr-namespace:PlacowkaOswiatowa.Views.Common"
+             xmlns:enums="clr-namespace:PlacowkaOswiatowa.Domain.Enums;assembly=PlacowkaOswiatowa.Domain" 
+             xmlns:custom="clr-namespace:PlacowkaOswiatowa.Helpers.CustomUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="900">
+    <!--xmlns:viewmodels="clr-namespace:PlacowkaOswiatowa.ViewModels"-->
+    <!--d:DataContext="{d:DesignInstance Type=viewmodels:NowyPracownikViewModel}"-->
+
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelStandardowy}"/>
+            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxZaokraglony}"/>
+            <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource DatePickerZaokraglony}"/>
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxZaokraglony}"/>
+            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Dane personalne">
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="125" SharedSizeGroup="SecondColumn"/>
+                    <ColumnDefinition MinWidth="230"  SharedSizeGroup="ThirdColumn"/>
+                    <ColumnDefinition Width="190" SharedSizeGroup="FourthColumn"/>
+                    <ColumnDefinition MinWidth="230" SharedSizeGroup="FifthColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="1" Content="Imię:"/>
+                <custom:AlphabetTextBox Grid.Row="0" Grid.Column="2"
+                                 Text="{Binding Imie, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="0" Grid.Column="3" Content="Drugie imię:"/>
+                <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding DrugieImie, 
+                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="1" Grid.Column="1" Content="Nazwisko:" />
+                <TextBox Grid.Row="1" Grid.Column="2" 
+                                 Text="{Binding Nazwisko, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="1" Grid.Column="3" Content="Data urodzenia:" />
+                <DatePicker Grid.Row="1" Grid.Column="4" 
+                                    Text="{Binding DataUrodzenia, UpdateSourceTrigger=LostFocus,
+                                    Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+
+                <Label Grid.Row="2" Grid.Column="1" Content="Pesel:"/>
+                <custom:NumericTextBox Grid.Row="2" Grid.Column="2" MaxLength="11" 
+                                 Text="{Binding Pesel, UpdateSourceTrigger=PropertyChanged}"/>
+
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Header="Dane ucznia">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition SharedSizeGroup="SecondColumn"/>
+                    <ColumnDefinition SharedSizeGroup="ThirdColumn"/>
+                    <ColumnDefinition SharedSizeGroup="FourthColumn"/>
+                    <ColumnDefinition SharedSizeGroup="FifthColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="1" Content="Oddział:"/>
+                <ComboBox Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" x:Name="OddzialComboBox"
+                          ItemsSource="{Binding Oddzialy, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedValue="{Binding Oddzial, Mode=TwoWay}"
+                          DisplayMemberPath="Nazwa"
+                          Text="{Binding Oddzial.Nazwa, 
+                            UpdateSourceTrigger=PropertyChanged}"
+                          />
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Header="Adres ucznia" Visibility="{Binding Adres,
+                    Converter={StaticResource ObjectToVisibility}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition SharedSizeGroup="SecondColumn"/>
+                    <ColumnDefinition SharedSizeGroup="ThirdColumn"/>
+                    <ColumnDefinition SharedSizeGroup="FourthColumn"/>
+                    <ColumnDefinition SharedSizeGroup="FifthColumn" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="1" Content="Kraj:"/>
+                <TextBox Grid.Row="0" Grid.Column="2" IsEnabled="False"
+                                 Text="{Binding Adres.Panstwo, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Row="0" Grid.Column="3" Content="Miejscowość:"/>
+                <TextBox Grid.Row="0" Grid.Column="4" MaxLength="24" IsEnabled="False"
+                                 Text="{Binding Adres.Miejscowosc, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Row="1" Grid.Column="1" Content="Ulica:"/>
+                <TextBox Grid.Row="1" Grid.Column="2" IsEnabled="False"
+                                 Text="{Binding Adres.Ulica, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Grid.Row="1" Grid.Column="3" Content="Nr domu:"/>
+                <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal"
+                                    HorizontalAlignment="Left">
+                    <custom:NumericTextBox MinWidth="35" MaxLength="3" IsEnabled="False"
+                                           Text="{Binding Adres.NumerDomu, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Nr Mieszkania:" Padding="1 5"/>
+                    <custom:NumericTextBox MinWidth="35" MaxLength="3" IsEnabled="False"
+                                           Text="{Binding Adres.NumerMieszkania, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                <Label Grid.Row="2" Grid.Column="1" Content="Kod pocztowy:"/>
+                <TextBox Grid.Row="2" Grid.Column="2" MaxLength="6" IsEnabled="False"
+                                 Text="{Binding Adres.KodPocztowy, UpdateSourceTrigger=PropertyChanged}"/>
+
+            </Grid>
+
+        </GroupBox>
+
+        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4"
+                HorizontalAlignment="Stretch"
+                Content="{Binding AddressButtonContent}"
+                IsDefault="True"
+                Style="{StaticResource ButtonStandardowy}"
+                Command="{Binding AddAddressCommand}" />
+                <!--IsEnabled="{Binding Adres, Converter={StaticResource BaseEntityToIsEnabled}}"-->
+
+    </Grid>
+
+</common:SingleItemViewBase>

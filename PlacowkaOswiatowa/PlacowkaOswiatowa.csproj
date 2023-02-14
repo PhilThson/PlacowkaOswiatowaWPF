@@ -1,0 +1,247 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <!--<Nullable>enable</Nullable>-->
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Compile Remove="Views\Icons\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Views\Icons\**" />
+    <None Remove="Migrations\**" />
+    <None Remove="Views\Icons\**" />
+    <Page Remove="Migrations\**" />
+    <Page Remove="Views\Icons\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Icons\academic.png" />
+    <None Remove="Icons\agreement.png" />
+    <None Remove="Icons\clear.png" />
+    <None Remove="Icons\currency.png" />
+    <None Remove="Icons\edit.png" />
+    <None Remove="Icons\handshake.png" />
+    <None Remove="Icons\people.png" />
+    <None Remove="Icons\plus_simple.png" />
+    <None Remove="Icons\presentation.png" />
+    <None Remove="Icons\refresh_blue.png" />
+    <None Remove="Icons\student.png" />
+    <None Remove="Icons\students.png" />
+    <None Remove="Icons\university.png" />
+    <None Remove="Icons\vacation.png" />
+    <None Remove="Themes\Generic.xaml~RF1d9e041.TMP" />
+    <None Remove="Views\LoginView.xaml~RF9139fa.TMP" />
+    <None Remove="Views\NowyAdresView.xaml~RF61f9aa.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\academic.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\agreement.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\clear.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\currency.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\handshake.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\people.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\plus_simple.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\presentation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\refresh_blue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\student.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\students.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\university.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\vacation.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <None Remove="Icons\briefcase.png" />
+    <None Remove="Icons\buy.png" />
+    <None Remove="Icons\calculate.png" />
+    <None Remove="Icons\candlestick.png" />
+    <None Remove="Icons\currency.png" />
+    <None Remove="Icons\diversification.png" />
+    <None Remove="Icons\graduation-hat.png" />
+    <None Remove="Icons\graph.png" />
+    <None Remove="Icons\logowanie.jpg" />
+    <None Remove="Icons\networking.png" />
+    <None Remove="Icons\people.png" />
+    <None Remove="Icons\presentation.png" />
+    <None Remove="Icons\school.png" />
+    <None Remove="Icons\school_v3.png" />
+    <None Remove="Icons\sell.png" />
+    <None Remove="Icons\student.png" />
+    <None Remove="Icons\students.png" />
+    <None Remove="Icons\trading.png" />
+    <None Remove="Icons\trading_2.png" />
+    <None Remove="Icons\university.png" />
+    <None Remove="Resources\school.png" />
+    <None Remove="Resources\school_v3.png" />
+    <None Remove="Icons\academic.png" />
+    <None Remove="Icons\agreement.png" />
+    <None Remove="Icons\delete.png" />
+    <None Remove="Icons\edit.png" />
+    <None Remove="Icons\handshake.png" />
+    <None Remove="Icons\plus.png" />
+    <None Remove="Icons\presentation.png" />
+    <None Remove="Icons\refresh-button.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\briefcase.png" />
+    <Resource Include="Icons\graduation-hat.png" />
+    <Resource Include="Icons\logowanie.jpg" />
+    <Resource Include="Icons\networking.png" />
+    <Resource Include="Icons\people.png" />
+    <Resource Include="Icons\presentation.png" />
+    <Resource Include="Icons\school.png" />
+    <Resource Include="Icons\school_v3.png" />
+    <Resource Include="Icons\student.png" />
+    <Resource Include="Icons\students.png" />
+    <Resource Include="Icons\university.png" />
+    <Resource Include="Resources\school.png" />
+    <Resource Include="Resources\school_v3.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\buy.png" />
+    <Resource Include="Icons\calculate.png" />
+    <Resource Include="Icons\candlestick.png" />
+    <Resource Include="Icons\currency.png" />
+    <Resource Include="Icons\diversification.png" />
+    <Resource Include="Icons\graph.png" />
+    <Resource Include="Icons\sell.png" />
+    <Resource Include="Icons\trading.png" />
+    <Resource Include="Icons\trading_2.png" />
+    <Resource Include="Icons\academic.png" />
+	<EmbeddedResource Include="Icons\agreement.png">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</EmbeddedResource>
+    <Resource Include="Icons\delete.png" />
+    <Resource Include="Icons\edit.png" />
+    <Resource Include="Icons\handshake.png" />
+    <Resource Include="Icons\plus.png" />
+    <Resource Include="Icons\presentation.png" />
+    <Resource Include="Icons\refresh-button.png" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Compile Update="Views\NowyUczenView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WszystkieOcenyView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WszystkieUrlopyView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WszystkieStanowiskaView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WszystkiePrzedmiotyView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WszystkieAdresyView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\WszyscyUczniowieView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlacowkaOswiatowa.Domain\PlacowkaOswiatowa.Domain.csproj" />
+    <ProjectReference Include="..\PlacowkaOswiatowa.ViewModels\PlacowkaOswiatowa.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\NowyUczenView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WszystkieOcenyView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WszystkieUrlopyView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WszystkieStanowiskaView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WszystkiePrzedmiotyView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WszystkieAdresyView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\WszyscyUczniowieView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Controls\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,265 @@
+﻿<common:SingleItemViewBase x:Class="PlacowkaOswiatowa.Views.NowaUmowaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:common="clr-namespace:PlacowkaOswiatowa.Views.Common"
+             xmlns:extensions="clr-namespace:PlacowkaOswiatowa.Domain.Extensions;assembly=PlacowkaOswiatowa.Domain"
+             xmlns:enums="clr-namespace:PlacowkaOswiatowa.Domain.Enums;assembly=PlacowkaOswiatowa.Domain" 
+            xmlns:viewmodels="clr-namespace:PlacowkaOswiatowa.ViewModels;assembly=PlacowkaOswiatowa.ViewModels" 
+            d:DataContext="{d:DesignInstance Type=viewmodels:NowaUmowaViewModel}"
+            mc:Ignorable="d">
+
+    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" CanContentScroll="True"
+                          Style="{StaticResource CustomScrollViewer}">
+        <!--Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, 
+                            AncestorType=UIElement}}" MaxHeight="480"-->
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource LabelStandardowy}"/>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxZaokraglony}"/>
+                <Style TargetType="{x:Type DatePicker}" BasedOn="{StaticResource DatePickerZaokraglony}"/>
+                <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxZaokraglony}"/>
+                <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource ComboBoxItemZaokraglony}"/>
+                <Style TargetType="{x:Type Expander}" BasedOn="{StaticResource CustomExpander}"/>
+                <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CustomCheckBox}"/>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Border 
+                        Style="{StaticResource WorkspaceBorder}" 
+                        Background="Transparent"
+                        BorderThickness="1" Margin="2">
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Dane pracownika:"/>
+                    <ComboBox Grid.Row="0" Grid.Column="2"
+                              IsEnabled="{Binding IsForEdit, UpdateSourceTrigger=PropertyChanged,
+                                Converter={StaticResource InvertedBool}}"
+                              x:Name="Pracownicy"
+                              ItemsSource="{Binding Pracownicy, 
+                                UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding Pracownik, Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"
+                              >
+                              <!--Text="{Binding Pracownik, Mode=OneWayToSource,
+                                Converter={StaticResource PracownikDtoToString}}"-->
+                    <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Imie}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Nazwisko}"/>
+                                    <TextBlock Text=" "/>
+                                    <TextBlock Text="{Binding Pesel}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="4"
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding Pracownik,
+                                            Converter={StaticResource ObjectToVisibility}}">
+                        <Label Content="{Binding Pracownik.Imie, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Separator Width="10" Visibility="Hidden"/>
+                        <Label Content="{Binding Pracownik.Nazwisko, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Separator Width="10" Visibility="Hidden"/>
+                        <Label Content="urodzony: "/>
+                        <Label Content="{Binding Pracownik.DataUrodzenia, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="PESEL: "/>
+                        <Label Content="{Binding Pracownik.Pesel, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Grid.ColumnSpan="4"
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding Pracownik,
+                                            Converter={StaticResource ObjectToVisibility}}">
+                        <Label Content="Miejsce zmieszkania:" />
+                        <Label Content="{Binding Pracownik.Adres, UpdateSourceTrigger=PropertyChanged,
+                                    Converter={StaticResource AdresDtoToString}}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border 
+                        Grid.Row="1"
+                        Style="{StaticResource WorkspaceBorder}" 
+                        Background="Transparent"
+                        BorderThickness="1" Margin="2">
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="160"/>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Grid.Row="0" Grid.Column="1" Content="Dane pracodawcy:"/>
+                    <ComboBox Grid.Row="0" Grid.Column="2"
+                              IsEnabled="{Binding IsForEdit,UpdateSourceTrigger=PropertyChanged,
+                                Converter={StaticResource InvertedBool}}"
+                              ItemsSource="{Binding Pracodawcy}"
+                              SelectedItem="{Binding Pracodawca, 
+                                UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Nazwa}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4"  Orientation="Horizontal" 
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding Pracodawca, 
+                                            Converter={StaticResource ObjectToVisibility}}">
+                        <Label Content="{Binding Pracodawca.Nazwa, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content=","/>
+                        <Separator Width="10" Visibility="Hidden"/>
+                        <Label Content="Regon: "/>
+                        <Label Content="{Binding Pracodawca.Regon, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"  Orientation="Horizontal" 
+                                        HorizontalAlignment="Center"
+                                        Visibility="{Binding Pracodawca, 
+                                            Converter={StaticResource ObjectToVisibility}}">
+                        <Label Content="Siedziba:" />
+                        <Label Content="{Binding Pracodawca.Adres, UpdateSourceTrigger=PropertyChanged,
+                                    Converter={StaticResource AdresDtoToString}}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <GroupBox Header="Dane umowy" Grid.Row="2">
+                <Grid Grid.IsSharedSizeScope="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="FirstColumn"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition SharedSizeGroup="ThirdColumn"/>
+                            <ColumnDefinition Width="200" SharedSizeGroup="FourthColumn"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="Data zawarcia umowy:" Width="auto" Grid.Column="1" />
+                        <DatePicker Grid.Column="2" HorizontalAlignment="Left" 
+                                            Text="{Binding DataZawarciaUmowy, UpdateSourceTrigger=PropertyChanged,
+                                                Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                        <Label Grid.Column="3" Content="Okres pracy:"/>
+                        <ComboBox Grid.Column="4"
+                                  ItemsSource="{Binding Source={extensions:EnumBindingSource 
+                                    {x:Type enums:OkresPracyEnum}}}"
+                                  SelectedItem="{Binding OkresPracy}" />
+
+                        <Label Grid.Row="1" Grid.Column="1" Content="Wynagrodzenie brutto"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+                            <TextBox Text="{Binding WynagrodzenieBrutto, UpdateSourceTrigger=PropertyChanged, 
+                                        Mode=TwoWay, StringFormat=N2}" MinWidth="120"/>
+                            <Label Content="zł" Style="{StaticResource LabelWaski}"/>
+                        </StackPanel>
+                        <CheckBox Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" 
+                                          HorizontalAlignment="Right" Content="{Binding CzyZwolnionyOdPodatku}"/>
+                        <Label Grid.Row="1" Grid.Column="4" Content="Zwolnienie od podatku" Margin="2" 
+                                       Width="auto"/>
+
+                        <Label Grid.Row="2" Grid.Column="1" Content="Opis wynagrodzenia:"/>
+                        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding OpisWynagrodzenia}"
+                                         Grid.ColumnSpan="3" MaxLength="50"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="1" Content="Miejsce wykonywania pracy:"/>
+                        <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" MaxLength="50"
+                                         Text="{Binding MiejsceWykonywaniaPracy, UpdateSourceTrigger=PropertyChanged}"
+                                         />
+                        
+                        <Label Grid.Row="4" Grid.Column="1" Content="Wymiar czasu pracy:"/>
+                        <ComboBox Grid.Row="4" Grid.Column="2"
+                                          ItemsSource="{Binding Source={extensions:EnumBindingSource 
+                                            {x:Type enums:WymiarCzasuPracyEnum}}}"
+                                          SelectedItem="{Binding WymiarCzasuPracy}"
+                                          />
+                        
+                        <Label Grid.Row="4" Grid.Column="3" Content="Wymiar godzinowy:"/>
+                        <StackPanel Grid.Row="4" Grid.Column="4" Orientation="Horizontal">
+                            <TextBox Text="{Binding WymiarGodzinowy, UpdateSourceTrigger=PropertyChanged, 
+                                        Mode=TwoWay}" MinWidth="80" />
+                            <Label Content="godz." Style="{StaticResource LabelWaski}"/>
+                        </StackPanel>
+                        
+                        <Label Grid.Row="5" Grid.Column="1" Content="Stanowisko:"/>
+                        <ComboBox Grid.Row="5" Grid.Column="2" x:Name="StanowiskoComboBox"
+                                  ItemsSource="{Binding Stanowiska, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding Stanowisko, Mode=TwoWay}"
+                                  DisplayMemberPath="Opis"
+                                  Text="{Binding Stanowisko.Opis}"
+                                  />
+                        <!--<TextBlock Grid.Row="5" Grid.Column="2" TextWrapping="Wrap" 
+                          Text="{Binding Stanowisko.Opis, UpdateSourceTrigger=PropertyChanged}"/>-->
+                        <Label Grid.Row="5" Grid.Column="3" Content="Etat:"/>
+                        <ComboBox Grid.Row="5" Grid.Column="4" x:Name="EtatComboBox"
+                                  ItemsSource="{Binding Etaty, UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding Etat, Mode=TwoWay}"
+                                  DisplayMemberPath="Opis"
+                                  Text="{Binding Etat.Opis}"
+                                  />
+                        
+                        <Label Grid.Row="6" Grid.Column="1" Content="Data rozpoczęcia pracy:" Width="auto"/>
+                        <DatePicker Grid.Row="6" Grid.Column="2" HorizontalAlignment="Left"
+                                            Text="{Binding DataRozpoczeciaPracy, UpdateSourceTrigger=PropertyChanged,
+                                                Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                        
+                        <Label Grid.Row="6" Grid.Column="3" Content="Data zakończenia pracy:" Width="auto"/>
+                        <DatePicker Grid.Row="6" Grid.Column="4" HorizontalAlignment="Left"
+                                            Text="{Binding DataZakonczeniaPracy, UpdateSourceTrigger=PropertyChanged,
+                                                Mode=TwoWay, Converter={StaticResource DateToString}}"/>
+                        
+                        <Label Grid.Row="7" Grid.Column="1" Content="Inne warunki zatrudnienia:"/>
+                        <TextBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" MaxLength="50"
+                                         Text="{Binding InneWarunkiZatrudnienia}"/>
+                        
+                        <Label Grid.Row="8" Grid.Column="1" Content="Przyczyny zawarcia umowy:"/>
+                        <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="3" MaxLength="50"
+                                         Text="{Binding PrzyczynyZawarciaUmowy}"/>
+                    </Grid>
+                </Grid>
+            </GroupBox>
+
+        </Grid>
+    </ScrollViewer>
+
+</common:SingleItemViewBase>
