@@ -42,7 +42,7 @@ namespace PlacowkaOswiatowa.ViewModels
             _workspacesVisibility = "Collapsed";
             _loginViewVisibility = "Collapsed";
             //wyświetlanie panelu logowania
-            _isLoggedIn = true;
+            _isLoggedIn = false;
             _signal.NewMessage += (s, m) => StatusMessage = m;
             _signal.LoggedInChanged += () => IsLoggedIn = true;
             _signal.HideLogingRequest += () => ChangeLoginViewVisibility();
