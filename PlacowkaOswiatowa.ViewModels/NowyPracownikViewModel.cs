@@ -273,7 +273,7 @@ namespace PlacowkaOswiatowa.ViewModels
             }
         }
 
-        //obsługa zdarzenia utworzenia adresu
+        //obsługa utworzenia adresu
         private void OnAddressCreated(AdresDto createdAddress, Guid listenerId)
         {
             AllList ??= new ObservableCollection<AdresDto>();
