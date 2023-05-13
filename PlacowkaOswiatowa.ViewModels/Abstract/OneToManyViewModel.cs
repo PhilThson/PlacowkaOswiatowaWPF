@@ -7,6 +7,7 @@ using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
+    // Bazowy ViewModel do obsługi encji w relecji jeden do wielu (lub wiele do wielu)
     public abstract class OneToManyViewModel<T, TMany> : SingleItemViewModel<T>
         where T : class, new()
     {

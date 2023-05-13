@@ -12,14 +12,17 @@ namespace PlacowkaOswiatowa.Domain.Helpers
         private static readonly Lazy<SignalHub> lazy
             = new Lazy<SignalHub>(() => new SignalHub());
 
-        private Dictionary<Guid, AddressCreatedDelegate> _addressCreatedListeners =
-            new Dictionary<Guid, AddressCreatedDelegate>();
+        // Para Guid : AddressCreatedDelegate - pozwala na jednoznaczne określenie
+        // komu ma zostać zwrócony obiekt utworzonego adresu
+        // Wynika to ze sposobu edycji/dodawania adresu, które to mogło wystąpić
+        // w kilku miejscach jednocześnie i może być otwarte wiele okien naraz
+        private Dictionary<Guid, AddressCreatedDelegate> _addressCreatedListeners;
         #endregion
 
         #region Konstruktor
         private SignalHub()
         {
-
+            _addressCreatedListeners = new Dictionary<Guid, AddressCreatedDelegate>();
         }
         #endregion
 
@@ -62,6 +65,7 @@ namespace PlacowkaOswiatowa.Domain.Helpers
             NewViewRequested?.Invoke(sender, obj);
 
 
+        // rozpoczęcie nasłuchiwania utworzenia/edycji adresu
         public void AddAddressCreatedListener(Guid listenerId, AddressCreatedDelegate listener)
         {
             if (_addressCreatedListeners.ContainsKey(listenerId))
@@ -70,6 +74,8 @@ namespace PlacowkaOswiatowa.Domain.Helpers
             _addressCreatedListeners.Add(listenerId, listener);
         }
 
+        // wywołanie delegaty obsługującej utworzenie/edycję adresu
+        // przez MainWindowViewModel (po zakończeniu edycji/dodawania)
         public void RaiseAddressCreatedDelegate(Guid listenerId, AdresDto address)
         {
             if (!_addressCreatedListeners.TryGetValue(listenerId, out AddressCreatedDelegate listener))

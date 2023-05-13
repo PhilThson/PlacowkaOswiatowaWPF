@@ -17,6 +17,7 @@ using static PlacowkaOswiatowa.Domain.Extensions.CommonExtensions;
 
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
+    // Bazowy ViewModel do obsługi pojedynczej encji
     public abstract class SingleItemViewModel<T> : WorkspaceViewModel, INotifyDataErrorInfo
         where T : new()
     {
