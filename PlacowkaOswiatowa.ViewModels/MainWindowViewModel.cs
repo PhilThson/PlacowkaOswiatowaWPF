@@ -60,7 +60,7 @@ namespace PlacowkaOswiatowa.ViewModels
         
         private ICommand _NowyPracownikCommand;
         public ICommand NowyPracownikCommand => _NowyPracownikCommand ??=
-            new BaseCommand(() => OnNewViewRequested(null, 
+            new BaseCommand(() => OnNewViewRequested(this, 
                 new ViewHandler(typeof(NowyPracownikViewModel))));
         
         private ICommand _WszyscyPracownicyCommand;
@@ -82,6 +82,11 @@ namespace PlacowkaOswiatowa.ViewModels
         private ICommand _WszystkieAdresyCommand;
         public ICommand WszystkieAdresyCommand => _WszystkieAdresyCommand ??=
             new BaseCommand(ShowSingletonAsync<WszystkieAdresyViewModel>);
+
+        private ICommand _NowyAdresCommand;
+        public ICommand NowyAdresCommand => _NowyAdresCommand ??=
+            new BaseCommand(() => OnNewViewRequested(this,
+                new ViewHandler(typeof(NowyAdresViewModel))));
 
         private ICommand _WszystkiePrzedmiotyCommand;
         public ICommand WszystkiePrzedmiotyCommand => _WszystkiePrzedmiotyCommand ??=
@@ -238,6 +243,12 @@ namespace PlacowkaOswiatowa.ViewModels
                     //pobranie rekordu do edycji
                     Task.Run(() => (workspace as IEditable).LoadItem(viewHandler.ItemId)
                          .SafeFireAndForget((e) => OnTaskException(workspace.GetType().Name, e)));
+                }
+
+                if (workspace is NowyAdresViewModel && 
+                    (sender is ItemsCollectionViewModel<AdresDto> || sender is MainWindowViewModel))
+                {
+                    (workspace as NowyAdresViewModel).CzyZListy = false;
                 }
 
                 if (viewHandler.IsModal)

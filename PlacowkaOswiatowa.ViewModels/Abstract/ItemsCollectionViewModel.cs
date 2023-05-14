@@ -17,6 +17,7 @@ using System.Windows.Input;
 
 namespace PlacowkaOswiatowa.ViewModels.Abstract
 {
+    // Bazowy ViewModel do obsługi kolekcji encji
     public abstract class ItemsCollectionViewModel<T> : WorkspaceViewModel
         where T : IBaseEntity<object>
     {

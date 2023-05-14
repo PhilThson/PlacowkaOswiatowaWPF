@@ -109,32 +109,6 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository
 
             return query.ToListAsync();
         }
-        //public virtual void Add(TEntity entity)
-        //{
-        //    _dbSet.Add(entity);
-        //    _db.SaveChanges();
-        //}
-        //public virtual async Task AddAsync(TEntity entity)
-        //{
-        //    await _dbSet.AddAsync(entity);
-        //    await _db.SaveChangesAsync();
-        //}
-        //public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities)
-        //{
-        //    await _dbSet.AddRangeAsync(entities);
-        //    await _db.SaveChangesAsync();
-        //}
-        //public virtual async Task RemoveAsync(TKey id)
-        //{
-        //    var entity = await GetAsync(e => e.Id.Equals(id));
-        //    entity.CzyAktywny = false;
-        //    await _db.SaveChangesAsync();
-        //}
-        //public virtual async Task RemoveRangeAsync(IEnumerable<TEntity> entities)
-        //{
-        //    _dbSet.RemoveRange(entities);
-        //    await _db.SaveChangesAsync();
-        //}
         public virtual Task<bool> HasAnyAsync()
         {
             return _dbSet.AnyAsync();

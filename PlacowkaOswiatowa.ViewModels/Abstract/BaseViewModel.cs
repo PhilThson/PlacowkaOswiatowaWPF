@@ -36,11 +36,11 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
             Action? onChanged = null,
             Func<T, T, bool>? validateValue = null)
         {
-            //if value didn't change
+            //jeżeli wartość się nie zmieniła
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;
 
-            //if value changed but didn't validate
+            //wartość się zmieniła ale jest nieprawidłowa
             if (validateValue != null && !validateValue(backingStore, value))
                 return false;
 
