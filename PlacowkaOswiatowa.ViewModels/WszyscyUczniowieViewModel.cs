@@ -50,14 +50,22 @@ namespace PlacowkaOswiatowa.ViewModels
 
         protected override void Load()
         {
-            var uczniowie = new List<Uczen>();
-            using (var scope = _serviceProvider.CreateScope())
+            try
             {
-                var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
-                uczniowie = repository.Uczniowie.GetAll();
+                var uczniowie = new List<Uczen>();
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    var repository = scope.ServiceProvider.GetRequiredService<IPlacowkaRepository>();
+                    uczniowie = repository.Uczniowie.GetAll();
+                }
+                AllList = _mapper.Map<List<UczenDto>>(uczniowie);
+                List = new ObservableCollection<UczenDto>(AllList);
             }
-            AllList = _mapper.Map<List<UczenDto>>(uczniowie);
-            List = new ObservableCollection<UczenDto>(AllList);
+            catch (Exception e)
+            {
+                MessageBox.Show("Nie udało się pobrać listy uczniów.", "Błąd",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public override void Dispose()

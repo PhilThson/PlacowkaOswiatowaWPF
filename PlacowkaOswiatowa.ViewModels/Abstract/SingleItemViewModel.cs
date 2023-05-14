@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using PlacowkaOswiatowa.Domain.Commands;
 using PlacowkaOswiatowa.Domain.Interfaces.CommonInterfaces;
-using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Domain.Resources;
 using PlacowkaOswiatowa.ViewModels.Commands;
 using PlacowkaOswiatowa.ViewModels.Helpers;
@@ -130,7 +129,7 @@ namespace PlacowkaOswiatowa.ViewModels.Abstract
         }
 
         //Domyślnie w klasie bazowej są obsługiwane zmiany w błędach poszczególnych właściwości
-        //jeżeli jakaś klasa pochodna będzie chciała może nadpisać poniższą metodę
+        //jeżeli jakaś klasa pochodna będzie chciała, to może nadpisać poniższą metodę
         //dzięki temu wystarczy wywołać ClearAllErrors i cały formularz zostanie pozbawiony błędów
         protected virtual void OnErrorsChanged(object sender, DataErrorsChangedEventArgs e)
         {

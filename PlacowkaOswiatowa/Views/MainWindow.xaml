@@ -77,7 +77,7 @@
                               InputGestureText="Ctrl+U"
                               Command="{Binding WszyscyUczniowieCommand}"/>
                     <MenuItem Header="_Nowy uczeń" 
-                              ToolTip="_Dodaj nowego ucznia"
+                              ToolTip="Dodaj nowego ucznia"
                               InputGestureText="Ctrl+Q"
                               Command="{Binding NowyUczenCommand}"/>
                     <MenuItem Header="Wszystkie _oceny" 
@@ -85,8 +85,11 @@
                               Command="{Binding WszystkieOcenyCommand}"/>
                 </MenuItem>
                 <MenuItem Header="_Adresy" IsEnabled="{Binding IsLoggedIn}">
+                    <MenuItem Header="Nowy adresy" 
+                              ToolTip="Dodaj nowy adres"
+                              Command="{Binding NowyAdresCommand}"/>
                     <MenuItem Header="Wszystkie adresy" 
-                              ToolTip="_Wyświetl wszystkie adresy"
+                              ToolTip="Wyświetl wszystkie adresy"
                               InputGestureText="Ctrl+A"
                               Command="{Binding WszystkieAdresyCommand}"/>
                 </MenuItem>

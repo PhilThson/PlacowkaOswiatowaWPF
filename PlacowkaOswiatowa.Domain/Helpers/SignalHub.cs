@@ -74,8 +74,8 @@ namespace PlacowkaOswiatowa.Domain.Helpers
             _addressCreatedListeners.Add(listenerId, listener);
         }
 
-        // wywołanie delegaty obsługującej utworzenie/edycję adresu
-        // przez MainWindowViewModel (po zakończeniu edycji/dodawania)
+        // wywołanie przez MainWindowViewModel delegaty obsługującej utworzenie/edycję adresu
+        // po zakończeniu edycji/dodawania
         public void RaiseAddressCreatedDelegate(Guid listenerId, AdresDto address)
         {
             if (!_addressCreatedListeners.TryGetValue(listenerId, out AddressCreatedDelegate listener))

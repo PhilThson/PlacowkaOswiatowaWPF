@@ -12,7 +12,7 @@ namespace PlacowkaOswiatowa.Infrastructure.Repository.EntityConfiguration
     {
         private readonly string _connectionString;
 
-        //musi też być konstruktor bez parametryczny
+        //musi też być konstruktor bezparametryczny
         public AplikacjaDbContextFactory()
         { }
 

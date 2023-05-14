@@ -33,6 +33,7 @@ namespace PlacowkaOswiatowa.ViewModels
         {
             Item = new AdresDto();
             _logger = logger;
+            _CzyZListy = true;
         }
         #endregion
 
@@ -155,6 +156,13 @@ namespace PlacowkaOswiatowa.ViewModels
                     OnPropertyChanged();
                 }
             }
+        }
+
+        private bool _CzyZListy;
+        public bool CzyZListy 
+        {
+            get => _CzyZListy;
+            set => SetProperty(ref _CzyZListy, value);
         }
         #endregion
 
