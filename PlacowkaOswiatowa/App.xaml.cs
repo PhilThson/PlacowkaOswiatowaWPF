@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using PlacowkaOswiatowa.Domain.Interfaces.RepositoryInterfaces;
 using PlacowkaOswiatowa.Helpers;
 using PlacowkaOswiatowa.Infrastructure.DataAccess;
@@ -53,7 +54,7 @@ namespace PlacowkaOswiatowa
                     {
                         options.UseSqlServer(
                             context.Configuration.GetConnectionString("Default"));
-                        options.LogTo(Console.WriteLine);
+                        options.LogTo(Console.WriteLine, LogLevel.Warning);
                     }, ServiceLifetime.Transient);
 
                     services.AddSingleton(new AplikacjaDbContextFactory(connectionString));

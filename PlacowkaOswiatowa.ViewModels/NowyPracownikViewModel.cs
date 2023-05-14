@@ -308,11 +308,11 @@ namespace PlacowkaOswiatowa.ViewModels
             base.DisplayName = BaseResources.EdycjaPracownika;
             base.AddItemName = BaseResources.SaveItem;
 
-            //Dodatkowo wysłanie wiadomości z nowym statusem
+            //Wysłanie wiadomości z nowym statusem
             _signal.SendMessage(this, $"Widok: {DisplayName}");
 
             Item = _mapper.Map<CreatePracownikDto>(pracownik);
-            //aby nie wyświetlać listy jeżeli jest pusta
+            //zabezpieczenie przed wyświetlaniem pustej listy adresów
             if (Item.Adresy?.Count > 0)
                 AllList = new ObservableCollection<AdresDto>(Item.Adresy);
 

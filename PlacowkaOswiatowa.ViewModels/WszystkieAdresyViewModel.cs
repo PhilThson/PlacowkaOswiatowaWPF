@@ -69,7 +69,7 @@ namespace PlacowkaOswiatowa.ViewModels
             {
                 _logger.LogError("Błąd odświeżania listy adresów: {error}", e.Message);
 
-                MessageBox.Show("Nie udało się pobrać ocen.", "Błąd",
+                MessageBox.Show("Nie udało się pobrać adresów.", "Błąd",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

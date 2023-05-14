@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PlacowkaOswiatowa.ViewModels
 {
@@ -66,6 +67,9 @@ namespace PlacowkaOswiatowa.ViewModels
             catch(Exception e)
             {
                 _logger.LogError("Błąd podczas odświeżania listy pracowników: {error}", e.Message);
+
+                MessageBox.Show("Nie udało się pobrać pracowników.", "Błąd",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         public override void Dispose()
